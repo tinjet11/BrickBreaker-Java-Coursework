@@ -6,8 +6,14 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 //import sun.plugin2.message.Message;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 public class Score {
+    private final Object lock = new Object(); // Lock to synchronize access to the show method
+
     public void show(final double x, final double y, int score, final Main main) {
         String sign;
         if (score >= 0) {
@@ -19,58 +25,112 @@ public class Score {
         label.setTranslateX(x);
         label.setTranslateY(y);
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                main.root.getChildren().add(label);
-            }
+        // Synchronize access to the show method to prevent concurrent modification
+        synchronized (lock) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    main.root.getChildren().add(label);
+                }
+            });
+        }
+
+        // Create a Timeline for the animation
+        Timeline timeline = new Timeline();
+
+        // Create KeyFrames for opacity and scale animations
+        KeyFrame opacityFrame = new KeyFrame(
+                Duration.seconds(1), // Duration for the animation
+                new KeyValue(label.opacityProperty(), 0) // End value for opacity
+        );
+
+        KeyFrame scaleXFrame = new KeyFrame(
+                Duration.seconds(1), // Duration for the animation
+                new KeyValue(label.scaleXProperty(), 0) // End value for scaleX
+        );
+
+        KeyFrame scaleYFrame = new KeyFrame(
+                Duration.seconds(1), // Duration for the animation
+                new KeyValue(label.scaleYProperty(), 0) // End value for scaleY
+        );
+
+        // Add key frames to the timeline
+        timeline.getKeyFrames().addAll(opacityFrame, scaleXFrame, scaleYFrame);
+
+        // Set an event handler for when the timeline finishes
+        timeline.setOnFinished(event -> {
+            main.root.getChildren().remove(label);
         });
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < 21; i++) {
-                    try {
-                        label.setScaleX(i);
-                        label.setScaleY(i);
-                        label.setOpacity((20 - i) / 20.0);
-                        Thread.sleep(15);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+        // Synchronize access to the timeline to prevent concurrent modification
+        synchronized (lock) {
+            // Play the timeline to start the animation
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    timeline.play();
                 }
-            }
-        }).start();
+            });
+        }
+
     }
 
-    public void showMessage(String message, final Main main) {
-        final Label label = new Label(message);
-        label.setTranslateX(220);
-        label.setTranslateY(340);
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                main.root.getChildren().add(label);
-            }
-        });
+        public void showMessage(String message, final Main main) {
+            final Label label = new Label(message);
+            label.setTranslateX(220);
+            label.setTranslateY(340);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < 21; i++) {
-                    try {
-                        label.setScaleX(Math.abs(i-10));
-                        label.setScaleY(Math.abs(i-10));
-                        label.setOpacity((20 - i) / 20.0);
-                        Thread.sleep(15);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+            // Synchronize access to the show method to prevent concurrent modification
+            synchronized (lock) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        main.root.getChildren().add(label);
                     }
-                }
+                });
             }
-        }).start();
-    }
+
+            // Create a Timeline for the animation
+            Timeline timeline = new Timeline();
+
+            // Create KeyFrames for opacity and scale animations
+            KeyFrame opacityFrame = new KeyFrame(
+                    Duration.seconds(1), // Duration for the animation
+                    new KeyValue(label.opacityProperty(), 0) // End value for opacity
+            );
+
+            KeyFrame scaleXFrame = new KeyFrame(
+                    Duration.seconds(1), // Duration for the animation
+                    new KeyValue(label.scaleXProperty(), 0) // End value for scaleX
+            );
+
+            KeyFrame scaleYFrame = new KeyFrame(
+                    Duration.seconds(1), // Duration for the animation
+                    new KeyValue(label.scaleYProperty(), 0) // End value for scaleY
+            );
+
+            // Add key frames to the timeline
+            timeline.getKeyFrames().addAll(opacityFrame, scaleXFrame, scaleYFrame);
+
+            // Set an event handler for when the timeline finishes
+            timeline.setOnFinished(event -> {
+                main.root.getChildren().remove(label);
+            });
+
+            // Synchronize access to the timeline to prevent concurrent modification
+            synchronized (lock) {
+                // Play the timeline to start the animation
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        timeline.play();
+                    }
+                });
+            }
+        }
+
+
 
     public void showGameOver(final Main main) {
         Platform.runLater(new Runnable() {
