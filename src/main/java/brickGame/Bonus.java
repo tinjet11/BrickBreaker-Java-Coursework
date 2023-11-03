@@ -1,8 +1,10 @@
 package brickGame;
 
+import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -10,10 +12,10 @@ import java.util.Random;
 public class Bonus implements Serializable {
     public Rectangle choco;
 
-    public double x;
-    public double y;
-    public long timeCreated;
-    public boolean taken = false;
+    private double x;
+    private double y;
+    private long timeCreated;
+    private boolean taken = false;
 
     public Bonus(int row, int column) {
         x = (column * (Block.getWidth())) + Block.getPaddingH() + (Block.getWidth() / 2) - 15;
@@ -21,6 +23,23 @@ public class Bonus implements Serializable {
 
         draw();
     }
+
+    public void setX(double x){
+        this.x = x;
+    }
+    public double getX(){
+        return  x;
+    }
+
+    public void setY(double y){
+        this.y = y;
+    }
+
+    public double getY(){
+        return  y;
+    }
+
+
 
     private void draw() {
         choco = new Rectangle();
@@ -39,6 +58,19 @@ public class Bonus implements Serializable {
         choco.setFill(new ImagePattern(new Image(url)));
     }
 
+    public long getTimeCreated() {
+        return timeCreated;
+    }
 
+    public void setTimeCreated(long timeCreated) {
+        this.timeCreated = timeCreated;
+    }
 
+    public boolean isTaken() {
+        return taken;
+    }
+
+    public void setTaken(boolean taken) {
+        this.taken = taken;
+    }
 }
