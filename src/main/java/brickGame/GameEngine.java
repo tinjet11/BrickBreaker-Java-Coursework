@@ -1,6 +1,8 @@
 package brickGame;
 
 
+import javafx.application.Platform;
+
 public class GameEngine {
 
     private OnAction onAction;
@@ -17,7 +19,7 @@ public class GameEngine {
      * @param fps set fps and we convert it to millisecond
      */
     public void setFps(int fps) {
-        this.fps = (int) 1000 / fps;
+        this.fps = (int) 500 / fps;
     }
 
     private synchronized void Update() {
@@ -26,16 +28,31 @@ public class GameEngine {
             public void run() {
                 while (!updateThread.isInterrupted()) {
                     try {
-                        onAction.onUpdate();
+                        // Perform your update logic in the background thread
+
+                        // Update the UI components (JavaFX nodes) from the JavaFX application thread
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                onAction.onUpdate();
+                                // You can also update other UI components here
+                            }
+                        });
+
                         Thread.sleep(fps);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        break;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        break;
                     }
                 }
             }
         });
         updateThread.start();
     }
+
 
     private void Initialize() {
         onAction.onInit();
@@ -47,18 +64,32 @@ public class GameEngine {
             public void run() {
                 while (!physicsThread.isInterrupted()) {
                     try {
-                        onAction.onPhysicsUpdate();
+                        // Perform your physics calculations in the background thread
+
+                        // Update the UI components (JavaFX nodes) from the JavaFX application thread
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                onAction.onPhysicsUpdate();
+                                // You can also update other UI components here
+                            }
+                        });
+
                         Thread.sleep(fps);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        break;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        break;
                     }
                 }
             }
         });
 
         physicsThread.start();
-
     }
+
 
     public void start() {
         time = 0;
@@ -69,12 +100,13 @@ public class GameEngine {
         isStopped = false;
     }
 
+//change from .stop to .interrupt
     public void stop() {
         if (!isStopped) {
             isStopped = true;
-            updateThread.stop();
-            physicsThread.stop();
-            timeThread.stop();
+            updateThread.interrupt();
+            physicsThread.interrupt();
+            timeThread.interrupt();
         }
     }
 
@@ -87,12 +119,15 @@ public class GameEngine {
             @Override
             public void run() {
                 try {
-                    while (true) {
+                    while (!timeThread.isInterrupted()) {
                         time++;
                         onAction.onTime(time);
                         Thread.sleep(1);
+                      //  break;
                     }
                 } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -101,14 +136,6 @@ public class GameEngine {
     }
 
 
-    public interface OnAction {
-        void onUpdate();
 
-        void onInit();
-
-        void onPhysicsUpdate();
-
-        void onTime(long time);
-    }
 
 }
