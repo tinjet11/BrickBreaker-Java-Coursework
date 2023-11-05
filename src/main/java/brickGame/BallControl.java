@@ -57,26 +57,26 @@ public class BallControl {
             //vX = 1.000;
             resetcollideFlags();
             goDownBall = true;
-            return;
+        //    return;
         }
         if (yBall >= sceneHeight) {
-            if (!ballOutOfBounds) {
-                Platform.runLater(() -> {
-                    goDownBall = false;
-                });
+            Platform.runLater(() -> {
+                goDownBall = false;
+                resetcollideFlags();
+            });
                 if (!isGoldStatus) {
                     //TODO gameover
                     heart = heart - 1;
                     ballOutOfBounds = true;
-                    new Score().show(sceneWidth / 2, sceneHeight / 2, -1, main);
+                    new Score(main).show(sceneWidth / 2, sceneHeight / 2, -1);
 
                     if (heart == 0) {
-                        new Score().showGameOver(main);
+                        new Score(main).showGameOver();
                         engine.stop();
                     }
-                }
+
             }
-            return;
+           // return;
         }
 
         if (yBall >= yBreak - ballRadius) {
