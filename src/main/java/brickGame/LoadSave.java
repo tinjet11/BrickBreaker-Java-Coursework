@@ -8,21 +8,22 @@ import java.util.ArrayList;
 
 public class LoadSave {
     public boolean          isExistHeartBlock;
-    public boolean          isGoldStauts;
+    public boolean          isGoldStatus;
     public boolean          goDownBall;
     public boolean          goRightBall;
-    public boolean          colideToBreak;
-    public boolean          colideToBreakAndMoveToRight;
-    public boolean          colideToRightWall;
-    public boolean          colideToLeftWall;
-    public boolean          colideToRightBlock;
-    public boolean          colideToBottomBlock;
-    public boolean          colideToLeftBlock;
-    public boolean          colideToTopBlock;
+    public boolean          collideToBreak;
+    public boolean          collideToBreakAndMoveToRight;
+    public boolean          collideToRightWall;
+    public boolean          collideToLeftWall;
+    public boolean          collideToRightBlock;
+    public boolean          collideToBottomBlock;
+    public boolean          collideToLeftBlock;
+    public boolean          collideToTopBlock;
     public int              level;
     public int              score;
     public int              heart;
-    public int              destroyedBlockCount;
+  //  public int              destroyedBlockCount;
+    public int  remainingBlockCount;
     public double           xBall;
     public double           yBall;
     public double           xBreak;
@@ -35,51 +36,63 @@ public class LoadSave {
 
 
     public void read() {
-
-
-        try {
-            ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(new File(Main.savePath)));
-
-
-            level = inputStream.readInt();
-            score = inputStream.readInt();
-            heart = inputStream.readInt();
-            destroyedBlockCount = inputStream.readInt();
-
-
-            xBall = inputStream.readDouble();
-            yBall = inputStream.readDouble();
-            xBreak = inputStream.readDouble();
-            yBreak = inputStream.readDouble();
-            centerBreakX = inputStream.readDouble();
-            time = inputStream.readLong();
-            goldTime = inputStream.readLong();
-            vX = inputStream.readDouble();
-
-
-            isExistHeartBlock = inputStream.readBoolean();
-            isGoldStauts = inputStream.readBoolean();
-            goDownBall = inputStream.readBoolean();
-            goRightBall = inputStream.readBoolean();
-            colideToBreak = inputStream.readBoolean();
-            colideToBreakAndMoveToRight = inputStream.readBoolean();
-            colideToRightWall = inputStream.readBoolean();
-            colideToLeftWall = inputStream.readBoolean();
-            colideToRightBlock = inputStream.readBoolean();
-            colideToBottomBlock = inputStream.readBoolean();
-            colideToLeftBlock = inputStream.readBoolean();
-            colideToTopBlock = inputStream.readBoolean();
-
-
+        File saveFile = new File(Main.savePath);
+        System.out.println(saveFile.toString());
+        if (saveFile.exists()) {
+            // Proceed with reading the save file
             try {
-                blocks = (ArrayList<BlockSerializable>) inputStream.readObject();
-            } catch (ClassNotFoundException e) {
+                ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(new File(Main.savePath)));
+
+
+                level = inputStream.readInt();
+                score = inputStream.readInt();
+                heart = inputStream.readInt();
+                remainingBlockCount = inputStream.readInt();
+
+
+                xBall = inputStream.readDouble();
+                yBall = inputStream.readDouble();
+                xBreak = inputStream.readDouble();
+                yBreak = inputStream.readDouble();
+                centerBreakX = inputStream.readDouble();
+                time = inputStream.readLong();
+                goldTime = inputStream.readLong();
+                vX = inputStream.readDouble();
+
+
+                isExistHeartBlock = inputStream.readBoolean();
+                isGoldStatus = inputStream.readBoolean();
+                goDownBall = inputStream.readBoolean();
+                goRightBall = inputStream.readBoolean();
+                collideToBreak = inputStream.readBoolean();
+                collideToBreakAndMoveToRight = inputStream.readBoolean();
+                collideToRightWall = inputStream.readBoolean();
+                collideToLeftWall = inputStream.readBoolean();
+                collideToRightBlock = inputStream.readBoolean();
+                collideToBottomBlock = inputStream.readBoolean();
+                collideToLeftBlock = inputStream.readBoolean();
+                collideToTopBlock = inputStream.readBoolean();
+
+
+                try {
+                    Object obj = inputStream.readObject();
+                    if (obj instanceof ArrayList<?>) {
+                        blocks = (ArrayList<BlockSerializable>) obj;
+                    }
+
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
+            // Handle the case when the save file does not exist
+            System.out.println("FIle didn't exist in LOAD save function");
         }
+
 
     }
 }
