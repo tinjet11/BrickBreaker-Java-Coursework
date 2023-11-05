@@ -42,7 +42,10 @@ public class Init {
     public void initBall() {
         Random random = new Random();
         xBall = random.nextInt(sceneWidth) + 1;
-        yBall = random.nextInt(sceneHeight - 200) + ((level + 1) * Block.getHeight()) + 15;
+        // Ensure that the ball starts above the screen's bottom edge
+        int minYBall = ((level + 1) * Block.getHeight()) + 2 * ballRadius;
+        yBall = random.nextInt(sceneHeight - minYBall) + minYBall;
+
         ball = new Circle();
         ball.setRadius(ballRadius);
         ball.setFill(new ImagePattern(new Image("ball.png")));
