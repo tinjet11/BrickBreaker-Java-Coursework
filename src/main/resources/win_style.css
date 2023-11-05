@@ -1,0 +1,29 @@
+/* Styles for the AnchorPane */
+.root {
+ -fx-background-color: #1d1d1d;
+}
+
+/* Styles for the Try Again button */
+.button {
+    -fx-font-size: 16px;
+    -fx-background-color: #4CAF50; /* Background color */
+    -fx-text-fill: white; /* Text color */
+}
+
+/* Styles for the Exit button */
+.button:second {
+    -fx-font-size: 16px;
+    -fx-background-color: #f44336; /* Background color */
+    -fx-text-fill: white; /* Text color */
+}
+
+/* Styles for the ImageView */
+.image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 0, 5);
+}
+
+/* Styles for the Labels */
+.label {
+    -fx-font-size: 18px;
+    -fx-text-fill: #333; /* Text color */
+}
