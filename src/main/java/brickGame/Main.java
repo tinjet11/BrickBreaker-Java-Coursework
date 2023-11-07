@@ -33,7 +33,7 @@ import static brickGame.WinController.showGameWinningScreen;
 
 public class Main extends Application implements EventHandler<KeyEvent>, OnAction {
 
-    private final int endLevel = 2;
+    private final int endLevel = 18;
     public static int level = 1 ;
     public static double xBreak = 0.0f;
     public static double centerBreakX;
@@ -68,7 +68,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
     public static long goldTime = 0;
 
     public static GameEngine engine;
-    public static String savePathDir = "save"; // Relative to the project directory
+    public static final String savePathDir = "save"; // Relative to the project directory
 
     // Construct the complete path using the directory and filename
     public static String savePath = savePathDir + "/save.mdds";
@@ -107,23 +107,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-/*        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Menu.fxml"));
-        Scene menuScene = new Scene(fxmlLoader.load());
-
-
-        primaryStage.setTitle("Brick Breaker Game");
-        primaryStage.setScene(menuScene);
-        primaryStage.show();*/
-
-/*        Button btn = (Button) menuScene.lookup("#startButton");
-        btn.setOnAction(actionEvent -> {
-            startGame(primaryStage);
-        });
-
-        Button tutorialBtn = (Button) menuScene.lookup("#tutorialButton");
-        tutorialBtn.setOnAction(actionEvent -> {
-         viewTutorial(primaryStage);
-        });*/
         initializeMenuScene();
     }
 
@@ -155,7 +138,6 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
 
     private void startGame(Stage primaryStage){
         this.primaryStage = primaryStage;
-
 
         root = new Pane();
         lefthbox = new HBox();
