@@ -47,37 +47,8 @@ public class Score {
         label.setTranslateY(250);
         label.setScaleX(2);
         label.setScaleY(2);
-        createRestartButton();
+        //createRestartButton();
         main.root.getChildren().addAll(label);
     }
 
-    public void showWin() {
-        Label label = new Label("You Win :)");
-        label.setTranslateX(200);
-        label.setTranslateY(250);
-        label.setScaleX(3);
-        label.setScaleY(3);
-
-        // Platform.runLater is used for UI updates and should not throw exceptions
-        Platform.runLater(() -> {
-            main.root.getChildren().addAll(label);
-        });
-
-        // Sleep for a short time to give JavaFX time to update the UI
-        try {
-            Thread.sleep(100); // Adjust the sleep time as needed
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("showwwww");
-    }
-
-    private void createRestartButton() {
-        Button restart = new Button("Restart");
-        restart.setTranslateX(220);
-        restart.setTranslateY(300);
-        restart.setOnAction(event -> main.restartGame());
-        main.root.getChildren().add(restart);
-    }
 }
