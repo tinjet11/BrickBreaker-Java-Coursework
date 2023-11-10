@@ -100,7 +100,7 @@ public class GameEngine {
         isStopped = false;
     }
 
-//change from .stop to .interrupt
+    //change from .stop to .interrupt
     public void stop() {
         if (!isStopped) {
             isStopped = true;
@@ -123,19 +123,17 @@ public class GameEngine {
                         time++;
                         onAction.onTime(time);
                         Thread.sleep(1);
-                      //  break;
+                        //  break;
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
         timeThread.start();
     }
-
-
 
 
 }

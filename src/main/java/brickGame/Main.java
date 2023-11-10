@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -28,28 +29,29 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static brickGame.BallControl.*;
-import static brickGame.TutorialController.viewTutorial;
+
 import static brickGame.WinController.showGameWinningScreen;
 
-public class Main extends Application implements EventHandler<KeyEvent>, OnAction {
+public class Main extends Application implements OnAction {
 
-    private final int endLevel = 18;
-    public static int level = 1 ;
+    public static boolean isGameRun =false;
+    public static final int endLevel = 18;
+    public static int level = 1;
     public static double xBreak = 0.0f;
     public static double centerBreakX;
     public static double yBreak = 640.0f;
-    public static final int breakWidth     = 130;
-    public static final int breakHeight    = 30;
+    public static final int breakWidth = 130;
+    public static final int breakHeight = 30;
     public static final int halfBreakWidth = breakWidth / 2;
     public static final int sceneWidth = 500;
     public static final int sceneHeight = 700;
-    public static final  int LEFT  = 1;
-    public static final  int RIGHT = 2;
+    public static final int LEFT = 1;
+    public static final int RIGHT = 2;
     public static Circle ball;
     public static double xBall;
     public static double yBall;
 
-    public static boolean isGoldStatus      = false;
+    public static boolean isGoldStatus = false;
     public static boolean isExistHeartBlock = false;
 
     public static Rectangle rect;
@@ -61,13 +63,15 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
 
     public static double v = 1.000;
 
-    public static int  heart    = 1000;
-    public static int  score    = 0;
-    public static long time     = 0;
-    public static long hitTime  = 0;
+    public static int heart = 1000;
+    public static int score = 0;
+    public static long time = 0;
+    public static long hitTime = 0;
     public static long goldTime = 0;
 
     public static GameEngine engine;
+
+    private Scene gameScene;
     public static final String savePathDir = "save"; // Relative to the project directory
 
     // Construct the complete path using the directory and filename
@@ -90,56 +94,71 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
             Color.TOMATO,
             Color.TAN,
     };
-    public  Pane             root;
+    public Pane root;
 
     public HBox lefthbox;
     public HBox righthbox;
     public HBox parentHbox;
-    private Label            scoreLabel;
-    private Label            heartLabel;
-    private Label            levelLabel;
+    private Label scoreLabel;
+    private Label heartLabel;
+    private Label levelLabel;
 
-    private boolean loadFromSave = false;
+    public static boolean loadFromSave = false;
 
-    public static Stage  primaryStage;
+    public static Stage primaryStage;
     Button pauseButton = null;
+
+    private GameSceneController gameSceneController;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         initializeMenuScene();
+        FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("Tutorial.fxml"));
+        fxmlLoader1.setControllerFactory(c -> {
+            return new TutorialController(this, primaryStage);
+        });
+
     }
 
 
     private void initializeMenuScene() {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Menu.fxml"));
         Scene menuScene = null;
+        fxmlLoader.setControllerFactory(c -> {
+            return new MenuController(this, primaryStage);
+        });
         try {
             menuScene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-
         primaryStage.setTitle("Brick Breaker Game");
         primaryStage.setScene(menuScene);
         primaryStage.show();
+        /*
 
-        Button btn = (Button) menuScene.lookup("#startButton");
+      Button btn = (Button) menuScene.lookup("#startButton");
         btn.setOnAction(actionEvent -> {
-            startGame(primaryStage);
-        });
+            try {
+                startGame(primaryStage);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });*/
 
-        Button tutorialBtn = (Button) menuScene.lookup("#tutorialButton");
+ /*       Button tutorialBtn = (Button) menuScene.lookup("#tutorialButton");
         tutorialBtn.setOnAction(actionEvent -> {
             viewTutorial(primaryStage);
-        });
+        });*/
     }
 
-    private void startGame(Stage primaryStage){
+    public void startGame(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
+        isGameRun = true;
 
-        root = new Pane();
+     /*   root = new Pane();
         lefthbox = new HBox();
         righthbox = new HBox();
         parentHbox = new HBox();
@@ -158,7 +177,8 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
         HBox.setHgrow(pauseButton, Priority.ALWAYS);
 
         righthbox.getChildren().add(pauseButton);
-        parentHbox.getChildren().addAll(lefthbox,righthbox);
+        parentHbox.getChildren().addAll(lefthbox,righthbox);*/
+/*
         System.out.println(level);
         if (!loadFromSave) {
             System.out.println("test: " + level);
@@ -196,8 +216,22 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
         primaryStage.setTitle("Brick Breaker Game");
         primaryStage.setScene(scene);
         primaryStage.show();
+*/
+        FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("Game.fxml"));
+        fxmlLoader1.setControllerFactory(c -> {
+            return gameSceneController = new GameSceneController(this, primaryStage);
+        });
+        gameScene = new Scene(fxmlLoader1.load());
+        //   gameSceneController =
+        //  gameSceneController.setPrimaryStage(primaryStage);
+        gameSceneController.showScene(gameScene);
+        // gameSceneController.setMain(this);
+        root = gameSceneController.getGamePane();
+        gameSceneController.setLevelLabel("Level: " + level);
+        // Button pauseButton = gameSceneController.getPauseButton();
 
-        pauseButton.setOnAction(new EventHandler<ActionEvent>() {
+
+/*     pauseButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 saveGame();
@@ -220,10 +254,10 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
                     loadGame();
                 });
             }
-        });
+        });*/
 
 
-        if(level != endLevel){
+/*        if (level != endLevel) {
             if (!loadFromSave) {
                 remainingBlockCount = blocks.size();
                 if (level >= 1 && level < endLevel) {
@@ -239,87 +273,33 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
                 engine.start();
                 loadFromSave = false;
             }
-        }
+        }*/
 
 
     }
-
 
 
     public static void main(String[] args) {
         launch(args);
     }
 
-    @Override
-    public void handle(KeyEvent event) {
-        //System.out.println("Key pressed: " + event.getCode()); // Add this line
-        switch (event.getCode()) {
-            case LEFT:
-                move(LEFT);
-                break;
-            case RIGHT:
-                move(RIGHT);
-                break;
-            case DOWN:
-                // Uncomment if needed: setPhysicsToBall();
-                break;
-            case S:
-                // Uncomment if needed: saveGame();
-                break;
-        }
-    }
-
-
-
-    private void move(final int direction) {
-        //Move the platform
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int sleepTime = 4;
-                for (int i = 0; i < 30; i++) {
-                    if (xBreak == (sceneWidth - breakWidth) && direction == RIGHT) {
-                        return;
-                    }
-                    if (xBreak == 0 && direction == LEFT) {
-                        return;
-                    }
-                    if (direction == RIGHT) {
-                        xBreak++;
-                    } else {
-                        xBreak--;
-                    }
-                    centerBreakX = xBreak + halfBreakWidth;
-                    try {
-                        Thread.sleep(sleepTime);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        System.out.printf("%s","move function in Main.java:");
-                    }
-                    if (i >= 20) {
-                        sleepTime = i;
-                    }
-                }
-            }
-        }).start();
-    }
 
     private void checkDestroyedCount() {
         //System.out.println(remainingBlockCount);
-      if (0 == remainingBlockCount && level != endLevel) {
-          //TODO win level todo...
-           //System.out.println("You Win");
-           nextLevel();
-      }
+        if (0 == remainingBlockCount && level != endLevel) {
+            //TODO win level todo...
+            //System.out.println("You Win");
+            nextLevel();
+        }
 
 
     }
 
-    private void saveGame() {
-        new Thread(()->{
-               new File(savePathDir).mkdirs();
-               File file = new File(savePath);
-               ObjectOutputStream outputStream = null;
+    public static void saveGame() {
+        new Thread(() -> {
+            new File(savePathDir).mkdirs();
+            File file = new File(savePath);
+            ObjectOutputStream outputStream = null;
 
             engine.stop();
             try {
@@ -366,15 +346,15 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
 
                 outputStream.writeObject(blockSerializables);
 
-                new Score(this).showMessage("Game Saved", 300,300);
+                //new Score(this).showMessage("Game Saved", 300, 300);
 
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                System.out.printf("%s","savegame (FNTE) function in Main.java:");
+                System.out.printf("%s", "savegame (FNTE) function in Main.java:");
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.printf("%s","savegame (IOE) function in Main.java:");
+                System.out.printf("%s", "savegame (IOE) function in Main.java:");
             } finally {
                 try {
                     outputStream.flush();
@@ -388,7 +368,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
 
     }
 
-    private void loadGame() {
+    public void loadGame() {
 
         LoadSave loadSave = new LoadSave();
         loadSave.read();
@@ -409,7 +389,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
         score = loadSave.score;
         heart = loadSave.heart;
         remainingBlockCount = loadSave.remainingBlockCount;
-        System.out.printf("remainingBlockCount : %d",remainingBlockCount);
+        System.out.printf("remainingBlockCount : %d", remainingBlockCount);
         xBall = loadSave.xBall;
         yBall = loadSave.yBall;
         xBreak = loadSave.xBreak;
@@ -444,7 +424,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
             startGame(primaryStage);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.printf("%s","loadGame function in Main.java:");
+            System.out.printf("%s", "loadGame function in Main.java:");
         }
 
 
@@ -452,7 +432,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
 
     private void nextLevel() {
         System.out.println("nextlevel run");
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             try {
                 vX = 1.000;
                 //to slow down the ball to prevent heart deducting very fast
@@ -473,14 +453,14 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
                 blocks.clear();
                 chocos.clear();
                 remainingBlockCount = 0;
-                if(level < endLevel) {
+                if (level < endLevel) {
                     level++;
                 }
                 startGame(primaryStage);
 
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.printf("%s","nextLevel function in Main.java:");
+                System.out.printf("%s", "nextLevel function in Main.java:");
             }
 
         });
@@ -509,17 +489,20 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
             startGame(primaryStage);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.printf("%s","restart  function in Main.java:");
+            System.out.printf("%s", "restart  function in Main.java:");
         }
     }
 
 
     @Override
     public void onUpdate() {
-        Platform.runLater(() ->{
+        Platform.runLater(() -> {
 
-                    scoreLabel.setText("Score: " + score);
-                    heartLabel.setText("Heart : " + heart);
+                    //scoreLabel.setText("Score: " + score);
+                    //heartLabel.setText("Heart : " + heart);
+
+                    gameSceneController.setScoreLabel("Score: " + score);
+                    gameSceneController.setHeartLabel("Heart : " + heart);
 
                     rect.setX(xBreak);
                     rect.setY(yBreak);
@@ -553,11 +536,13 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
                         }
 
                         if (block.type == Block.BLOCK_STAR) {
-                            goldTime = time;
-                            ball.setFill(new ImagePattern(new Image("goldball.png")));
-                            System.out.println("gold ball");
-                            root.getStyleClass().add("goldRoot");
-                            isGoldStatus = true;
+                            Platform.runLater(()-> {
+                                goldTime = time;
+                                ball.setFill(new ImagePattern(new Image("goldball.png")));
+                                System.out.println("gold ball");
+                                root.getStyleClass().add("goldRoot");
+                                isGoldStatus = true;
+                            });
                         }
 
                         if (block.type == Block.BLOCK_HEART) {
@@ -601,15 +586,18 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
 
     @Override
     public void onPhysicsUpdate() {
-        if(level != endLevel){
+        if (level != endLevel) {
             checkDestroyedCount();
         }
         setPhysicsToBall(this);
 
         if (time - goldTime > 5000) {
-            ball.setFill(new ImagePattern(new Image("ball.png")));
-            root.getStyleClass().remove("goldRoot");
-            isGoldStatus = false;
+            Platform.runLater(()->{
+                ball.setFill(new ImagePattern(new Image("ball.png")));
+                root.getStyleClass().remove("goldRoot");
+                isGoldStatus = false;
+            });
+
         }
         //this part is about the Bonus object
         for (Bonus choco : chocos) {
@@ -623,7 +611,7 @@ public class Main extends Application implements EventHandler<KeyEvent>, OnActio
                 System.out.println("choco hited");
                 score += 3;
                 new Score(this).show(choco.getX(), choco.getY(), 3);
-            }else {
+            } else {
                 // Update choco's position to make it drop
                 double timeElapsed = (time - choco.getTimeCreated()) / 1000.0; // Time in seconds
                 double gravity = 9.8; // Adjust the gravity as needed

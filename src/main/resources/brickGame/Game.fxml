@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane onKeyPressed="#handleKeyPressed"  stylesheets="@../style.css" prefHeight="700.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml" fx:controller="brickGame.GameSceneController">
+    <children>
+
+        <Pane fx:id="gamePane">
+            <!-- Add your game elements (e.g., rect, ball) here -->
+    <children>
+        <HBox fx:id="parentHbox">
+            <children>
+                <HBox fx:id="lefthbox">
+                    <children>
+                        <Label fx:id="scoreLabel" text="Score: 0"/>
+                        <Label fx:id="levelLabel" text="Level: 1"/>
+                        <Label fx:id="heartLabel" text="Heart: 1000"/>
+                    </children>
+                </HBox>
+                <HBox fx:id="righthbox">
+                    <children>
+                        <Button fx:id="pauseButton" text="Pause" onAction="#handlePauseButton" focusTraversable="false"/>
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+    </children>
+        </Pane>
+    </children>
+</AnchorPane>
