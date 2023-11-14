@@ -3,8 +3,7 @@
 
 
 
-
-- New File
+## New File
 Game.fxml
 GameSceneController.java
 Menu.fxml
@@ -14,26 +13,40 @@ TutorialController.java
 Win.fxml
 WinController.java
 
-Block.java
 BallControl.java
 Init.java
 OnAction.java (interface from GameEngine)
 
-- Existing file
+## Existing file
 Score.java
 - I add a constructor,which have main instance as parameter
 - I  add multiple thread to each function to prevent the UI from being lagged
 - I  change the way that the score show when one block get hitted, using transition
 
+Block.java
+- 
+
+BlockSerializable.java
+- no changes
+
+Main.java
+- 
+
+GameEngine.java
+* inside stop() method, i change all the thread.stop() to thread.interrupt
+* move OnAction interface to its own file
+* 
 
 
-fixing typo issue to have a more readable code
+General refactoring work that i have done
+- fixing typo issue to have a more readable code
+- replace name  to lambda expression 
+- set multiple field to final and static
 
-replace statement lambda to expression lambda
 
 Menu added, with a start button and a image
 
-set multiple field to final and static
+
 
 
 implement the pause and resume button
@@ -52,6 +65,8 @@ i need to passing the primary stage and instance of Main class to other controll
 one bug that i face after implement mvc pattern is when the gold ball is hit,there will abnormal scenario that the right and bottom part of the scene will not
 become gold background, instead it will become a "bouncing wall" which whenever the ball or the platform hit the right wall, that part will bounce to right, after 
 that it will bounce back to left
+-fix already
+
 
 
 Compilation Instructions: 
