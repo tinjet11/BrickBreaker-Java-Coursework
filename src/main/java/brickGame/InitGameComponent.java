@@ -33,7 +33,7 @@ public class InitGameComponent {
                 } else {
                     type = Block.BLOCK_NORMAL;
                 }
-                blocks.add(new Block(j, i, colors[r % (colors.length)], type));
+                blocks.add(new Block(j, i, type));
                 //System.out.println("colors " + r % (colors.length));
             }
         }

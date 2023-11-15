@@ -11,7 +11,7 @@ import java.io.Serializable;
 import static brickGame.Main.ballRadius;
 
 public class Block implements Serializable {
-    private static Block block = new Block(-1, -1, Color.TRANSPARENT, 99);
+    private static Block block = new Block(-1, -1, 99);
 
     public int row;
     public int column;
@@ -44,10 +44,9 @@ public class Block implements Serializable {
     public static final int BLOCK_HEART = 102;
 
 
-    public Block(int row, int column, Color color, int type) {
+    public Block(int row, int column, int type) {
         this.row = row;
         this.column = column;
-        this.color = color;
         this.type = type;
 
         draw();
