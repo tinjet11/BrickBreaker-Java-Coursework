@@ -2,21 +2,14 @@ package brickGame;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -30,19 +23,17 @@ import java.util.Random;
 
 import static brickGame.BallControl.*;
 
-import static brickGame.WinController.showGameWinningScreen;
+public class Main extends Application implements Actionable {
 
-public class Main extends Application implements OnAction {
-
-    public static boolean isGameRun =false;
+    public static boolean isGameRun = false;
     public static final int endLevel = 18;
-    public static int level = 1;
-    public static double xBreak = 0.0f;
-    public static double centerBreakX;
-    public static double yBreak = 640.0f;
-    public static final int breakWidth = 130;
-    public static final int breakHeight = 30;
-    public static final int halfBreakWidth = breakWidth / 2;
+    public static int level = 15;
+    public static double xPaddle = 0.0f;
+    public static double centerPaddleX;
+    public static double yPaddle = 640.0f;
+    public static final int paddleWidth = 130;
+    public static final int paddleHeight = 10;
+    public static final int halfPaddleWidth = paddleWidth / 2;
     public static final int sceneWidth = 500;
     public static final int sceneHeight = 700;
     public static final int LEFT = 1;
@@ -56,8 +47,6 @@ public class Main extends Application implements OnAction {
 
     public static Rectangle rect;
     public static final int ballRadius = 10;
-
-    //public static int destroyedBlockCount = 0;
 
     public static int remainingBlockCount = 0;
 
@@ -75,38 +64,17 @@ public class Main extends Application implements OnAction {
     public static final String savePathDir = "save"; // Relative to the project directory
 
     // Construct the complete path using the directory and filename
-    public static String savePath = savePathDir + "/save.mdds";
+    public static final String savePath = savePathDir + "/save.mdds";
 
     public static ArrayList<Block> blocks = new ArrayList<>();
     private ArrayList<Bonus> chocos = new ArrayList<>();
-    protected static final Color[] colors = new Color[]{
-            Color.MAGENTA,
-            Color.RED,
-            Color.GOLD,
-            Color.CORAL,
-            Color.AQUA,
-            Color.VIOLET,
-            Color.GREENYELLOW,
-            Color.ORANGE,
-            Color.PINK,
-            Color.SLATEGREY,
-            Color.YELLOW,
-            Color.TOMATO,
-            Color.TAN,
-    };
-    public Pane root;
 
-    public HBox lefthbox;
-    public HBox righthbox;
-    public HBox parentHbox;
-    private Label scoreLabel;
-    private Label heartLabel;
-    private Label levelLabel;
+    public Pane root;
+    public AnchorPane gameRoot;
 
     public static boolean loadFromSave = false;
 
     public static Stage primaryStage;
-    Button pauseButton = null;
 
     private GameSceneController gameSceneController;
 
@@ -118,7 +86,6 @@ public class Main extends Application implements OnAction {
         fxmlLoader1.setControllerFactory(c -> {
             return new TutorialController(this, primaryStage);
         });
-
     }
 
 
@@ -137,145 +104,21 @@ public class Main extends Application implements OnAction {
         primaryStage.setTitle("Brick Breaker Game");
         primaryStage.setScene(menuScene);
         primaryStage.show();
-        /*
-
-      Button btn = (Button) menuScene.lookup("#startButton");
-        btn.setOnAction(actionEvent -> {
-            try {
-                startGame(primaryStage);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });*/
-
- /*       Button tutorialBtn = (Button) menuScene.lookup("#tutorialButton");
-        tutorialBtn.setOnAction(actionEvent -> {
-            viewTutorial(primaryStage);
-        });*/
     }
 
     public void startGame(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
         isGameRun = true;
 
-     /*   root = new Pane();
-        lefthbox = new HBox();
-        righthbox = new HBox();
-        parentHbox = new HBox();
-        pauseButton = new Button("Pause");
-
-        scoreLabel = new Label("Score: " + score);
-        levelLabel = new Label("Level: " + level);
-        heartLabel = new Label("Heart : " + heart);
-        root.requestFocus();
-
-        // Disable focus traversal for the button
-        pauseButton.setFocusTraversable(false);
-
-
-        lefthbox.getChildren().addAll(scoreLabel,levelLabel,heartLabel);
-        HBox.setHgrow(pauseButton, Priority.ALWAYS);
-
-        righthbox.getChildren().add(pauseButton);
-        parentHbox.getChildren().addAll(lefthbox,righthbox);*/
-/*
-        System.out.println(level);
-        if (!loadFromSave) {
-            System.out.println("test: " + level);
-//            level++;
-            if (level >1){
-                new Score(this).showMessage("Level Up :)",300,300);
-
-            }
-            if (level == endLevel) {
-                showGameWinningScreen(primaryStage);
-                return;
-            }
-
-            Init init = new Init();
-
-            init.initBall();
-            init.initBreak();
-            init.initBoard();
-            root.getChildren().addAll(rect, ball,parentHbox);
-        } else {
-            root.getChildren().addAll(rect, ball, parentHbox);
-        }
-
-        // add block to the screen
-        for (Block block : blocks) {
-            root.getChildren().add(block.rect);
-        }
-
-
-
-        Scene scene = new Scene(root, sceneWidth, sceneHeight);
-        scene.getStylesheets().add("style.css");
-        scene.setOnKeyPressed(this);
-
-        primaryStage.setTitle("Brick Breaker Game");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-*/
-        FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("Game.fxml"));
+        FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("GameScene.fxml"));
         fxmlLoader1.setControllerFactory(c -> {
             return gameSceneController = new GameSceneController(this, primaryStage);
         });
         gameScene = new Scene(fxmlLoader1.load());
-        //   gameSceneController =
-        //  gameSceneController.setPrimaryStage(primaryStage);
         gameSceneController.showScene(gameScene);
-        // gameSceneController.setMain(this);
         root = gameSceneController.getGamePane();
+        gameRoot = gameSceneController.getGameAnchorPane();
         gameSceneController.setLevelLabel("Level: " + level);
-        // Button pauseButton = gameSceneController.getPauseButton();
-
-
-/*     pauseButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                saveGame();
-                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Menu.fxml"));
-                Scene menuScene = null;
-                try {
-                    menuScene = new Scene(fxmlLoader.load());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                menuScene.getStylesheets().add("style.css");
-                Button startbtn = (Button) menuScene.lookup("#startButton");
-                startbtn.setText("Resume");
-
-                primaryStage.setTitle("Brick Breaker Game");
-                primaryStage.setScene(menuScene);
-                primaryStage.show();
-
-                startbtn.setOnAction(actionEvent -> {
-                    loadGame();
-                });
-            }
-        });*/
-
-
-/*        if (level != endLevel) {
-            if (!loadFromSave) {
-                remainingBlockCount = blocks.size();
-                if (level >= 1 && level < endLevel) {
-                    engine = new GameEngine();
-                    engine.setOnAction(this);
-                    engine.setFps(120);
-                    engine.start();
-                }
-            } else {
-                engine = new GameEngine();
-                engine.setOnAction(this);
-                engine.setFps(120);
-                engine.start();
-                loadFromSave = false;
-            }
-        }*/
-
-
     }
 
 
@@ -286,12 +129,10 @@ public class Main extends Application implements OnAction {
 
     private void checkDestroyedCount() {
         //System.out.println(remainingBlockCount);
-        if (0 == remainingBlockCount && level != endLevel) {
-            //TODO win level todo...
-            //System.out.println("You Win");
-            nextLevel();
-        }
-
+            if (remainingBlockCount == 0 && level != endLevel) {
+                System.out.println("Level Up!");
+                nextLevel();
+            }
 
     }
 
@@ -313,9 +154,9 @@ public class Main extends Application implements OnAction {
 
                 outputStream.writeDouble(xBall);
                 outputStream.writeDouble(yBall);
-                outputStream.writeDouble(xBreak);
-                outputStream.writeDouble(yBreak);
-                outputStream.writeDouble(centerBreakX);
+                outputStream.writeDouble(xPaddle);
+                outputStream.writeDouble(yPaddle);
+                outputStream.writeDouble(centerPaddleX);
                 outputStream.writeLong(time);
                 outputStream.writeLong(goldTime);
                 outputStream.writeDouble(vX);
@@ -325,8 +166,8 @@ public class Main extends Application implements OnAction {
                 outputStream.writeBoolean(isGoldStatus);
                 outputStream.writeBoolean(goDownBall);
                 outputStream.writeBoolean(goRightBall);
-                outputStream.writeBoolean(collideToBreak);
-                outputStream.writeBoolean(collideToBreakAndMoveToRight);
+                outputStream.writeBoolean(collideToPaddle);
+                outputStream.writeBoolean(collideToPaddleAndMoveToRight);
                 outputStream.writeBoolean(collideToRightWall);
                 outputStream.writeBoolean(collideToLeftWall);
                 outputStream.writeBoolean(collideToRightBlock);
@@ -334,12 +175,12 @@ public class Main extends Application implements OnAction {
                 outputStream.writeBoolean(collideToLeftBlock);
                 outputStream.writeBoolean(collideToTopBlock);
 
-                ArrayList<BlockSerializable> blockSerializables = new ArrayList<>();
+                ArrayList<BlockSerialize> blockSerializables = new ArrayList<>();
                 for (Block block : blocks) {
                     if (block.isDestroyed) {
                         continue;
                     }
-                    blockSerializables.add(new BlockSerializable(block.row, block.column, block.type));
+                    blockSerializables.add(new BlockSerialize(block.row, block.column, block.type));
                 }
 
                 System.out.println(blockSerializables.size());
@@ -377,8 +218,8 @@ public class Main extends Application implements OnAction {
         isGoldStatus = loadSave.isGoldStatus;
         goDownBall = loadSave.goDownBall;
         goRightBall = loadSave.goRightBall;
-        collideToBreak = loadSave.collideToBreak;
-        collideToBreakAndMoveToRight = loadSave.collideToBreakAndMoveToRight;
+        collideToPaddle = loadSave.collideToPaddle;
+        collideToPaddleAndMoveToRight = loadSave.collideTopPaddleAndMoveToRight;
         collideToRightWall = loadSave.collideToRightWall;
         collideToLeftWall = loadSave.collideToLeftWall;
         collideToRightBlock = loadSave.collideToRightBlock;
@@ -392,9 +233,9 @@ public class Main extends Application implements OnAction {
         System.out.printf("remainingBlockCount : %d", remainingBlockCount);
         xBall = loadSave.xBall;
         yBall = loadSave.yBall;
-        xBreak = loadSave.xBreak;
-        yBreak = loadSave.yBreak;
-        centerBreakX = loadSave.centerBreakX;
+        xPaddle = loadSave.xPaddle;
+        yPaddle = loadSave.yPaddle;
+        centerPaddleX = loadSave.centerPaddleX;
         time = loadSave.time;
         goldTime = loadSave.goldTime;
         vX = loadSave.vX;
@@ -402,9 +243,9 @@ public class Main extends Application implements OnAction {
         blocks.clear();
         chocos.clear();
 
-        for (BlockSerializable ser : loadSave.blocks) {
+        for (BlockSerialize ser : loadSave.blocks) {
             int r = new Random().nextInt(200);
-            blocks.add(new Block(ser.row, ser.j, colors[r % colors.length], ser.type));
+            blocks.add(new Block(ser.row, ser.j, ser.type));
         }
 
 
@@ -430,12 +271,20 @@ public class Main extends Application implements OnAction {
 
     }
 
+    private boolean nextLevelInProgress = false;
+
     private void nextLevel() {
-        System.out.println("nextlevel run");
+        // Check if nextLevel is already in progress, if yes, return
+        if (nextLevelInProgress) {
+            return;
+        }
+
+        // Set the flag to indicate that nextLevel is in progress
+        nextLevelInProgress = true;
+
         Platform.runLater(() -> {
             try {
                 vX = 1.000;
-                //to slow down the ball to prevent heart deducting very fast
                 vY = 1.000;
 
                 engine.stop();
@@ -461,15 +310,18 @@ public class Main extends Application implements OnAction {
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.printf("%s", "nextLevel function in Main.java:");
+            } finally {
+                // Reset the flag to indicate that nextLevel is completed
+                nextLevelInProgress = false;
             }
-
         });
     }
+
 
     public void restartGame() {
 
         try {
-            level = 0;
+            level = 1;
             heart = 3;
             score = 0;
             vX = 1.000;
@@ -497,20 +349,15 @@ public class Main extends Application implements OnAction {
     @Override
     public void onUpdate() {
         Platform.runLater(() -> {
-
-                    //scoreLabel.setText("Score: " + score);
-                    //heartLabel.setText("Heart : " + heart);
-
                     gameSceneController.setScoreLabel("Score: " + score);
                     gameSceneController.setHeartLabel("Heart : " + heart);
 
-                    rect.setX(xBreak);
-                    rect.setY(yBreak);
+                    rect.setX(xPaddle);
+                    rect.setY(yPaddle);
                     ball.setCenterX(xBall);
                     ball.setCenterY(yBall);
                 }
         );
-
 
         if (yBall >= Block.getPaddingTop() && yBall <= (Block.getHeight() * (level + 1)) + Block.getPaddingTop()) {
             for (final Block block : blocks) {
@@ -524,7 +371,6 @@ public class Main extends Application implements OnAction {
                         block.rect.setVisible(false);
                         block.isDestroyed = true;
                         remainingBlockCount--;
-                        //System.out.println("size is " + blocks.size());
                         resetcollideFlags();
 
                         if (block.type == Block.BLOCK_CHOCO) {
@@ -536,31 +382,31 @@ public class Main extends Application implements OnAction {
                         }
 
                         if (block.type == Block.BLOCK_STAR) {
-                            Platform.runLater(()-> {
+                            Platform.runLater(() -> {
                                 goldTime = time;
                                 ball.setFill(new ImagePattern(new Image("goldball.png")));
                                 System.out.println("gold ball");
-                                root.getStyleClass().add("goldRoot");
+                                gameRoot.getStyleClass().add("goldRoot");
                                 isGoldStatus = true;
                             });
                         }
 
                         if (block.type == Block.BLOCK_HEART) {
-                            // if(heart != 3){
                             heart++;
                             System.out.println("heart hitted");
-                            //   }
                         }
 
-                        if (hitCode == Block.HIT_RIGHT) {
-                            collideToRightBlock = true;
-                        } else if (hitCode == Block.HIT_BOTTOM) {
-                            collideToBottomBlock = true;
-                        } else if (hitCode == Block.HIT_LEFT) {
-                            collideToLeftBlock = true;
-                        } else if (hitCode == Block.HIT_TOP) {
-                            collideToTopBlock = true;
-                        }
+                        Platform.runLater(() -> {
+                            if (hitCode == Block.HIT_RIGHT) {
+                                collideToRightBlock = true;
+                            } else if (hitCode == Block.HIT_BOTTOM) {
+                                collideToBottomBlock = true;
+                            } else if (hitCode == Block.HIT_LEFT) {
+                                collideToLeftBlock = true;
+                            } else if (hitCode == Block.HIT_TOP) {
+                                collideToTopBlock = true;
+                            }
+                        });
                     }
 
                     //TODO hit to break and some work here....
@@ -587,14 +433,17 @@ public class Main extends Application implements OnAction {
     @Override
     public void onPhysicsUpdate() {
         if (level != endLevel) {
-            checkDestroyedCount();
+
+                checkDestroyedCount();
+
+
         }
         setPhysicsToBall(this);
 
         if (time - goldTime > 5000) {
-            Platform.runLater(()->{
+            Platform.runLater(() -> {
                 ball.setFill(new ImagePattern(new Image("ball.png")));
-                root.getStyleClass().remove("goldRoot");
+                gameRoot.getStyleClass().remove("goldRoot");
                 isGoldStatus = false;
             });
 
@@ -604,25 +453,20 @@ public class Main extends Application implements OnAction {
             if (choco.getY() > sceneHeight || choco.isTaken()) {
                 continue;
             }
-            if (choco.getY() >= yBreak && choco.getY() <= yBreak + breakHeight && choco.getX() >= xBreak && choco.getX() <= xBreak + breakWidth) {
+
+            if (choco.getY() >= yPaddle && choco.getY() <= yPaddle + paddleHeight && choco.getX() >= xPaddle && choco.getX() <= xPaddle + paddleWidth) {
                 System.out.println("You Got it and +3 score for you");
                 choco.setTaken(true);
                 choco.choco.setVisible(false);
                 System.out.println("choco hited");
                 score += 3;
                 new Score(this).show(choco.getX(), choco.getY(), 3);
-            } else {
-                // Update choco's position to make it drop
-                double timeElapsed = (time - choco.getTimeCreated()) / 1000.0; // Time in seconds
-                double gravity = 9.8; // Adjust the gravity as needed
-                double deltaY = 0.5 * gravity * timeElapsed * timeElapsed; // Displacement formula
-                choco.setY(deltaY + choco.getY());
-                Platform.runLater(() -> {
-                    // Update UI to reflect the new position
-                    choco.choco.setLayoutY(choco.getY());
-                });
-
             }
+            choco.setY(choco.getY() +((time - choco.getTimeCreated()) / 1000.000) + 1.000);
+            Platform.runLater(() -> {
+                // Update UI to reflect the new position
+                choco.choco.setY(choco.getY());
+            });
         }
     }
 
