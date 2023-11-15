@@ -1,6 +1,6 @@
 package brickGame;
 
-public interface OnAction {
+public interface Actionable {
     void onUpdate();
 
     void onInit();
