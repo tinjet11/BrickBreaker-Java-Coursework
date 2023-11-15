@@ -1,27 +1,26 @@
 package brickGame;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.stage.Stage;
-
-import static brickGame.Main.score;
+import javafx.fxml.FXML;
 
 public class WinController {
+    private Main main;
 
-    public static void showGameWinningScreen(Stage primaryStage){
-        try{
-            FXMLLoader fxmlLoader = new FXMLLoader(WinController.class.getResource("Win.fxml"));
-            Scene winScene= new Scene(fxmlLoader.load());
-
-            Label scorePlaceholder = (Label) winScene.lookup("#scorePlaceholder");
-            scorePlaceholder.setText(String.valueOf(score));
-
-            primaryStage.setTitle("Brick Breaker Game");
-            primaryStage.setScene(winScene);
-            primaryStage.show();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+    public WinController(Main main){
+        this.main = main;
     }
+
+    public WinController(){
+
+    }
+
+    @FXML
+    public void exit(){
+        System.exit(0);
+    }
+
+    @FXML
+    public void restart(){
+        this.main.restartGame();
+    }
+
 }
