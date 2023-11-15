@@ -10,18 +10,44 @@
 
 
 ## New File
-* Game.fxml
-* GameSceneController.java
-* Menu.fxml
-* MenuController.java
-* Tutorial.fxml
-* TutorialController.java 
-* Win.fxml
-* WinController.java
+
+### GameScene.fxml
+- move all the UI code to this file
+- add a pause button
+- move level label to left
+
+### GameSceneController.java
+- add a constructor which have main and stage as parameter
+- the code to set up the game scene is here, but is call inside Main.java through this controller
+- add the ball, block , paddle in this file instead of the Main.java
+- Most of the method is moved from Main.java
+
+### Menu.fxml
+- add start, tutorial and quit button in here
+- add a brick breaker image at the top
+- reuse this file when pause button is clicked, and the text of start button will change to resume, the other is same
+
+
+### MenuController.java
+- when start button is click, it will check the text inside the button, if is start then call startGame(),else call loadGame() 
+- add a constructor which have main and stage as parameter
+- all the onAction functionality of the button in menu is defined here
+
+### Tutorial.fxml
+### TutorialController.java 
+
+### Win.fxml
+- screen that i add for game winning and losing
+- show the score after win or lose
+- added play again and quit button 
+
+### WinController.java
+- restart() and exit() function is defined here
 
 ### BallControl.java
 - all the method and field is moved from Main.java to hava a cleaner Main.java file
 - change the private variable to public static variable because it is being used among the project, and it is unique
+- fix one bug that when collide to left block, gorightball should be equal false
 
 ### Init.java
 - all the method and field is moved from Main.java to hava a cleaner Main.java file
@@ -51,7 +77,7 @@
 
 ### LoadSave.java
 - change some variable typo error
-- 
+
 ### Main.java
 - 
 
@@ -126,5 +152,7 @@ Communicate any unexpected challenges or issues you
 encountered during the assignment. Describe how you addressed or attempted to
 resolve them.
 
+
+nextlevel run twice
 
 
