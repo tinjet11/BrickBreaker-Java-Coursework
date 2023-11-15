@@ -2,46 +2,69 @@
 # Name - Leong Tin Jet
 
 
+## General refactoring work that I have done
+- fixing typo issue to have a more readable code
+- use lambda expression
+- set multiple field to final and static (to share among classes)
+- change variable involve break to paddle (better naming, the previous one is not easy to understand)
+
 
 ## New File
-Game.fxml
-GameSceneController.java
-Menu.fxml
-MenuController.java
-Tutorial.fxml
-TutorialController.java
-Win.fxml
-WinController.java
+* Game.fxml
+* GameSceneController.java
+* Menu.fxml
+* MenuController.java
+* Tutorial.fxml
+* TutorialController.java 
+* Win.fxml
+* WinController.java
 
-BallControl.java
-Init.java
-OnAction.java (interface from GameEngine)
+### BallControl.java
+- all the method and field is moved from Main.java to hava a cleaner Main.java file
+- change the private variable to public static variable because it is being used among the project, and it is unique
+
+### Init.java
+- all the method and field is moved from Main.java to hava a cleaner Main.java file
+- move to this file because 
+
+### Actionable.java
+- interface that I move from GameEngine.java
+- rename the interface from OnAction to Actionable
 
 ## Existing file
-Score.java
-- I add a constructor,which have main instance as parameter
-- I  add multiple thread to each function to prevent the UI from being lagged
-- I  change the way that the score show when one block get hitted, using transition
 
-Block.java
+### Block.java
+- change the hit logic so that don't have penetrated issue
+
+### BlockSerializable.java
+- rename file to BlockSerialize
+
+### Bonus.java
+- change the public variable to private variable
+- create getter and setter for some private variable
+
+### GameEngine.java
+- inside stop() method, I change all the thread.stop() to thread.interrupt
+- move OnAction interface to its own file
+- add platform run later to Update() and PhysicsCalculation()
+- add a break statement inside the while loop of Update() and PhysicsCalculation() to prevent the program being stucked
+
+### LoadSave.java
+- change some variable typo error
+- 
+### Main.java
 - 
 
-BlockSerializable.java
-- no changes
-
-Main.java
-- 
-
-GameEngine.java
-* inside stop() method, i change all the thread.stop() to thread.interrupt
-* move OnAction interface to its own file
-* 
+### Score.java
+- add a constructor,which have main instance as parameter
+- utilizes JavaFX's Timeline and KeyFrame for animation instead of creating a separate thread and using Thread.sleep()
+- removed unused import statements
+- Code formatting is improved, and lambda expressions are used for conciseness in certain places, like the Platform.runLater() calls.
+- remove showWin() and showGameOver() method
+- change the show() method, utilise the showMessage() method thus prevent any code duplication
 
 
-General refactoring work that i have done
-- fixing typo issue to have a more readable code
-- replace name  to lambda expression 
-- set multiple field to final and static
+
 
 
 Menu added, with a start button and a image
