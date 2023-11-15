@@ -7,37 +7,36 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 public class LoadSave {
-    public boolean          isExistHeartBlock;
-    public boolean          isGoldStatus;
-    public boolean          goDownBall;
-    public boolean          goRightBall;
-    public boolean          collideToBreak;
-    public boolean          collideToBreakAndMoveToRight;
-    public boolean          collideToRightWall;
-    public boolean          collideToLeftWall;
-    public boolean          collideToRightBlock;
-    public boolean          collideToBottomBlock;
-    public boolean          collideToLeftBlock;
-    public boolean          collideToTopBlock;
-    public int              level;
-    public int              score;
-    public int              heart;
-  //  public int              destroyedBlockCount;
-    public int  remainingBlockCount;
-    public double           xBall;
-    public double           yBall;
-    public double           xBreak;
-    public double           yBreak;
-    public double           centerBreakX;
-    public long             time;
-    public long             goldTime;
-    public double           vX;
-    public ArrayList<BlockSerializable> blocks = new ArrayList<BlockSerializable>();
+    public boolean isExistHeartBlock;
+    public boolean isGoldStatus;
+    public boolean goDownBall;
+    public boolean goRightBall;
+    public boolean collideToPaddle;
+    public boolean collideTopPaddleAndMoveToRight;
+    public boolean collideToRightWall;
+    public boolean collideToLeftWall;
+    public boolean collideToRightBlock;
+    public boolean collideToBottomBlock;
+    public boolean collideToLeftBlock;
+    public boolean collideToTopBlock;
+    public int level;
+    public int score;
+    public int heart;
+
+    public int remainingBlockCount;
+    public double xBall;
+    public double yBall;
+    public double xPaddle;
+    public double yPaddle;
+    public double centerPaddleX;
+    public long time;
+    public long goldTime;
+    public double vX;
+    public ArrayList<BlockSerialize> blocks = new ArrayList<BlockSerialize>();
 
 
     public void read() {
         File saveFile = new File(Main.savePath);
-        System.out.println(saveFile.toString());
         if (saveFile.exists()) {
             // Proceed with reading the save file
             try {
@@ -52,9 +51,9 @@ public class LoadSave {
 
                 xBall = inputStream.readDouble();
                 yBall = inputStream.readDouble();
-                xBreak = inputStream.readDouble();
-                yBreak = inputStream.readDouble();
-                centerBreakX = inputStream.readDouble();
+                xPaddle = inputStream.readDouble();
+                yPaddle = inputStream.readDouble();
+                centerPaddleX = inputStream.readDouble();
                 time = inputStream.readLong();
                 goldTime = inputStream.readLong();
                 vX = inputStream.readDouble();
@@ -64,8 +63,8 @@ public class LoadSave {
                 isGoldStatus = inputStream.readBoolean();
                 goDownBall = inputStream.readBoolean();
                 goRightBall = inputStream.readBoolean();
-                collideToBreak = inputStream.readBoolean();
-                collideToBreakAndMoveToRight = inputStream.readBoolean();
+                collideToPaddle = inputStream.readBoolean();
+                collideTopPaddleAndMoveToRight = inputStream.readBoolean();
                 collideToRightWall = inputStream.readBoolean();
                 collideToLeftWall = inputStream.readBoolean();
                 collideToRightBlock = inputStream.readBoolean();
@@ -77,7 +76,7 @@ public class LoadSave {
                 try {
                     Object obj = inputStream.readObject();
                     if (obj instanceof ArrayList<?>) {
-                        blocks = (ArrayList<BlockSerializable>) obj;
+                        blocks = (ArrayList<BlockSerialize>) obj;
                     }
 
                 } catch (ClassNotFoundException e) {
