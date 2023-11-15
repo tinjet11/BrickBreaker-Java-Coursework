@@ -1,6 +1,7 @@
 package brickGame;
 
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
@@ -24,38 +25,24 @@ public class Bonus implements Serializable {
         draw();
     }
 
-    public void setX(double x){
-        this.x = x;
-    }
-    public double getX(){
-        return  x;
-    }
-
-    public void setY(double y){
-        this.y = y;
-    }
-
-    public double getY(){
-        return  y;
-    }
-
-
-
     private void draw() {
-        choco = new Rectangle();
-        choco.setWidth(30);
-        choco.setHeight(30);
-        choco.setX(x);
-        choco.setY(y);
+        Platform.runLater(()->{
+            choco = new Rectangle();
+            choco.setWidth(30);
+            choco.setHeight(30);
+            choco.setX(x);
+            choco.setY(y);
 
-        String url;
-        if (new Random().nextInt(20) % 2 == 0) {
-            url = "bonus1.png";
-        } else {
-            url = "bonus2.png";
-        }
+            String url;
+            if (new Random().nextInt(20) % 2 == 0) {
+                url = "bonus1.png";
+            } else {
+                url = "bonus2.png";
+            }
 
-        choco.setFill(new ImagePattern(new Image(url)));
+            choco.setFill(new ImagePattern(new Image(url)));
+        });
+
     }
 
     public long getTimeCreated() {
@@ -73,4 +60,18 @@ public class Bonus implements Serializable {
     public void setTaken(boolean taken) {
         this.taken = taken;
     }
+
+    public double getX(){
+        return  x;
+    }
+    public void setY(double y){
+        this.y = y;
+    }
+    public double getY(){
+        return  y;
+    }
+
+
+
 }
+
