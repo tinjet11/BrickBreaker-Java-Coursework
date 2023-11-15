@@ -1,6 +1,9 @@
 package brickGame;
 
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
 
 import static brickGame.Main.*;
 
@@ -8,8 +11,8 @@ public class BallControl {
 
     public static boolean goDownBall                  = true;
     public static boolean goRightBall                 = true;
-    public static boolean collideToBreak               = false;
-    public static boolean collideToBreakAndMoveToRight = true;
+    public static boolean collideToPaddle = false;
+    public static boolean collideToPaddleAndMoveToRight = true;
     public static boolean collideToRightWall           = false;
     public static boolean collideToLeftWall            = false;
 
@@ -25,8 +28,8 @@ public class BallControl {
 
     public static void resetcollideFlags() {
 
-        collideToBreak = false;
-        collideToBreakAndMoveToRight = false;
+        collideToPaddle = false;
+        collideToPaddleAndMoveToRight = false;
         collideToRightWall = false;
         collideToLeftWall = false;
 
@@ -64,30 +67,49 @@ public class BallControl {
                 goDownBall = false;
                 resetcollideFlags();
             });
-                if (!isGoldStatus) {
+            if (!isGoldStatus) {
                     //TODO gameover
                     heart = heart - 1;
                     ballOutOfBounds = true;
                     new Score(main).show(sceneWidth / 2, sceneHeight / 2, -1);
 
-                    if (heart == 0) {
-                        new Score(main).showGameOver();
+                    if (heart <= 0) {
+                    //  new Score(main).showGameOver();
                         engine.stop();
-                    }
 
+                        try{
+                            FXMLLoader fxmlLoader = new FXMLLoader(main.getClass().getResource("Win.fxml"));
+                            fxmlLoader.setControllerFactory(c -> {
+                                return new WinController(main);
+                            });
+                            Scene winScene= new Scene(fxmlLoader.load());
+
+                            Label scorePlaceholder = (Label) winScene.lookup("#scorePlaceholder");
+                            scorePlaceholder.setText(String.valueOf(score));
+
+                            Label winloselabel = (Label) winScene.lookup("#winloselabel");
+                            winloselabel.setText("Game Over :(");
+
+                            primaryStage.setTitle("Brick Breaker Game");
+                            primaryStage.setScene(winScene);
+                            primaryStage.show();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
             }
            // return;
         }
 
-        if (yBall >= yBreak - ballRadius) {
+        if (yBall >= yPaddle - ballRadius) {
             //System.out.println("collide1");
-            if (xBall >= xBreak && xBall <= xBreak + breakWidth) {
+            if (xBall >= xPaddle && xBall <= xPaddle + paddleWidth) {
                 hitTime = time;
                 resetcollideFlags();
-                collideToBreak = true;
+                collideToPaddle = true;
                 goDownBall = false;
 
-                double relation = (xBall - centerBreakX) / (breakWidth / 2);
+                double relation = (xBall - centerPaddleX) / (paddleWidth / 2);
 
                 if (Math.abs(relation) <= 0.3) {
                     //vX = 0;
@@ -100,10 +122,10 @@ public class BallControl {
                     //System.out.println("vX " + vX);
                 }
 
-                if (xBall - centerBreakX > 0) {
-                    collideToBreakAndMoveToRight = true;
+                if (xBall - centerPaddleX > 0) {
+                    collideToPaddleAndMoveToRight = true;
                 } else {
-                    collideToBreakAndMoveToRight = false;
+                    collideToPaddleAndMoveToRight = false;
                 }
                 //System.out.println("collide2");
             }
@@ -121,8 +143,8 @@ public class BallControl {
             collideToLeftWall = true;
         }
 
-        if (collideToBreak) {
-            if (collideToBreakAndMoveToRight) {
+        if (collideToPaddle) {
+            if (collideToPaddleAndMoveToRight) {
                 goRightBall = true;
             } else {
                 goRightBall = false;
