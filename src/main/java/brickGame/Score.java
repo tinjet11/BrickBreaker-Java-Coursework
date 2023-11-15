@@ -12,7 +12,7 @@ import javafx.animation.Timeline;
 import javafx.util.Duration;
 public class Score {
     private Main main;
-    private static final Duration ANIMATION_DURATION = Duration.seconds(1);
+    private static final Duration ANIMATION_DURATION = Duration.seconds(1.5);
     private static final double OPACITY_END_VALUE = 0.0;
     private static final double SCALE_END_VALUE = 0.0;
 
@@ -39,16 +39,6 @@ public class Score {
         timeline.getKeyFrames().addAll(opacityFrame, scaleXFrame, scaleYFrame);
         timeline.setOnFinished(event -> main.root.getChildren().remove(label));
         Platform.runLater(() -> timeline.play());
-    }
-
-    public void showGameOver() {
-        Label label = new Label("Game Over :(");
-        label.setTranslateX(200);
-        label.setTranslateY(250);
-        label.setScaleX(2);
-        label.setScaleY(2);
-        //createRestartButton();
-        main.root.getChildren().addAll(label);
     }
 
 }
