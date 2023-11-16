@@ -4,7 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="700.0" prefWidth="500.0" style="-fx-background-image: url('path/to/background/image.jpg');" stylesheets="@../win_style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brickGame.EndGameSceneController">
+<AnchorPane prefHeight="700.0" prefWidth="500.0" style="-fx-background-image: url('path/to/background/image.jpg');" stylesheets="@../endGameScene_style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brickGame.EndGameSceneController">
    <children>
       <Label fx:id="winloselabel" layoutX="145.0" layoutY="72.0" styleClass="title-label" text="Congratulations! You Win!" />
       <Button fx:id="restart" layoutX="200.0" layoutY="200.0" mnemonicParsing="false" onAction="#restart" styleClass="button" text="Play Again" />
