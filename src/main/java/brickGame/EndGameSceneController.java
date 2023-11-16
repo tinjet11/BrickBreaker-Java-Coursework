@@ -2,14 +2,14 @@ package brickGame;
 
 import javafx.fxml.FXML;
 
-public class WinController {
+public class EndGameSceneController {
     private Main main;
 
-    public WinController(Main main){
+    public EndGameSceneController(Main main){
         this.main = main;
     }
 
-    public WinController(){
+    public EndGameSceneController(){
 
     }
 
