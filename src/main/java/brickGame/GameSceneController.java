@@ -80,9 +80,9 @@ public class GameSceneController {
                 }
                 if (level == endLevel) {
                     try{
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Win.fxml"));
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("EndGameScene.fxml"));
                         fxmlLoader.setControllerFactory(c -> {
-                            return new WinController(this.main);
+                            return new EndGameSceneController(this.main);
                         });
                         Scene winScene= new Scene(fxmlLoader.load());
 

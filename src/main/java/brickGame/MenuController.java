@@ -9,8 +9,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static brickGame.Main.isGameRun;
-
 public class MenuController {
 
     public MenuController() {
@@ -55,9 +53,9 @@ public class MenuController {
     public void onOpenTutorial() {
 
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Tutorial.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Settings.fxml"));
             fxmlLoader.setControllerFactory(c -> {
-                return new TutorialController(this.main, primaryStage);
+                return new SettingsController(this.main, primaryStage);
             });
 
             Scene tutorialScene = new Scene(fxmlLoader.load());

@@ -4,13 +4,9 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -26,8 +22,9 @@ import static brickGame.BallControl.*;
 public class Main extends Application implements Actionable {
 
     public static boolean isGameRun = false;
-    public static final int endLevel = 18;
+    public static int endLevel = 18;
     public static int level = 15;
+
     public static double xPaddle = 0.0f;
     public static double centerPaddleX;
     public static double yPaddle = 640.0f;
@@ -52,7 +49,8 @@ public class Main extends Application implements Actionable {
 
     public static double v = 1.000;
 
-    public static int heart = 1000;
+    public static int heart = 10;
+    public static int initialHeart = 3;
     public static int score = 0;
     public static long time = 0;
     public static long hitTime = 0;
@@ -82,9 +80,9 @@ public class Main extends Application implements Actionable {
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         initializeMenuScene();
-        FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("Tutorial.fxml"));
+        FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("Settings.fxml"));
         fxmlLoader1.setControllerFactory(c -> {
-            return new TutorialController(this, primaryStage);
+            return new SettingsController(this, primaryStage);
         });
     }
 
@@ -108,6 +106,9 @@ public class Main extends Application implements Actionable {
 
     public void startGame(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
+        if(!isGameRun){
+            heart =  initialHeart;
+        }
         isGameRun = true;
 
         FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("GameScene.fxml"));
@@ -322,7 +323,7 @@ public class Main extends Application implements Actionable {
 
         try {
             level = 1;
-            heart = 3;
+            heart = initialHeart;
             score = 0;
             vX = 1.000;
             remainingBlockCount = 0;

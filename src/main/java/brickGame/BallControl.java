@@ -78,9 +78,9 @@ public class BallControl {
                         engine.stop();
 
                         try{
-                            FXMLLoader fxmlLoader = new FXMLLoader(main.getClass().getResource("Win.fxml"));
+                            FXMLLoader fxmlLoader = new FXMLLoader(main.getClass().getResource("EndGameScene.fxml"));
                             fxmlLoader.setControllerFactory(c -> {
-                                return new WinController(main);
+                                return new EndGameSceneController(main);
                             });
                             Scene winScene= new Scene(fxmlLoader.load());
 
