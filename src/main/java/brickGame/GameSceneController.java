@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import static brickGame.GameStateManager.gameState;
 import static brickGame.Main.*;
 
 public class GameSceneController {
@@ -32,6 +33,7 @@ public class GameSceneController {
     private Main main;
 
     private GameLogicHandler gameLogicHandler;
+    private MenuController menuController;
     public GameSceneController() {
 
     }
@@ -83,18 +85,17 @@ public class GameSceneController {
                 }
                 if (level == endLevel) {
                     try{
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("EndGameScene.fxml"));
+                        gameState =GameStateManager.GameState.GAME_OVER;
+                        isGameRun = false;
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Menu.fxml"));
                         fxmlLoader.setControllerFactory(c -> {
-                            return new EndGameSceneController(this.main);
+                            return menuController = new MenuController(this.main,this.primaryStage);
                         });
-                        Scene winScene= new Scene(fxmlLoader.load());
 
-                        Label scorePlaceholder = (Label) winScene.lookup("#scorePlaceholder");
-                        scorePlaceholder.setText(String.valueOf(score));
+                        Scene winMenuScene= new Scene(fxmlLoader.load());
+                        menuController.showMenuScene("Win",winMenuScene);
 
-                        primaryStage.setTitle("Brick Breaker Game");
-                        primaryStage.setScene(winScene);
-                        primaryStage.show();
+
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -169,7 +170,7 @@ public class GameSceneController {
             public void run() {
                 int sleepTime = 4;
                 for (int i = 0; i < 30; i++) {
-                    if (xPaddle == (sceneWidth - paddleWidth) && direction == RIGHT) {
+                    if (xPaddle == (SCENE_WIDTH - PADDLE_WIDTH) && direction == RIGHT) {
                         return;
                     }
                     if (xPaddle == 0 && direction == LEFT) {
@@ -180,7 +181,7 @@ public class GameSceneController {
                     } else {
                         xPaddle--;
                     }
-                    centerPaddleX = xPaddle + halfPaddleWidth;
+                    centerPaddleX = xPaddle + HALF_PADDLE_WIDTH;
                     try {
                         Thread.sleep(sleepTime);
                     } catch (InterruptedException e) {
@@ -215,6 +216,7 @@ public class GameSceneController {
         menuScene.getStylesheets().add("style.css");
         Button startbtn = (Button) menuScene.lookup("#startButton");
         startbtn.setText("Resume");
+        gameState = GameStateManager.GameState.PAUSED;
 
         if (primaryStage != null) {
             primaryStage.setTitle("Brick Breaker Game");
