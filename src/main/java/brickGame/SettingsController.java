@@ -9,6 +9,9 @@ import javafx.scene.control.ScrollBar;
 import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
+import static brickGame.GameStateManager.gameState;
 import static brickGame.Main.*;
 
 public class SettingsController {
@@ -58,11 +61,15 @@ public class SettingsController {
 
             Button startButton = (Button) menuScene.lookup("#startButton");
 
-            if (isGameRun) {
-                startButton.setText("Resume");
-            } else {
+            if (gameState == GameStateManager.GameState.ON_START) {
                 startButton.setText("Start Game");
+            } else if (gameState == GameStateManager.GameState.PAUSED) {
+                startButton.setText("Resume");
+            } else if (gameState == GameStateManager.GameState.GAME_OVER) {
+                startButton.setText("Play Again");
             }
+
+
 
             primaryStage.setTitle("Brick Breaker Game");
             primaryStage.setScene(menuScene);
