@@ -9,7 +9,7 @@ import java.util.Random;
 
 import static brickGame.Main.*;
 
-public class Init {
+public class InitGameComponent {
     //set up the brick in the game according to the current level
     public void initBoard() {
         for (int i = 0; i < 4; i++) {
@@ -33,7 +33,7 @@ public class Init {
                 } else {
                     type = Block.BLOCK_NORMAL;
                 }
-                blocks.add(new Block(j, i, colors[r % (colors.length)], type));
+                blocks.add(new Block(j, i, type));
                 //System.out.println("colors " + r % (colors.length));
             }
         }
@@ -51,12 +51,13 @@ public class Init {
         ball.setFill(new ImagePattern(new Image("ball.png")));
     }
 
-    public void initBreak() {
+    // the paddle
+    public void initPaddle() {
         rect = new Rectangle();
-        rect.setWidth(breakWidth);
-        rect.setHeight(breakHeight);
-        rect.setX(xBreak);
-        rect.setY(yBreak);
+        rect.setWidth(paddleWidth);
+        rect.setHeight(paddleHeight);
+        rect.setX(xPaddle);
+        rect.setY(yPaddle);
 
         ImagePattern pattern = new ImagePattern(new Image("block.jpg"));
 

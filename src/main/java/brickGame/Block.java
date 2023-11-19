@@ -8,8 +8,10 @@ import javafx.scene.shape.Rectangle;
 
 import java.io.Serializable;
 
+import static brickGame.Main.ballRadius;
+
 public class Block implements Serializable {
-    private static Block block = new Block(-1, -1, Color.TRANSPARENT, 99);
+    private static Block block = new Block(-1, -1, 99);
 
     public int row;
     public int column;
@@ -30,22 +32,21 @@ public class Block implements Serializable {
     public Rectangle rect;
 
 
-    public static int NO_HIT = -1;
-    public static int HIT_RIGHT = 0;
-    public static int HIT_BOTTOM = 1;
-    public static int HIT_LEFT = 2;
-    public static int HIT_TOP = 3;
+    public static final int NO_HIT = -1;
+    public static final int HIT_RIGHT = 0;
+    public static final int HIT_BOTTOM = 1;
+    public static final int HIT_LEFT = 2;
+    public static final int HIT_TOP = 3;
 
-    public static int BLOCK_NORMAL = 99;
-    public static int BLOCK_CHOCO = 100;
-    public static int BLOCK_STAR = 101;
-    public static int BLOCK_HEART = 102;
+    public static final int BLOCK_NORMAL = 99;
+    public static final int BLOCK_CHOCO = 100;
+    public static final int BLOCK_STAR = 101;
+    public static final int BLOCK_HEART = 102;
 
 
-    public Block(int row, int column, Color color, int type) {
+    public Block(int row, int column, int type) {
         this.row = row;
         this.column = column;
-        this.color = color;
         this.type = type;
 
         draw();
@@ -74,36 +75,37 @@ public class Block implements Serializable {
             ImagePattern pattern = new ImagePattern(image);
             rect.setFill(pattern);
         } else {
-            rect.setFill(color);
+            // rect.setFill(color);
+            Image image = new Image("brick.jpg");
+            ImagePattern pattern = new ImagePattern(image);
+            rect.setFill(pattern);
         }
 
     }
 
-
     public int checkHitToBlock(double xBall, double yBall) {
-
         if (isDestroyed) {
             return NO_HIT;
         }
 
-        if (xBall >= x && xBall <= x + width && yBall == y + height) {
-            return HIT_BOTTOM;
-        }
 
-        if (xBall >= x && xBall <= x + width && yBall == y) {
-            return HIT_TOP;
-        }
+        if (xBall + ballRadius >= x && xBall - ballRadius <= x + width && yBall + ballRadius >= y && yBall - ballRadius <= y + height) {
+            // Collision detected
+            double dx = Math.min(Math.abs(xBall - x), Math.abs(xBall - (x + width)));
+            double dy = Math.min(Math.abs(yBall - y), Math.abs(yBall - (y + height)));
 
-        if (yBall >= y && yBall <= y + height && xBall == x + width) {
-            return HIT_RIGHT;
-        }
-
-        if (yBall >= y && yBall <= y + height && xBall == x) {
-            return HIT_LEFT;
+            if (dx < dy) {
+                // Collision on the x-axis
+                return xBall < x + width / 2 ? HIT_LEFT : HIT_RIGHT;
+            } else {
+                // Collision on the y-axis
+                return yBall < y + height / 2 ? HIT_TOP : HIT_BOTTOM;
+            }
         }
 
         return NO_HIT;
     }
+
 
     public static int getPaddingTop() {
         return block.paddingTop;

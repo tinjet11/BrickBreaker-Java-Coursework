@@ -5,13 +5,13 @@ import javafx.application.Platform;
 
 public class GameEngine {
 
-    private OnAction onAction;
+    private Actionable onAction;
     private int fps = 15;
     private Thread updateThread;
     private Thread physicsThread;
     public boolean isStopped = true;
 
-    public void setOnAction(OnAction onAction) {
+    public void setOnAction(Actionable onAction) {
         this.onAction = onAction;
     }
 
@@ -28,17 +28,9 @@ public class GameEngine {
             public void run() {
                 while (!updateThread.isInterrupted()) {
                     try {
-                        // Perform your update logic in the background thread
-
-                        // Update the UI components (JavaFX nodes) from the JavaFX application thread
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                onAction.onUpdate();
-                                // You can also update other UI components here
-                            }
+                        Platform.runLater(() -> {
+                            onAction.onUpdate();
                         });
-
                         Thread.sleep(fps);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -64,17 +56,9 @@ public class GameEngine {
             public void run() {
                 while (!physicsThread.isInterrupted()) {
                     try {
-                        // Perform your physics calculations in the background thread
-
-                        // Update the UI components (JavaFX nodes) from the JavaFX application thread
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                onAction.onPhysicsUpdate();
-                                // You can also update other UI components here
-                            }
+                        Platform.runLater(() -> {
+                            onAction.onPhysicsUpdate();
                         });
-
                         Thread.sleep(fps);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -100,7 +84,7 @@ public class GameEngine {
         isStopped = false;
     }
 
-//change from .stop to .interrupt
+    //change from .stop to .interrupt
     public void stop() {
         if (!isStopped) {
             isStopped = true;
@@ -123,19 +107,16 @@ public class GameEngine {
                         time++;
                         onAction.onTime(time);
                         Thread.sleep(1);
-                      //  break;
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
         timeThread.start();
     }
-
-
 
 
 }
