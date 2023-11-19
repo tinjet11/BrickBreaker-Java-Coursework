@@ -41,21 +41,21 @@ public class InitGameComponent {
 
     public void initBall() {
         Random random = new Random();
-        xBall = random.nextInt(sceneWidth) + 1;
+        xBall = random.nextInt(SCENE_WIDTH) + 1;
         // Ensure that the ball starts above the screen's bottom edge
-        int minYBall = ((level + 1) * Block.getHeight()) + 2 * ballRadius;
-        yBall = random.nextInt(sceneHeight - minYBall) + minYBall;
+        int minYBall = ((level + 1) * Block.getHeight()) + 2 * BALL_RADIUS;
+        yBall = random.nextInt(SCENE_HEIGHT - minYBall) + minYBall;
 
         ball = new Circle();
-        ball.setRadius(ballRadius);
+        ball.setRadius(BALL_RADIUS);
         ball.setFill(new ImagePattern(new Image("ball.png")));
     }
 
     // the paddle
     public void initPaddle() {
         rect = new Rectangle();
-        rect.setWidth(paddleWidth);
-        rect.setHeight(paddleHeight);
+        rect.setWidth(PADDLE_WIDTH);
+        rect.setHeight(PADDLE_HEIGHT);
         rect.setX(xPaddle);
         rect.setY(yPaddle);
 
