@@ -33,15 +33,20 @@
 - add a constructor which have main and stage as parameter
 - all the onAction functionality of the button in menu is defined here
 
-### Tutorial.fxml
-### TutorialController.java 
+### Settings.fxml
+- add a interface for user to adjust the initial heart number, end Level, background music volume and on/off background music
 
-### Win.fxml
+### SettingsController.java 
+- provide the functionality of adjust initial heart number
+- provide the functionality of adjust end level
+- provide the functionality of turn on/off background music and adjust volume
+
+### EndGameScene.fxml
 - screen that i add for game winning and losing
 - show the score after win or lose
 - added play again and quit button 
 
-### WinController.java
+### EndGameSceneController.java
 - restart() and exit() function is defined here
 
 ### BallControl.java
