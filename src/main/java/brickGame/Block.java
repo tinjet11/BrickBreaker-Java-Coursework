@@ -8,7 +8,7 @@ import javafx.scene.shape.Rectangle;
 
 import java.io.Serializable;
 
-import static brickGame.Main.ballRadius;
+import static brickGame.Main.BALL_RADIUS;
 
 public class Block implements Serializable {
     private static Block block = new Block(-1, -1, 99);
@@ -89,7 +89,7 @@ public class Block implements Serializable {
         }
 
 
-        if (xBall + ballRadius >= x && xBall - ballRadius <= x + width && yBall + ballRadius >= y && yBall - ballRadius <= y + height) {
+        if (xBall + BALL_RADIUS >= x && xBall - BALL_RADIUS <= x + width && yBall + BALL_RADIUS >= y && yBall - BALL_RADIUS <= y + height) {
             // Collision detected
             double dx = Math.min(Math.abs(xBall - x), Math.abs(xBall - (x + width)));
             double dy = Math.min(Math.abs(yBall - y), Math.abs(yBall - (y + height)));
