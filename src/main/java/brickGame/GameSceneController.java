@@ -30,6 +30,8 @@ public class GameSceneController {
     @FXML
     private Button pauseButton;
     private Main main;
+
+    private GameLogicHandler gameLogicHandler;
     public GameSceneController() {
 
     }
@@ -37,6 +39,7 @@ public class GameSceneController {
     public GameSceneController(Main main, Stage primaryStage) {
         this.main = main;
         this.primaryStage = primaryStage;
+        this.gameLogicHandler = new GameLogicHandler(main);
     }
     public void setMain(Main main) {
         this.main = main;
@@ -123,13 +126,13 @@ public class GameSceneController {
                     remainingBlockCount = blocks.size();
                     if (level >= 1 && level < endLevel) {
                         engine = new GameEngine();
-                        engine.setOnAction(main);
+                        engine.setOnAction(gameLogicHandler);
                         engine.setFps(120);
                         engine.start();
                     }
                 } else {
                     engine = new GameEngine();
-                    engine.setOnAction(main);
+                    engine.setOnAction(gameLogicHandler);
                     engine.setFps(120);
                     engine.start();
                     loadFromSave = false;
@@ -196,7 +199,7 @@ public class GameSceneController {
     private void handlePauseButton(ActionEvent event) {
         System.out.println("Pause button clicked");
         // Implement the pause functionality here
-        saveGame();
+        gameStateManager.saveGame();
         // Rest of your code
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Menu.fxml"));
@@ -219,7 +222,7 @@ public class GameSceneController {
             primaryStage.show();
 
             startbtn.setOnAction(actionEvent -> {
-                main.loadGame();
+                gameStateManager.loadGame();
             });
         }
     }

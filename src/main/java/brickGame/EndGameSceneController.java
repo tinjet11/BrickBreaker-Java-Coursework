@@ -2,6 +2,8 @@ package brickGame;
 
 import javafx.fxml.FXML;
 
+import static brickGame.Main.gameStateManager;
+
 public class EndGameSceneController {
     private Main main;
 
@@ -20,7 +22,7 @@ public class EndGameSceneController {
 
     @FXML
     public void restart(){
-        this.main.restartGame();
+        gameStateManager.restartGame();
     }
 
 }

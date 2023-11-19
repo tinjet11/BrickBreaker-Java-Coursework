@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import static brickGame.Main.gameStateManager;
+
 public class MenuController {
 
     public MenuController() {
@@ -45,7 +47,7 @@ public class MenuController {
             }
             System.out.println("start 2");
         } else {
-            main.loadGame();
+            gameStateManager.loadGame();
         }
     }
 
