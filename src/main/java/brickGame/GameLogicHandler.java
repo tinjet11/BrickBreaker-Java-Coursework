@@ -106,7 +106,7 @@ public class GameLogicHandler implements Actionable {
         //System.out.println(remainingBlockCount);
         if (remainingBlockCount == 0 && level != endLevel) {
             System.out.println("Level Up!");
-            main.nextLevel();
+            gameStateManager.nextLevel();
         }
     }
     @Override
@@ -128,11 +128,11 @@ public class GameLogicHandler implements Actionable {
         }
         //this part is about the Bonus object
         for (Bonus choco : chocos) {
-            if (choco.getY() > sceneHeight || choco.isTaken()) {
+            if (choco.getY() > SCENE_HEIGHT || choco.isTaken()) {
                 continue;
             }
 
-            if (choco.getY() >= yPaddle && choco.getY() <= yPaddle + paddleHeight && choco.getX() >= xPaddle && choco.getX() <= xPaddle + paddleWidth) {
+            if (choco.getY() >= yPaddle && choco.getY() <= yPaddle + PADDLE_HEIGHT && choco.getX() >= xPaddle && choco.getX() <= xPaddle + PADDLE_WIDTH) {
                 System.out.println("You Got it and +3 score for you");
                 choco.setTaken(true);
                 choco.choco.setVisible(false);

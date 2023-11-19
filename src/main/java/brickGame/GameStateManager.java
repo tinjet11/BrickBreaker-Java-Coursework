@@ -1,5 +1,7 @@
 package brickGame;
 
+import javafx.application.Platform;
+
 import java.io.*;
 import java.util.ArrayList;
 
@@ -8,14 +10,22 @@ import static brickGame.Main.*;
 
 public class GameStateManager {
     private Main main;
+    public enum GameState {
+        ON_START,
+        IN_PROGRESS,
+        PAUSED,
+        GAME_OVER
+    }
+
+    public static GameState gameState = GameState.ON_START;
 
     public GameStateManager(Main main){
         this.main = main;
     }
     public static void saveGame() {
         new Thread(() -> {
-            new File(savePathDir).mkdirs();
-            File file = new File(savePath);
+            new File(SAVE_PATH_DIR).mkdirs();
+            File file = new File(SAVE_PATH);
             ObjectOutputStream outputStream = null;
 
             engine.stop();
@@ -128,7 +138,7 @@ public class GameStateManager {
             loadFromSave = true;
             if (loadFromSave) {
                 // Delete the saved game file
-                File saveFile = new File(Main.savePath);
+                File saveFile = new File(Main.SAVE_PATH);
                 if (saveFile.exists()) {
                     if (saveFile.delete()) {
                         System.out.println("Deleted the saved game file.");
@@ -173,5 +183,49 @@ public class GameStateManager {
             System.out.printf("%s", "restart  function in Main.java:");
         }
     }
+    private boolean nextLevelInProgress = false;
 
+    public void nextLevel() {
+        // Check if nextLevel is already in progress, if yes, return
+        if (nextLevelInProgress) {
+            return;
+        }
+
+        // Set the flag to indicate that nextLevel is in progress
+        nextLevelInProgress = true;
+
+        Platform.runLater(() -> {
+            try {
+                vX = 1.000;
+                vY = 1.000;
+
+                engine.stop();
+                resetcollideFlags();
+                goDownBall = true;
+
+                isGoldStatus = false;
+                isExistHeartBlock = false;
+
+                hitTime = 0;
+                time = 0;
+                goldTime = 0;
+
+                engine.stop();
+                blocks.clear();
+                chocos.clear();
+                remainingBlockCount = 0;
+                if (level < endLevel) {
+                    level++;
+                }
+                main.startGame(primaryStage);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.printf("%s", "nextLevel function in Main.java:");
+            } finally {
+                // Reset the flag to indicate that nextLevel is completed
+                nextLevelInProgress = false;
+            }
+        });
+    }
 }
