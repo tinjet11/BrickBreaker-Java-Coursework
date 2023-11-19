@@ -36,11 +36,11 @@ public class LoadSave {
 
 
     public void read() {
-        File saveFile = new File(Main.savePath);
+        File saveFile = new File(Main.SAVE_PATH);
         if (saveFile.exists()) {
             // Proceed with reading the save file
             try {
-                ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(new File(Main.savePath)));
+                ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(new File(Main.SAVE_PATH)));
 
 
                 level = inputStream.readInt();
