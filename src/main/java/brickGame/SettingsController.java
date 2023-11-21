@@ -7,17 +7,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.Slider;
-import javafx.stage.Stage;
-
-import java.io.IOException;
 
 import static brickGame.GameStateManager.gameState;
 import static brickGame.Main.*;
 
 public class SettingsController {
 
-    private Main main;
-    private Stage primaryStage;
+
 
     @FXML
     private Slider heartNumberSlider;
@@ -43,20 +39,16 @@ public class SettingsController {
 
     }
 
-    public SettingsController(Main main, Stage primaryStage) {
-        this.main = main;
-        this.primaryStage = primaryStage;
 
-    }
 
     @FXML
     public void back() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(SettingsController.class.getResource("fxml/Menu.fxml"));
 
-            fxmlLoader.setControllerFactory(c -> {
-                return new MenuController(this.main, primaryStage);
-            });
+//            fxmlLoader.setControllerFactory(c -> {
+//                return new MenuController();
+//            });
             Scene menuScene = new Scene(fxmlLoader.load());
 
             Button startButton = (Button) menuScene.lookup("#startButton");

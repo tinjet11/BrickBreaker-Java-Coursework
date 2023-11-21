@@ -1,9 +1,6 @@
 package brickGame;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 //import sun.plugin2.message.Message;
 import javafx.animation.KeyFrame;
@@ -17,9 +14,6 @@ public class Score {
     private static final double OPACITY_END_VALUE = 0.0;
     private static final double SCALE_END_VALUE = 0.0;
 
-    public Score(Main main) {
-        this.main = main;
-    }
 
     public void show(double x, double y, int score) {
         String sign = (score >= 0) ? "+" : "";

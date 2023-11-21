@@ -1,6 +1,8 @@
 package brickGame;
 
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -9,7 +11,7 @@ import static brickGame.BallControl.*;
 import static brickGame.Main.*;
 
 public class GameStateManager {
-    private Main main;
+
     public enum GameState {
         ON_START,
         IN_PROGRESS,
@@ -19,10 +21,28 @@ public class GameStateManager {
 
     public static GameState gameState = GameState.ON_START;
 
-    public GameStateManager(Main main){
-        this.main = main;
+    public static GameSceneController gameSceneController;
+
+    public void startGame() throws IOException {
+        if (!isGameRun) {
+            heart = initialHeart;
+        }
+        isGameRun = true;
+        System.out.println("test");
+        FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("fxml/GameScene.fxml"));
+        fxmlLoader1.setControllerFactory(c -> {
+            return gameSceneController = new GameSceneController();
+        });
+
+        gameScene = new Scene(fxmlLoader1.load());
+        gameSceneController.showScene(gameScene);
+        root = gameSceneController.getGamePane();
+        gameRoot = gameSceneController.getGameAnchorPane();
+        gameSceneController.setLevelLabel("Level: " + level);
     }
-    public static void saveGame() {
+
+
+    public void saveGame() {
         new Thread(() -> {
             new File(SAVE_PATH_DIR).mkdirs();
             File file = new File(SAVE_PATH);
@@ -147,7 +167,7 @@ public class GameStateManager {
                     }
                 }
             }
-            main.startGame(primaryStage);
+            startGame();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.printf("%s", "loadGame function in Main.java:");
@@ -177,7 +197,7 @@ public class GameStateManager {
             blocks.clear();
             chocos.clear();
 
-            main.startGame(primaryStage);
+        startGame();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.printf("%s", "restart  function in Main.java:");
@@ -217,7 +237,7 @@ public class GameStateManager {
                 if (level < endLevel) {
                     level++;
                 }
-                main.startGame(primaryStage);
+         startGame();
 
             } catch (Exception e) {
                 e.printStackTrace();

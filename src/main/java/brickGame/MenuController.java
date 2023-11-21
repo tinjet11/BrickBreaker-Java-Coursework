@@ -16,21 +16,6 @@ import static brickGame.Main.*;
 
 public class MenuController {
 
-    public MenuController() {
-        // Constructor logic, if needed
-    }
-    public MenuController(Main main, Stage primaryStage) {
-        this.main = main;
-      //  this.primaryStage = primaryStage;
-    }
-
-
-    private Main main;
-  //  private Stage primaryStage;
-
-    @FXML
-    private Button startButton;
-
     @FXML
     private VBox resultBox;
 
@@ -44,7 +29,8 @@ public class MenuController {
 
         if (gameState == GameStateManager.GameState.ON_START) {
             try {
-                main.startGame(primaryStage);
+                gameStateManager.startGame();
+                System.out.println("clicked");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -64,7 +50,7 @@ public class MenuController {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/Settings.fxml"));
             fxmlLoader.setControllerFactory(c -> {
-                return new SettingsController(this.main, primaryStage);
+                return new SettingsController();
             });
 
             Scene tutorialScene = new Scene(fxmlLoader.load());

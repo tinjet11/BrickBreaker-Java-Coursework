@@ -3,22 +3,16 @@ package brickGame;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
-
 import static brickGame.BallControl.*;
-import static brickGame.BallControl.setPhysicsToBall;
+import static brickGame.GameStateManager.gameSceneController;
 import static brickGame.Main.*;
 
 public class GameLogicHandler implements Actionable {
 
-    private Main main;
-
-
-
-
-    public GameLogicHandler(Main main){
-        this.main = main;
+    BallControl ballControl;
+    public  GameLogicHandler(){
+        ballControl = new BallControl();
     }
-
 
     @Override
     public void onUpdate() {
@@ -40,7 +34,7 @@ public class GameLogicHandler implements Actionable {
                     if (hitCode != Block.NO_HIT) {
                         score += 1;
 
-                        new Score(main).show(block.x, block.y, 1);
+                        new Score().show(block.x, block.y, 1);
 
                         block.rect.setVisible(false);
                         block.isDestroyed = true;
@@ -121,7 +115,7 @@ public class GameLogicHandler implements Actionable {
             checkDestroyedCount();
 
         }
-        setPhysicsToBall(main);
+        ballControl.setPhysicsToBall();
 
         if (time - goldTime > 5000) {
             Platform.runLater(() -> {
@@ -143,7 +137,7 @@ public class GameLogicHandler implements Actionable {
                 choco.choco.setVisible(false);
                 System.out.println("choco hited");
                 score += 3;
-                new Score(main).show(choco.getX(), choco.getY(), 3);
+                new Score().show(choco.getX(), choco.getY(), 3);
             }
             choco.setY(choco.getY() +((time - choco.getTimeCreated()) / 1000.000) + 1.000);
             Platform.runLater(() -> {

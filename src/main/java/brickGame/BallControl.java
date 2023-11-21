@@ -45,7 +45,8 @@ public class BallControl {
         ballOutOfBounds = false;
     }
     public static boolean ballOutOfBounds = false; // Add this flag
-    public static void setPhysicsToBall(Main main) {
+
+    public  void setPhysicsToBall() {
         //v = ((time - hitTime) / 1000.000) + 1.000;
 
         if (goDownBall) {
@@ -75,7 +76,7 @@ public class BallControl {
                     //TODO gameover
                     heart = heart - 1;
                     ballOutOfBounds = true;
-                    new Score(main).show(SCENE_WIDTH / 2, SCENE_HEIGHT / 2, -1);
+                    new Score().show(SCENE_WIDTH / 2, SCENE_HEIGHT / 2, -1);
 
                     if (heart <= 0) {
                     //  new Score(main).showGameOver();
@@ -84,9 +85,9 @@ public class BallControl {
                         try{
                             isGameRun = false;
                             gameState =GameStateManager.GameState.GAME_OVER;
-                            FXMLLoader fxmlLoader = new FXMLLoader(main.getClass().getResource("fxml/Menu.fxml"));
+                            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/Menu.fxml"));
                             fxmlLoader.setControllerFactory(c -> {
-                                return menuController = new MenuController(main,primaryStage);
+                                return menuController = new MenuController();
                             });
                             Scene winMenuScene= new Scene(fxmlLoader.load());
 

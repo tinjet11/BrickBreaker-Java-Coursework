@@ -22,6 +22,9 @@ public class Main extends Application {
     public static int endLevel = 18;
 
     public static int level = 1;
+    public static boolean isGoldStatus = false;
+
+    public static int remainingBlockCount = 0;
 
     public static double xPaddle = 0.0f;
     public static double centerPaddleX;
@@ -31,28 +34,28 @@ public class Main extends Application {
     public static final int HALF_PADDLE_WIDTH = PADDLE_WIDTH / 2;
     public static final int SCENE_WIDTH = 500;
     public static final int SCENE_HEIGHT = 700;
+    public static boolean isExistHeartBlock = false;
     public static final int LEFT = 1;
     public static final int RIGHT = 2;
 
-    public static boolean isGoldStatus = false;
-    public static boolean isExistHeartBlock = false;
+
 
     public static Rectangle rect;
     public static final int BALL_RADIUS = 10;
 
-    public static int remainingBlockCount = 0;
+
 
     public static double v = 1.000;
 
     public static int heart = 10;
     public static int initialHeart = 3;
+
     public static int score = 0;
     public static long time = 0;
     public static long hitTime = 0;
     public static long goldTime = 0;
 
     public static GameEngine engine;
-
     public static Scene gameScene;
     public static final String SAVE_PATH_DIR = "save"; // Relative to the project directory
 
@@ -64,25 +67,26 @@ public class Main extends Application {
 
     public static Pane root;
     public static AnchorPane gameRoot;
-
+    public static GameStateManager gameStateManager;
     public static boolean loadFromSave = false;
 
     public static Stage primaryStage;
 
-    public static GameSceneController gameSceneController;
-    public static GameStateManager gameStateManager ;
+
+
+
 
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        gameStateManager = new GameStateManager();
         this.primaryStage = primaryStage;
         initializeMenuScene();
         FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("fxml/Settings.fxml"));
         fxmlLoader1.setControllerFactory(c -> {
-            return new SettingsController(this, primaryStage);
+            return new SettingsController();
         });
 
-        gameStateManager = new GameStateManager(this);
     }
 
 
@@ -90,7 +94,7 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/Menu.fxml"));
         Scene menuScene = null;
         fxmlLoader.setControllerFactory(c -> {
-            return new MenuController(this, primaryStage);
+            return new MenuController();
         });
         try {
             menuScene = new Scene(fxmlLoader.load());
@@ -103,23 +107,7 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    public void startGame(Stage primaryStage) throws IOException {
-        this.primaryStage = primaryStage;
-        if (!isGameRun) {
-            heart = initialHeart;
-        }
-        isGameRun = true;
 
-        FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("fxml/GameScene.fxml"));
-        fxmlLoader1.setControllerFactory(c -> {
-            return gameSceneController = new GameSceneController(this, primaryStage);
-        });
-        gameScene = new Scene(fxmlLoader1.load());
-        gameSceneController.showScene(gameScene);
-        root = gameSceneController.getGamePane();
-        gameRoot = gameSceneController.getGameAnchorPane();
-        gameSceneController.setLevelLabel("Level: " + level);
-    }
 
 
     public static void main(String[] args) {

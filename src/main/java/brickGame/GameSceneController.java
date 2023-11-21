@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import static brickGame.BallControl.ball;
 import static brickGame.GameStateManager.gameState;
+
 import static brickGame.Main.*;
 
 public class GameSceneController {
@@ -22,7 +23,7 @@ public class GameSceneController {
     private Pane gamePane;
     @FXML
     private AnchorPane gameAnchorPane;
-    private Stage primaryStage;
+
     @FXML
     private Label scoreLabel;
     @FXML
@@ -31,22 +32,14 @@ public class GameSceneController {
     private Label levelLabel;
     @FXML
     private Button pauseButton;
-    private Main main;
+
 
     private GameLogicHandler gameLogicHandler;
     private MenuController menuController;
     public GameSceneController() {
-
+        this.gameLogicHandler = new GameLogicHandler();
     }
 
-    public GameSceneController(Main main, Stage primaryStage) {
-        this.main = main;
-        this.primaryStage = primaryStage;
-        this.gameLogicHandler = new GameLogicHandler(main);
-    }
-    public void setMain(Main main) {
-        this.main = main;
-    }
 
     public AnchorPane getGameAnchorPane() {
         return gameAnchorPane;
@@ -82,15 +75,15 @@ public class GameSceneController {
             if (!loadFromSave) {
                 System.out.println("test: " + level);
                 if (level > 1) {
-                    new Score(main).showMessage("Level Up :)", 300, 300);
+                    new Score().showMessage("Level Up :)", 300, 300);
                 }
                 if (level == endLevel) {
                     try{
                         gameState =GameStateManager.GameState.GAME_OVER;
                         isGameRun = false;
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Menu.fxml"));
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/Menu.fxml"));
                         fxmlLoader.setControllerFactory(c -> {
-                            return menuController = new MenuController(this.main,this.primaryStage);
+                            return menuController = new MenuController();
                         });
 
                         Scene winMenuScene= new Scene(fxmlLoader.load());
@@ -205,7 +198,7 @@ public class GameSceneController {
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/Menu.fxml"));
         fxmlLoader.setControllerFactory(c -> {
-            return new MenuController(this.main, primaryStage);
+            return new MenuController();
         });
         Scene menuScene = null;
         try {
