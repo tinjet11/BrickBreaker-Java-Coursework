@@ -54,7 +54,7 @@ public class GameLogicHandler implements Actionable {
                                 goldTime = time;
                                 ball.setFill(new ImagePattern(new Image("goldball.png")));
                                 System.out.println("gold ball");
-                                gameRoot.getStyleClass().add("goldRoot");
+                                root.getStyleClass().add("goldRoot");
                                 isGoldStatus = true;
                             });
                         }
@@ -120,7 +120,7 @@ public class GameLogicHandler implements Actionable {
         if (time - goldTime > 5000) {
             Platform.runLater(() -> {
                 ball.setFill(new ImagePattern(new Image("ball.png")));
-                gameRoot.getStyleClass().remove("goldRoot");
+                root.getStyleClass().remove("goldRoot");
                 isGoldStatus = false;
             });
 

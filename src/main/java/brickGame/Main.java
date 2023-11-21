@@ -18,7 +18,6 @@ import static brickGame.BallControl.*;
 public class Main extends Application {
 
     public static boolean isGameRun = false;
-
     public static int endLevel = 18;
 
     public static int level = 1;
@@ -38,12 +37,8 @@ public class Main extends Application {
     public static final int LEFT = 1;
     public static final int RIGHT = 2;
 
-
-
     public static Rectangle rect;
     public static final int BALL_RADIUS = 10;
-
-
 
     public static double v = 1.000;
 
@@ -65,17 +60,10 @@ public class Main extends Application {
     public static ArrayList<Block> blocks = new ArrayList<>();
     public static ArrayList<Bonus> chocos = new ArrayList<>();
 
-    public static Pane root;
-    public static AnchorPane gameRoot;
+    public static AnchorPane root;
     public static GameStateManager gameStateManager;
     public static boolean loadFromSave = false;
-
     public static Stage primaryStage;
-
-
-
-
-
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -86,9 +74,7 @@ public class Main extends Application {
         fxmlLoader1.setControllerFactory(c -> {
             return new SettingsController();
         });
-
     }
-
 
     private void initializeMenuScene() {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/Menu.fxml"));

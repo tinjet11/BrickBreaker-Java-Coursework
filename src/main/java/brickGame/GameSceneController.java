@@ -20,9 +20,7 @@ import static brickGame.Main.*;
 
 public class GameSceneController {
     @FXML
-    private Pane gamePane;
-    @FXML
-    private AnchorPane gameAnchorPane;
+    private AnchorPane gamePane;
 
     @FXML
     private Label scoreLabel;
@@ -40,13 +38,7 @@ public class GameSceneController {
         this.gameLogicHandler = new GameLogicHandler();
     }
 
-
-    public AnchorPane getGameAnchorPane() {
-        return gameAnchorPane;
-    }
-
-
-    public Pane getGamePane() {
+    public AnchorPane getGamePane() {
         return gamePane;
     }
 
@@ -66,7 +58,7 @@ public class GameSceneController {
     // Example: Method to show the scene
     public void showScene(Scene gameScene) throws IOException {
         if (primaryStage != null) {
-            gamePane = (Pane) gameScene.lookup("#gamePane");
+            gamePane = (AnchorPane) gameScene.lookup("#gamePane");
             scoreLabel = (Label) gameScene.lookup("#scoreLabel");
             heartLabel = (Label) gameScene.lookup("#heartLabel");
             levelLabel = (Label) gameScene.lookup("#levelLabel");

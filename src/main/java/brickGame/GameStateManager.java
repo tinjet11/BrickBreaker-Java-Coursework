@@ -37,7 +37,6 @@ public class GameStateManager {
         gameScene = new Scene(fxmlLoader1.load());
         gameSceneController.showScene(gameScene);
         root = gameSceneController.getGamePane();
-        gameRoot = gameSceneController.getGameAnchorPane();
         gameSceneController.setLevelLabel("Level: " + level);
     }
 
