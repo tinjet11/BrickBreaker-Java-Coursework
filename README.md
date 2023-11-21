@@ -34,27 +34,19 @@
 - all the onAction functionality of the button in menu is defined here
 
 ### Settings.fxml
-- add a interface for user to adjust the initial heart number, end Level, background music volume and on/off background music
+- add an interface for user to adjust the initial heart number, end Level, background music volume and on/off background music
 
 ### SettingsController.java 
 - provide the functionality of adjust initial heart number
 - provide the functionality of adjust end level
 - provide the functionality of turn on/off background music and adjust volume
 
-### EndGameScene.fxml
-- screen that i add for game winning and losing
-- show the score after win or lose
-- added play again and quit button 
-
-### EndGameSceneController.java
-- restart() and exit() function is defined here
-
 ### BallControl.java
 - all the method and field is moved from Main.java to hava a cleaner Main.java file
 - change the private variable to public static variable because it is being used among the project, and it is unique
 - fix one bug that when collide to left block, gorightball should be equal false
 
-### Init.java
+### InitGameComponent.java
 - all the method and field is moved from Main.java to hava a cleaner Main.java file
 - move to this file because 
 
@@ -62,12 +54,22 @@
 - interface that I move from GameEngine.java
 - rename the interface from OnAction to Actionable
 
+### GameLogicHandler
+- implements Actionable
+- move all the method that implements Actionable from Main into this file
+
+### GameStateManager
+- move loadGame(),saveGame(), restartGame() and nextLevel() from Main into this file
+- add a GameState enum to better represent the game state
+
+
+
 ## Existing file
 
 ### Block.java
 - change the hit logic so that don't have penetrated issue
 
-### BlockSerializable.java
+### BlockSerialize.java
 - rename file to BlockSerialize
 
 ### Bonus.java
@@ -116,10 +118,6 @@ https://www.reddit.com/r/javahelp/comments/4pnbuk/javafx_constructor_parameters_
 find the solution of cannot have parameter for controller class from the above link, which solve my issue when implementing mvc pattern because 
 i need to passing the primary stage and instance of Main class to other controller class
 
-one bug that i face after implement mvc pattern is when the gold ball is hit,there will abnormal scenario that the right and bottom part of the scene will not
-become gold background, instead it will become a "bouncing wall" which whenever the ball or the platform hit the right wall, that part will bounce to right, after 
-that it will bounce back to left
--fix already
 
 
 
@@ -160,4 +158,140 @@ resolve them.
 
 nextlevel run twice
 
+# General Refactoring:
+
+- Fixed typo issues for improved code readability.
+- Utilized lambda expressions.
+- Set multiple fields to `final` and `static` for sharing among classes.
+- Changed variable involving `break` to `paddle` for better naming.
+
+## New Files:
+
+### GameScene.fxml
+
+- Moved all game scene related UI code to this file.
+- Added a pause button.
+- Moved level label to the left.
+
+### GameSceneController.java
+
+- Added a constructor with `main` and `stage` as parameters.
+- Set up the game scene, called inside `Main.java` through this controller.
+- Added the ball, block, and paddle in this file instead of `Main.java`.
+- Moved most methods from `Main.java`.
+
+### Menu.fxml
+
+- Added start, settings, and quit buttons.
+- Added a brick breaker image at the top.
+- Reused this file when the pause button is clicked; the text of the start button changes to resume, while the others remain the same.
+- Reused this file when the pause button is clicked; the text of the start button changes to Play again, 
+  a Vbox is shown which consist of resultLabel and scoreLabel
+
+### MenuController.java
+
+- When the start button is clicked, it checks the text inside the button. If it's "start," it calls `startGame();` otherwise, it calls `loadGame()`.
+- Added a constructor with `main` and `stage` as parameters.
+- Defined all `onAction` functionality of the buttons in the menu.
+
+### Settings.fxml
+
+- Added an interface for users to adjust the initial heart number, end level, background music volume, and on/off background music.
+
+### SettingsController.java
+
+- Provided functionality to adjust the initial heart number.
+- Provided functionality to adjust the end level.
+- Provided functionality to turn on/off background music and adjust volume.
+
+### BallControl.java
+
+- Moved all methods and fields from `Main.java` for a cleaner file.
+- Changed private variables to public static variables since they are used among the project and are unique.
+- Fixed a bug: when colliding with the left block, `goRightBall` should be `false`.
+
+### InitGameComponent.java
+
+- all methods and fields in this file are moved from `Main.java`
+
+### Actionable.java
+
+- Interface moved from `GameEngine.java`.
+- Renamed the interface from `OnAction` to `Actionable`.
+
+### GameLogicHandler.java
+
+- Implements `Actionable`.
+- Moved all methods that implement `Actionable` from `Main` into this file.
+
+### GameStateManager.java
+
+- Moved `loadGame()`, `saveGame()`, `restartGame()`, and `nextLevel()` from `Main` into this file.
+- Added a `GameState` enum to better represent the game state.
+
+## Existing Files:
+
+### Block.java
+
+- Changed the collision logic to avoid penetration issues.
+
+### BlockSerialize.java
+
+- Renamed the file to `BlockSerialize`.
+
+### Bonus.java
+
+- Changed public variables to private variables.
+- Created getter and setter methods for some private variables.
+
+### GameEngine.java
+
+- Inside `stop()` method, changed all `thread.stop()` to `thread.interrupt()`.
+- Moved `OnAction` interface to its own file.
+- Added `Platform.runLater` to `Update()` and `PhysicsCalculation()`.
+- Added a break statement inside the while loop of `Update()` and `PhysicsCalculation()` to prevent the program from being stuck.
+
+### LoadSave.java
+
+- Fixed some variable typo errors.
+
+### Main.java
+
+- No specific changes mentioned.
+
+### Score.java
+
+- Added a constructor with `main` instance as a parameter.
+- Utilized JavaFX's Timeline and KeyFrame for animation instead of creating a separate thread and using `Thread.sleep()`.
+- Removed unused import statements.
+- Improved code formatting, and used lambda expressions for conciseness in certain places, like the `Platform.runLater()` calls.
+- Removed `showWin()` and `showGameOver()` methods.
+- Changed the `show()` method, utilized the `showMessage()` method to prevent any code duplication.
+
+## Additional Information:
+
+- Added a menu with a start button and an image.
+- Implemented pause and resume buttons.
+- Changed the logic of destroy block count to remaining block count to avoid issues after pausing and resuming the game.
+- Implemented the MVC pattern, successfully separating the UI code from `Main.java` using FXML and controllers.
+- Fixed a bug where the ball would get stuck at the bottom wall and not go up, causing continuous heart count decrease.
+- Found a solution to the issue of not being able to have parameters for controller classes when implementing the MVC pattern. Referenced [link](https://www.reddit.com/r/javahelp/comments/4pnbuk/javafx_constructor_parameters_for_controller/) for the solution.
+
+## Unexpected Problems:
+
+1. **Constructor Parameter for Controller:**
+    - **Issue:** Difficulty passing parameters to controller classes.
+    - **Solution:** Found a solution by referencing external sources, enabling the passing of the primary stage and Main class instance to other controller classes.
+
+2. **Ball Getting Stuck at Bottom Wall:**
+    - **Issue:** Occasionally, the ball would get stuck at the bottom wall.
+    - **Solution:** Implemented a fix to address the issue, ensuring that the ball continues its upward trajectory after touching the bottom wall.
+
+3. **Block Count Logic Issue:**
+    - **Issue:** The logic for block destruction count had a flaw, especially after pausing and resuming the game.
+    - **Solution:** Modified the logic to check the remaining block count rather than the destroyed block count, preventing unintended level progression.
+
+4. **Implementing MVC Pattern:**
+    - **Issue:** Difficulty in separating UI code from the main logic using FXML and controllers.
+    - **Solution:** Found a solution by referring to external sources, successfully implementing the MVC pattern by separating UI code into FXML files and corresponding controllers.
 
