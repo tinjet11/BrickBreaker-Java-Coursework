@@ -3,11 +3,15 @@ package brickGame;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.shape.Circle;
 
 import static brickGame.GameStateManager.gameState;
 import static brickGame.Main.*;
 
 public class BallControl {
+    public static Circle ball;
+    public static double xBall;
+    public static double yBall;
 
     public static boolean goDownBall                  = true;
     public static boolean goRightBall                 = true;
@@ -80,7 +84,7 @@ public class BallControl {
                         try{
                             isGameRun = false;
                             gameState =GameStateManager.GameState.GAME_OVER;
-                            FXMLLoader fxmlLoader = new FXMLLoader(main.getClass().getResource("Menu.fxml"));
+                            FXMLLoader fxmlLoader = new FXMLLoader(main.getClass().getResource("fxml/Menu.fxml"));
                             fxmlLoader.setControllerFactory(c -> {
                                 return menuController = new MenuController(main,primaryStage);
                             });

@@ -8,6 +8,7 @@ import javafx.scene.shape.Rectangle;
 import java.util.Random;
 
 import static brickGame.Main.*;
+import static brickGame.BallControl.*;
 
 public class InitGameComponent {
     //set up the brick in the game according to the current level
@@ -48,7 +49,7 @@ public class InitGameComponent {
 
         ball = new Circle();
         ball.setRadius(BALL_RADIUS);
-        ball.setFill(new ImagePattern(new Image("ball.png")));
+        ball.setFill(new ImagePattern(new Image("/ball.png")));
     }
 
     // the paddle
@@ -59,7 +60,7 @@ public class InitGameComponent {
         rect.setX(xPaddle);
         rect.setY(yPaddle);
 
-        ImagePattern pattern = new ImagePattern(new Image("block.jpg"));
+        ImagePattern pattern = new ImagePattern(new Image("/block.jpg"));
 
         rect.setFill(pattern);
     }

@@ -10,6 +10,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
+import static brickGame.Main.*;
 public class Score {
     private Main main;
     private static final Duration ANIMATION_DURATION = Duration.seconds(1.5);
@@ -30,14 +31,14 @@ public class Score {
         label.setTranslateX(x);
         label.setTranslateY(y);
 
-        Platform.runLater(() -> main.root.getChildren().add(label));
+        Platform.runLater(() -> root.getChildren().add(label));
 
         Timeline timeline = new Timeline();
         KeyFrame opacityFrame = new KeyFrame(ANIMATION_DURATION, new KeyValue(label.opacityProperty(), OPACITY_END_VALUE));
         KeyFrame scaleXFrame = new KeyFrame(ANIMATION_DURATION, new KeyValue(label.scaleXProperty(), SCALE_END_VALUE));
         KeyFrame scaleYFrame = new KeyFrame(ANIMATION_DURATION, new KeyValue(label.scaleYProperty(), SCALE_END_VALUE));
         timeline.getKeyFrames().addAll(opacityFrame, scaleXFrame, scaleYFrame);
-        timeline.setOnFinished(event -> main.root.getChildren().remove(label));
+        timeline.setOnFinished(event -> root.getChildren().remove(label));
         Platform.runLater(() -> timeline.play());
     }
 

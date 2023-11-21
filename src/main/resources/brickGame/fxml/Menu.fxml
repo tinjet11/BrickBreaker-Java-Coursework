@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="700.0" prefWidth="500.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brickGame.MenuController">
+<AnchorPane prefHeight="700.0" prefWidth="500.0" stylesheets="@../../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brickGame.MenuController">
    <children>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="150.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../brickbreaker.jpeg" />
+            <Image url="@../../brickbreaker.jpeg" />
          </image>
       </ImageView>
       <Label layoutX="215.0" layoutY="117.0" text="Menu" />
@@ -23,7 +23,7 @@
                <children>
                   <Button fx:id="startButton" alignment="CENTER" mnemonicParsing="false" onAction="#onStartOrResume" prefHeight="25.0" prefWidth="137.0" text="Start Game" />
                   <Button fx:id="settingsButton" alignment="CENTER" mnemonicParsing="false" onAction="#onOpenSettings" prefHeight="25.0" prefWidth="152.0" text="Settings" />
-                  <Button fx:id="exitButton" alignment="CENTER" mnemonicParsing="false" onAction="#exit" prefHeight="25.0" prefWidth="105.0" text="Quit" />
+                  <Button fx:id="exitButton" alignment="CENTER" mnemonicParsing="false" onAction="#onExit" prefHeight="25.0" prefWidth="105.0" text="Quit" />
                </children>
                <padding>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

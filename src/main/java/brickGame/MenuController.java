@@ -19,10 +19,14 @@ public class MenuController {
     public MenuController() {
         // Constructor logic, if needed
     }
+    public MenuController(Main main, Stage primaryStage) {
+        this.main = main;
+      //  this.primaryStage = primaryStage;
+    }
 
 
     private Main main;
-    private Stage primaryStage;
+  //  private Stage primaryStage;
 
     @FXML
     private Button startButton;
@@ -31,15 +35,7 @@ public class MenuController {
     private VBox resultBox;
 
     @FXML
-    private Button tutorialButton;
-
-    public MenuController(Main main, Stage primaryStage) {
-        this.main = main;
-        this.primaryStage = primaryStage;
-    }
-
-    @FXML
-    public void exit() {
+    public void onExit() {
         System.exit(0);
     }
 
@@ -66,7 +62,7 @@ public class MenuController {
     @FXML
     public void onOpenSettings() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Settings.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/Settings.fxml"));
             fxmlLoader.setControllerFactory(c -> {
                 return new SettingsController(this.main, primaryStage);
             });

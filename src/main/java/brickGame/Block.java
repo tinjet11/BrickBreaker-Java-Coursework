@@ -2,7 +2,6 @@ package brickGame;
 
 
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
@@ -16,19 +15,17 @@ public class Block implements Serializable {
     public int row;
     public int column;
 
-
     public boolean isDestroyed = false;
 
-    private Color color;
     public int type;
 
     public int x;
     public int y;
 
-    private int width = 100;
-    private int height = 30;
-    private int paddingTop = height * 2;
-    private int paddingH = 50;
+    private final int blockWidth = 100;
+    private final int blockHeight = 30;
+    private final int paddingTop = blockHeight * 2;
+    private final int paddingH = 50;
     public Rectangle rect;
 
 
@@ -53,30 +50,30 @@ public class Block implements Serializable {
     }
 
     private void draw() {
-        x = (column * width) + paddingH;
-        y = (row * height) + paddingTop;
+        x = (column * blockWidth) + paddingH;
+        y = (row * blockHeight) + paddingTop;
 
         rect = new Rectangle();
-        rect.setWidth(width);
-        rect.setHeight(height);
+        rect.setWidth(blockWidth);
+        rect.setHeight(blockHeight);
         rect.setX(x);
         rect.setY(y);
 
         if (type == BLOCK_CHOCO) {
-            Image image = new Image("choco.jpg");
+            Image image = new Image("/choco.jpg");
             ImagePattern pattern = new ImagePattern(image);
             rect.setFill(pattern);
         } else if (type == BLOCK_HEART) {
-            Image image = new Image("heart.jpg");
+            Image image = new Image("/heart.jpg");
             ImagePattern pattern = new ImagePattern(image);
             rect.setFill(pattern);
         } else if (type == BLOCK_STAR) {
-            Image image = new Image("star.jpg");
+            Image image = new Image("/star.jpg");
             ImagePattern pattern = new ImagePattern(image);
             rect.setFill(pattern);
         } else {
             // rect.setFill(color);
-            Image image = new Image("brick.jpg");
+            Image image = new Image("/brick.jpg");
             ImagePattern pattern = new ImagePattern(image);
             rect.setFill(pattern);
         }
@@ -89,17 +86,17 @@ public class Block implements Serializable {
         }
 
 
-        if (xBall + BALL_RADIUS >= x && xBall - BALL_RADIUS <= x + width && yBall + BALL_RADIUS >= y && yBall - BALL_RADIUS <= y + height) {
+        if (xBall + BALL_RADIUS >= x && xBall - BALL_RADIUS <= x + blockWidth && yBall + BALL_RADIUS >= y && yBall - BALL_RADIUS <= y + blockHeight) {
             // Collision detected
-            double dx = Math.min(Math.abs(xBall - x), Math.abs(xBall - (x + width)));
-            double dy = Math.min(Math.abs(yBall - y), Math.abs(yBall - (y + height)));
+            double dx = Math.min(Math.abs(xBall - x), Math.abs(xBall - (x + blockWidth)));
+            double dy = Math.min(Math.abs(yBall - y), Math.abs(yBall - (y + blockHeight)));
 
             if (dx < dy) {
                 // Collision on the x-axis
-                return xBall < x + width / 2 ? HIT_LEFT : HIT_RIGHT;
+                return xBall < x + blockWidth / 2 ? HIT_LEFT : HIT_RIGHT;
             } else {
                 // Collision on the y-axis
-                return yBall < y + height / 2 ? HIT_TOP : HIT_BOTTOM;
+                return yBall < y + blockHeight / 2 ? HIT_TOP : HIT_BOTTOM;
             }
         }
 
@@ -116,11 +113,11 @@ public class Block implements Serializable {
     }
 
     public static int getHeight() {
-        return block.height;
+        return block.blockHeight;
     }
 
     public static int getWidth() {
-        return block.width;
+        return block.blockWidth;
     }
 
 }

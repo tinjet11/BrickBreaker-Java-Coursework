@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import static brickGame.BallControl.ball;
 import static brickGame.GameStateManager.gameState;
 import static brickGame.Main.*;
 
@@ -94,7 +95,6 @@ public class GameSceneController {
 
                         Scene winMenuScene= new Scene(fxmlLoader.load());
                         menuController.showMenuScene("Win",winMenuScene);
-
 
                     }catch (Exception e){
                         e.printStackTrace();
@@ -203,7 +203,7 @@ public class GameSceneController {
         gameStateManager.saveGame();
         // Rest of your code
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Menu.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/Menu.fxml"));
         fxmlLoader.setControllerFactory(c -> {
             return new MenuController(this.main, primaryStage);
         });

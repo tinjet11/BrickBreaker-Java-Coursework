@@ -12,9 +12,14 @@ public class GameLogicHandler implements Actionable {
 
     private Main main;
 
+
+
+
     public GameLogicHandler(Main main){
         this.main = main;
     }
+
+
     @Override
     public void onUpdate() {
         Platform.runLater(() -> {

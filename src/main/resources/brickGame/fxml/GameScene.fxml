@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 
 <AnchorPane fx:id="gameAnchorPane" onKeyPressed="#handleKeyPressed" prefHeight="700.0" prefWidth="500.0"
-            stylesheets="@../style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+            stylesheets="@../../style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
             fx:controller="brickGame.GameSceneController">
     <children>
 

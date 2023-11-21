@@ -19,7 +19,6 @@ public class Main extends Application {
 
     public static boolean isGameRun = false;
 
-
     public static int endLevel = 18;
 
     public static int level = 1;
@@ -34,9 +33,6 @@ public class Main extends Application {
     public static final int SCENE_HEIGHT = 700;
     public static final int LEFT = 1;
     public static final int RIGHT = 2;
-    public static Circle ball;
-    public static double xBall;
-    public static double yBall;
 
     public static boolean isGoldStatus = false;
     public static boolean isExistHeartBlock = false;
@@ -81,7 +77,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         initializeMenuScene();
-        FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("Settings.fxml"));
+        FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("fxml/Settings.fxml"));
         fxmlLoader1.setControllerFactory(c -> {
             return new SettingsController(this, primaryStage);
         });
@@ -91,7 +87,7 @@ public class Main extends Application {
 
 
     private void initializeMenuScene() {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Menu.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/Menu.fxml"));
         Scene menuScene = null;
         fxmlLoader.setControllerFactory(c -> {
             return new MenuController(this, primaryStage);
@@ -114,7 +110,7 @@ public class Main extends Application {
         }
         isGameRun = true;
 
-        FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("GameScene.fxml"));
+        FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("fxml/GameScene.fxml"));
         fxmlLoader1.setControllerFactory(c -> {
             return gameSceneController = new GameSceneController(this, primaryStage);
         });
@@ -129,6 +125,5 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 
 }

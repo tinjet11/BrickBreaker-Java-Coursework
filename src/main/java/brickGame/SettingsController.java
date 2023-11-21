@@ -52,7 +52,7 @@ public class SettingsController {
     @FXML
     public void back() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(SettingsController.class.getResource("Menu.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(SettingsController.class.getResource("fxml/Menu.fxml"));
 
             fxmlLoader.setControllerFactory(c -> {
                 return new MenuController(this.main, primaryStage);
