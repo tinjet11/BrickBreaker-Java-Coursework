@@ -3,18 +3,33 @@ package brickGame;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
-
 import static brickGame.BallControl.*;
-import static brickGame.BallControl.setPhysicsToBall;
+import static brickGame.GameStateManager.gameSceneController;
 import static brickGame.Main.*;
+import static brickGame.InitGameComponent.*;
 
 public class GameLogicHandler implements Actionable {
 
-    private Main main;
+    BallControl ballControl;
+    public static int heart = 10;
+    public static int initialHeart = 3;
 
-    public GameLogicHandler(Main main){
-        this.main = main;
+    public static int score = 0;
+    public static long time = 0;
+    public static long hitTime = 0;
+    public static long goldTime = 0;
+    public static boolean isGameRun = false;
+    public static int endLevel = 18;
+
+    public static int level = 1;
+    public static boolean isGoldStatus = false;
+
+    public static int remainingBlockCount = 0;
+
+    public  GameLogicHandler(){
+        ballControl = new BallControl();
     }
+
     @Override
     public void onUpdate() {
         Platform.runLater(() -> {
@@ -35,7 +50,7 @@ public class GameLogicHandler implements Actionable {
                     if (hitCode != Block.NO_HIT) {
                         score += 1;
 
-                        new Score(main).show(block.x, block.y, 1);
+                        new Score().show(block.x, block.y, 1);
 
                         block.rect.setVisible(false);
                         block.isDestroyed = true;
@@ -55,7 +70,7 @@ public class GameLogicHandler implements Actionable {
                                 goldTime = time;
                                 ball.setFill(new ImagePattern(new Image("goldball.png")));
                                 System.out.println("gold ball");
-                                gameRoot.getStyleClass().add("goldRoot");
+                                root.getStyleClass().add("goldRoot");
                                 isGoldStatus = true;
                             });
                         }
@@ -106,7 +121,7 @@ public class GameLogicHandler implements Actionable {
         //System.out.println(remainingBlockCount);
         if (remainingBlockCount == 0 && level != endLevel) {
             System.out.println("Level Up!");
-            main.nextLevel();
+            gameStateManager.nextLevel();
         }
     }
     @Override
@@ -116,29 +131,29 @@ public class GameLogicHandler implements Actionable {
             checkDestroyedCount();
 
         }
-        setPhysicsToBall(main);
+        ballControl.setPhysicsToBall();
 
         if (time - goldTime > 5000) {
             Platform.runLater(() -> {
                 ball.setFill(new ImagePattern(new Image("ball.png")));
-                gameRoot.getStyleClass().remove("goldRoot");
+                root.getStyleClass().remove("goldRoot");
                 isGoldStatus = false;
             });
 
         }
         //this part is about the Bonus object
         for (Bonus choco : chocos) {
-            if (choco.getY() > sceneHeight || choco.isTaken()) {
+            if (choco.getY() > SCENE_HEIGHT || choco.isTaken()) {
                 continue;
             }
 
-            if (choco.getY() >= yPaddle && choco.getY() <= yPaddle + paddleHeight && choco.getX() >= xPaddle && choco.getX() <= xPaddle + paddleWidth) {
+            if (choco.getY() >= yPaddle && choco.getY() <= yPaddle + PADDLE_HEIGHT && choco.getX() >= xPaddle && choco.getX() <= xPaddle + PADDLE_WIDTH) {
                 System.out.println("You Got it and +3 score for you");
                 choco.setTaken(true);
                 choco.choco.setVisible(false);
                 System.out.println("choco hited");
                 score += 3;
-                new Score(main).show(choco.getX(), choco.getY(), 3);
+                new Score().show(choco.getX(), choco.getY(), 3);
             }
             choco.setY(choco.getY() +((time - choco.getTimeCreated()) / 1000.000) + 1.000);
             Platform.runLater(() -> {

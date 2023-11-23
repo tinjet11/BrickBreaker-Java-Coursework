@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="700.0" prefWidth="500.0" stylesheets="@../../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brickGame.MenuController">
+   <children>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="150.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../brickbreaker.jpeg" />
+         </image>
+      </ImageView>
+      <Label layoutX="215.0" layoutY="117.0" text="Menu" />
+      <Pane layoutX="200.0" layoutY="244.0" prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <VBox layoutY="35.0" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+               <children>
+                  <Button fx:id="startButton" alignment="CENTER" mnemonicParsing="false" onAction="#onStartOrResume" prefHeight="25.0" prefWidth="137.0" text="Start Game" />
+                  <Button fx:id="settingsButton" alignment="CENTER" mnemonicParsing="false" onAction="#onOpenSettings" prefHeight="25.0" prefWidth="152.0" text="Settings" />
+                  <Button fx:id="exitButton" alignment="CENTER" mnemonicParsing="false" onAction="#onExit" prefHeight="25.0" prefWidth="105.0" text="Quit" />
+               </children>
+               <padding>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </padding>
+            </VBox>
+
+         </children>
+      </Pane>
+      <VBox layoutX="112.0" layoutY="167.0" prefHeight="83.0" prefWidth="207.0" visible="false" fx:id="resultBox">
+         <children>
+            <Label fx:id="resultLabel" styleClass="title-label" text="Congratulations! You Win!" />
+            <Label fx:id="scoreLabel"  styleClass="score-label" text="Your Score is: " />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

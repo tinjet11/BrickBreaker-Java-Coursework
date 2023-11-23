@@ -1,5 +1,8 @@
 .root {
     -fx-background-color: #1d1d1d;
+ /*    -fx-background-image: url('/bg.jpg');
+        -fx-background-size: cover; *//* Adjust as needed *//*
+        -fx-background-repeat: no-repeat;*/
 }
 
 .goldRoot {
@@ -10,4 +13,26 @@
     -fx-text-fill: #FFF;
     -fx-label-padding: 8px;
     -fx-font-size: 15px;
+}
+
+
+.title-label {
+    -fx-font-size: 24px;
+    -fx-text-fill: #ffffff;
+}
+
+.button {
+    -fx-font-size: 16px;
+    -fx-background-color: #4CAF50; /* Green color, you can change it */
+    -fx-text-fill: #ffffff;
+}
+
+.button.second {
+    -fx-background-color: #f44336; /* Red color, you can change it */
+}
+
+
+.score-label {
+    -fx-font-size: 18px;
+    -fx-text-fill: #ffffff;
 }

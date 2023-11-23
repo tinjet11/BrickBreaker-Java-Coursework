@@ -1,11 +1,9 @@
 package brickGame;
 
-import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -35,9 +33,9 @@ public class Bonus implements Serializable {
 
             String url;
             if (new Random().nextInt(20) % 2 == 0) {
-                url = "bonus1.png";
+                url = "/bonus1.png";
             } else {
-                url = "bonus2.png";
+                url = "/bonus2.png";
             }
 
             choco.setFill(new ImagePattern(new Image(url)));

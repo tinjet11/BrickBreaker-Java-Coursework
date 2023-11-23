@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
+import static brickGame.GameStateManager.SAVE_PATH;
+
 public class LoadSave {
     public boolean isExistHeartBlock;
     public boolean isGoldStatus;
@@ -36,11 +38,11 @@ public class LoadSave {
 
 
     public void read() {
-        File saveFile = new File(Main.savePath);
+        File saveFile = new File(SAVE_PATH);
         if (saveFile.exists()) {
             // Proceed with reading the save file
             try {
-                ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(new File(Main.savePath)));
+                ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(new File(SAVE_PATH)));
 
 
                 level = inputStream.readInt();

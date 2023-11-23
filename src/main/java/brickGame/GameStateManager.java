@@ -1,21 +1,56 @@
 package brickGame;
 
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+
 import java.io.*;
 import java.util.ArrayList;
 
 import static brickGame.BallControl.*;
 import static brickGame.Main.*;
+import static brickGame.InitGameComponent.*;
+import static brickGame.GameLogicHandler.*;
 
 public class GameStateManager {
-    private Main main;
 
-    public GameStateManager(Main main){
-        this.main = main;
+    public enum GameState {
+        ON_START,
+        IN_PROGRESS,
+        PAUSED,
+        GAME_OVER
     }
-    public static void saveGame() {
+    public static final String SAVE_PATH_DIR = "save"; // Relative to the project directory
+
+    // Construct the complete path using the directory and filename
+    public static final String SAVE_PATH = SAVE_PATH_DIR + "/save.mdds";
+    public static GameState gameState = GameState.ON_START;
+
+    public static GameSceneController gameSceneController;
+
+    private Scene gameScene;
+
+    public void startGame() throws IOException {
+        if (!isGameRun) {
+            heart = initialHeart;
+        }
+        isGameRun = true;
+        FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("fxml/GameScene.fxml"));
+        fxmlLoader1.setControllerFactory(c -> {
+            return gameSceneController = new GameSceneController();
+        });
+
+        gameScene = new Scene(fxmlLoader1.load());
+        gameSceneController.showScene(gameScene);
+        root = gameSceneController.getGamePane();
+        gameSceneController.setLevelLabel("Level: " + level);
+    }
+
+
+    public void saveGame() {
         new Thread(() -> {
-            new File(savePathDir).mkdirs();
-            File file = new File(savePath);
+            new File(SAVE_PATH_DIR).mkdirs();
+            File file = new File(SAVE_PATH);
             ObjectOutputStream outputStream = null;
 
             engine.stop();
@@ -128,7 +163,7 @@ public class GameStateManager {
             loadFromSave = true;
             if (loadFromSave) {
                 // Delete the saved game file
-                File saveFile = new File(Main.savePath);
+                File saveFile = new File(SAVE_PATH);
                 if (saveFile.exists()) {
                     if (saveFile.delete()) {
                         System.out.println("Deleted the saved game file.");
@@ -137,10 +172,9 @@ public class GameStateManager {
                     }
                 }
             }
-            main.startGame(primaryStage);
+            startGame();
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.printf("%s", "loadGame function in Main.java:");
         }
 
 
@@ -167,11 +201,55 @@ public class GameStateManager {
             blocks.clear();
             chocos.clear();
 
-            main.startGame(primaryStage);
+        startGame();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.printf("%s", "restart  function in Main.java:");
         }
     }
+    private boolean nextLevelInProgress = false;
 
+    public void nextLevel() {
+        // Check if nextLevel is already in progress, if yes, return
+        if (nextLevelInProgress) {
+            return;
+        }
+
+        // Set the flag to indicate that nextLevel is in progress
+        nextLevelInProgress = true;
+
+        Platform.runLater(() -> {
+            try {
+                vX = 1.000;
+                vY = 1.000;
+
+                engine.stop();
+                resetcollideFlags();
+                goDownBall = true;
+
+                isGoldStatus = false;
+                isExistHeartBlock = false;
+
+                hitTime = 0;
+                time = 0;
+                goldTime = 0;
+
+                engine.stop();
+                blocks.clear();
+                chocos.clear();
+                remainingBlockCount = 0;
+                if (level < endLevel) {
+                    level++;
+                }
+         startGame();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.printf("%s", "nextLevel function in Main.java:");
+            } finally {
+                // Reset the flag to indicate that nextLevel is completed
+                nextLevelInProgress = false;
+            }
+        });
+    }
 }

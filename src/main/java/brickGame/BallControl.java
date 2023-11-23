@@ -3,11 +3,16 @@ package brickGame;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.shape.Circle;
 
+import static brickGame.GameStateManager.gameState;
 import static brickGame.Main.*;
-
+import static brickGame.InitGameComponent.*;
+import static brickGame.GameLogicHandler.*;
 public class BallControl {
+    public static Circle ball;
+    public static double xBall;
+    public static double yBall;
 
     public static boolean goDownBall                  = true;
     public static boolean goRightBall                 = true;
@@ -24,7 +29,7 @@ public class BallControl {
     public static double vX = 1.000;
     public static double vY = 1.000;
 
-
+    private static MenuController menuController;
 
     public static void resetcollideFlags() {
 
@@ -41,7 +46,8 @@ public class BallControl {
         ballOutOfBounds = false;
     }
     public static boolean ballOutOfBounds = false; // Add this flag
-    public static void setPhysicsToBall(Main main) {
+
+    public  void setPhysicsToBall() {
         //v = ((time - hitTime) / 1000.000) + 1.000;
 
         if (goDownBall) {
@@ -62,7 +68,7 @@ public class BallControl {
             goDownBall = true;
         //    return;
         }
-        if (yBall >= sceneHeight) {
+        if (yBall >= SCENE_HEIGHT) {
             Platform.runLater(() -> {
                 goDownBall = false;
                 resetcollideFlags();
@@ -71,28 +77,24 @@ public class BallControl {
                     //TODO gameover
                     heart = heart - 1;
                     ballOutOfBounds = true;
-                    new Score(main).show(sceneWidth / 2, sceneHeight / 2, -1);
+                    new Score().show(SCENE_WIDTH / 2, SCENE_HEIGHT / 2, -1);
 
                     if (heart <= 0) {
                     //  new Score(main).showGameOver();
                         engine.stop();
 
                         try{
-                            FXMLLoader fxmlLoader = new FXMLLoader(main.getClass().getResource("EndGameScene.fxml"));
+                            isGameRun = false;
+                            gameState =GameStateManager.GameState.GAME_OVER;
+                            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/Menu.fxml"));
                             fxmlLoader.setControllerFactory(c -> {
-                                return new EndGameSceneController(main);
+                                return menuController = new MenuController();
                             });
-                            Scene winScene= new Scene(fxmlLoader.load());
+                            Scene winMenuScene= new Scene(fxmlLoader.load());
 
-                            Label scorePlaceholder = (Label) winScene.lookup("#scorePlaceholder");
-                            scorePlaceholder.setText(String.valueOf(score));
+                            menuController.showMenuScene("Lose",winMenuScene);
 
-                            Label winloselabel = (Label) winScene.lookup("#winloselabel");
-                            winloselabel.setText("Game Over :(");
 
-                            primaryStage.setTitle("Brick Breaker Game");
-                            primaryStage.setScene(winScene);
-                            primaryStage.show();
                         }catch (Exception e){
                             e.printStackTrace();
                         }
@@ -101,15 +103,15 @@ public class BallControl {
            // return;
         }
 
-        if (yBall >= yPaddle - ballRadius) {
+        if (yBall >= yPaddle - BALL_RADIUS) {
             //System.out.println("collide1");
-            if (xBall >= xPaddle && xBall <= xPaddle + paddleWidth) {
+            if (xBall >= xPaddle && xBall <= xPaddle + PADDLE_WIDTH) {
                 hitTime = time;
                 resetcollideFlags();
                 collideToPaddle = true;
                 goDownBall = false;
 
-                double relation = (xBall - centerPaddleX) / (paddleWidth / 2);
+                double relation = (xBall - centerPaddleX) / (PADDLE_WIDTH / 2);
 
                 if (Math.abs(relation) <= 0.3) {
                     //vX = 0;
@@ -131,7 +133,7 @@ public class BallControl {
             }
         }
 
-        if (xBall >= sceneWidth) {
+        if (xBall >= SCENE_WIDTH) {
             resetcollideFlags();
             //vX = 1.000;
             collideToRightWall = true;

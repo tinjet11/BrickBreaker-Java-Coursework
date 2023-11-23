@@ -13,14 +13,16 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static brickGame.Main.*;
+import static brickGame.BallControl.ball;
+import static brickGame.GameStateManager.gameState;
 
+import static brickGame.Main.*;
+import static brickGame.InitGameComponent.*;
+import static brickGame.GameLogicHandler.*;
 public class GameSceneController {
     @FXML
-    private Pane gamePane;
-    @FXML
-    private AnchorPane gameAnchorPane;
-    private Stage primaryStage;
+    private AnchorPane gamePane;
+
     @FXML
     private Label scoreLabel;
     @FXML
@@ -29,28 +31,19 @@ public class GameSceneController {
     private Label levelLabel;
     @FXML
     private Button pauseButton;
-    private Main main;
+
 
     private GameLogicHandler gameLogicHandler;
+    private MenuController menuController;
+
+    public static final int LEFT = 1;
+    public static final int RIGHT = 2;
+
     public GameSceneController() {
-
+        this.gameLogicHandler = new GameLogicHandler();
     }
 
-    public GameSceneController(Main main, Stage primaryStage) {
-        this.main = main;
-        this.primaryStage = primaryStage;
-        this.gameLogicHandler = new GameLogicHandler(main);
-    }
-    public void setMain(Main main) {
-        this.main = main;
-    }
-
-    public AnchorPane getGameAnchorPane() {
-        return gameAnchorPane;
-    }
-
-
-    public Pane getGamePane() {
+    public AnchorPane getGamePane() {
         return gamePane;
     }
 
@@ -70,31 +63,28 @@ public class GameSceneController {
     // Example: Method to show the scene
     public void showScene(Scene gameScene) throws IOException {
         if (primaryStage != null) {
-            gamePane = (Pane) gameScene.lookup("#gamePane");
+            gamePane = (AnchorPane) gameScene.lookup("#gamePane");
             scoreLabel = (Label) gameScene.lookup("#scoreLabel");
             heartLabel = (Label) gameScene.lookup("#heartLabel");
             levelLabel = (Label) gameScene.lookup("#levelLabel");
             pauseButton = (Button) gameScene.lookup("#pauseButton");
 
             if (!loadFromSave) {
-                System.out.println("test: " + level);
                 if (level > 1) {
-                    new Score(main).showMessage("Level Up :)", 300, 300);
+                    new Score().showMessage("Level Up :)", 300, 300);
                 }
                 if (level == endLevel) {
                     try{
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("EndGameScene.fxml"));
+                        gameState =GameStateManager.GameState.GAME_OVER;
+                        isGameRun = false;
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/Menu.fxml"));
                         fxmlLoader.setControllerFactory(c -> {
-                            return new EndGameSceneController(this.main);
+                            return menuController = new MenuController();
                         });
-                        Scene winScene= new Scene(fxmlLoader.load());
 
-                        Label scorePlaceholder = (Label) winScene.lookup("#scorePlaceholder");
-                        scorePlaceholder.setText(String.valueOf(score));
+                        Scene winMenuScene= new Scene(fxmlLoader.load());
+                        menuController.showMenuScene("Win",winMenuScene);
 
-                        primaryStage.setTitle("Brick Breaker Game");
-                        primaryStage.setScene(winScene);
-                        primaryStage.show();
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -169,7 +159,7 @@ public class GameSceneController {
             public void run() {
                 int sleepTime = 4;
                 for (int i = 0; i < 30; i++) {
-                    if (xPaddle == (sceneWidth - paddleWidth) && direction == RIGHT) {
+                    if (xPaddle == (SCENE_WIDTH - PADDLE_WIDTH) && direction == RIGHT) {
                         return;
                     }
                     if (xPaddle == 0 && direction == LEFT) {
@@ -180,7 +170,7 @@ public class GameSceneController {
                     } else {
                         xPaddle--;
                     }
-                    centerPaddleX = xPaddle + halfPaddleWidth;
+                    centerPaddleX = xPaddle + HALF_PADDLE_WIDTH;
                     try {
                         Thread.sleep(sleepTime);
                     } catch (InterruptedException e) {
@@ -202,9 +192,9 @@ public class GameSceneController {
         gameStateManager.saveGame();
         // Rest of your code
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Menu.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/Menu.fxml"));
         fxmlLoader.setControllerFactory(c -> {
-            return new MenuController(this.main, primaryStage);
+            return new MenuController();
         });
         Scene menuScene = null;
         try {
@@ -215,6 +205,7 @@ public class GameSceneController {
         menuScene.getStylesheets().add("style.css");
         Button startbtn = (Button) menuScene.lookup("#startButton");
         startbtn.setText("Resume");
+        gameState = GameStateManager.GameState.PAUSED;
 
         if (primaryStage != null) {
             primaryStage.setTitle("Brick Breaker Game");

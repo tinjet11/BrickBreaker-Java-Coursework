@@ -7,14 +7,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.Slider;
-import javafx.stage.Stage;
 
+import static brickGame.GameStateManager.gameState;
 import static brickGame.Main.*;
-
+import static brickGame.GameLogicHandler.*;
 public class SettingsController {
 
-    private Main main;
-    private Stage primaryStage;
+
 
     @FXML
     private Slider heartNumberSlider;
@@ -40,29 +39,29 @@ public class SettingsController {
 
     }
 
-    public SettingsController(Main main, Stage primaryStage) {
-        this.main = main;
-        this.primaryStage = primaryStage;
 
-    }
 
     @FXML
     public void back() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(SettingsController.class.getResource("Menu.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(SettingsController.class.getResource("fxml/Menu.fxml"));
 
-            fxmlLoader.setControllerFactory(c -> {
-                return new MenuController(this.main, primaryStage);
-            });
+//            fxmlLoader.setControllerFactory(c -> {
+//                return new MenuController();
+//            });
             Scene menuScene = new Scene(fxmlLoader.load());
 
             Button startButton = (Button) menuScene.lookup("#startButton");
 
-            if (isGameRun) {
-                startButton.setText("Resume");
-            } else {
+            if (gameState == GameStateManager.GameState.ON_START) {
                 startButton.setText("Start Game");
+            } else if (gameState == GameStateManager.GameState.PAUSED) {
+                startButton.setText("Resume");
+            } else if (gameState == GameStateManager.GameState.GAME_OVER) {
+                startButton.setText("Play Again");
             }
+
+
 
             primaryStage.setTitle("Brick Breaker Game");
             primaryStage.setScene(menuScene);
