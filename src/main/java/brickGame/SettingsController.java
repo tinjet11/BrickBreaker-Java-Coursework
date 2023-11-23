@@ -10,7 +10,7 @@ import javafx.scene.control.Slider;
 
 import static brickGame.GameStateManager.gameState;
 import static brickGame.Main.*;
-
+import static brickGame.GameLogicHandler.*;
 public class SettingsController {
 
 

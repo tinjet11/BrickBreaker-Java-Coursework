@@ -7,7 +7,8 @@ import javafx.scene.shape.Circle;
 
 import static brickGame.GameStateManager.gameState;
 import static brickGame.Main.*;
-
+import static brickGame.InitGameComponent.*;
+import static brickGame.GameLogicHandler.*;
 public class BallControl {
     public static Circle ball;
     public static double xBall;

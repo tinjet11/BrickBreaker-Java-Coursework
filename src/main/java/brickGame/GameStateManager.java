@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 import static brickGame.BallControl.*;
 import static brickGame.Main.*;
+import static brickGame.InitGameComponent.*;
+import static brickGame.GameLogicHandler.*;
 
 public class GameStateManager {
 
@@ -18,17 +20,21 @@ public class GameStateManager {
         PAUSED,
         GAME_OVER
     }
+    public static final String SAVE_PATH_DIR = "save"; // Relative to the project directory
 
+    // Construct the complete path using the directory and filename
+    public static final String SAVE_PATH = SAVE_PATH_DIR + "/save.mdds";
     public static GameState gameState = GameState.ON_START;
 
     public static GameSceneController gameSceneController;
+
+    private Scene gameScene;
 
     public void startGame() throws IOException {
         if (!isGameRun) {
             heart = initialHeart;
         }
         isGameRun = true;
-        System.out.println("test");
         FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("fxml/GameScene.fxml"));
         fxmlLoader1.setControllerFactory(c -> {
             return gameSceneController = new GameSceneController();
@@ -157,7 +163,7 @@ public class GameStateManager {
             loadFromSave = true;
             if (loadFromSave) {
                 // Delete the saved game file
-                File saveFile = new File(Main.SAVE_PATH);
+                File saveFile = new File(SAVE_PATH);
                 if (saveFile.exists()) {
                     if (saveFile.delete()) {
                         System.out.println("Deleted the saved game file.");
@@ -169,7 +175,6 @@ public class GameStateManager {
             startGame();
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.printf("%s", "loadGame function in Main.java:");
         }
 
 

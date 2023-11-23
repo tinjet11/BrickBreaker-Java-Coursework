@@ -7,8 +7,7 @@ import javafx.scene.shape.Rectangle;
 
 import java.io.Serializable;
 
-import static brickGame.Main.BALL_RADIUS;
-
+import static brickGame.InitGameComponent.BALL_RADIUS;
 public class Block implements Serializable {
     private static Block block = new Block(-1, -1, 99);
 

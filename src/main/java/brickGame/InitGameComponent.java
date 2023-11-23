@@ -5,12 +5,28 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import static brickGame.Main.*;
 import static brickGame.BallControl.*;
+import static brickGame.GameLogicHandler.*;
 
 public class InitGameComponent {
+    public static Rectangle rect;
+    public static double xPaddle = 0.0f;
+    public static double centerPaddleX;
+    public static double yPaddle = 640.0f;
+    public static final int PADDLE_WIDTH = 130;
+    public static final int PADDLE_HEIGHT = 10;
+    public static final int HALF_PADDLE_WIDTH = PADDLE_WIDTH / 2;
+    public static final int SCENE_WIDTH = 500;
+    public static final int SCENE_HEIGHT = 700;
+    public static final int BALL_RADIUS = 10;
+    public static boolean isExistHeartBlock = false;
+
+    public static ArrayList<Block> blocks = new ArrayList<>();
+    public static ArrayList<Bonus> chocos = new ArrayList<>();
     //set up the brick in the game according to the current level
     public void initBoard() {
         for (int i = 0; i < 4; i++) {

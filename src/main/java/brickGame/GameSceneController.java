@@ -17,7 +17,8 @@ import static brickGame.BallControl.ball;
 import static brickGame.GameStateManager.gameState;
 
 import static brickGame.Main.*;
-
+import static brickGame.InitGameComponent.*;
+import static brickGame.GameLogicHandler.*;
 public class GameSceneController {
     @FXML
     private AnchorPane gamePane;
@@ -34,6 +35,10 @@ public class GameSceneController {
 
     private GameLogicHandler gameLogicHandler;
     private MenuController menuController;
+
+    public static final int LEFT = 1;
+    public static final int RIGHT = 2;
+
     public GameSceneController() {
         this.gameLogicHandler = new GameLogicHandler();
     }
@@ -65,7 +70,6 @@ public class GameSceneController {
             pauseButton = (Button) gameScene.lookup("#pauseButton");
 
             if (!loadFromSave) {
-                System.out.println("test: " + level);
                 if (level > 1) {
                     new Score().showMessage("Level Up :)", 300, 300);
                 }

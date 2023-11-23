@@ -6,10 +6,26 @@ import javafx.scene.paint.ImagePattern;
 import static brickGame.BallControl.*;
 import static brickGame.GameStateManager.gameSceneController;
 import static brickGame.Main.*;
+import static brickGame.InitGameComponent.*;
 
 public class GameLogicHandler implements Actionable {
 
     BallControl ballControl;
+    public static int heart = 10;
+    public static int initialHeart = 3;
+
+    public static int score = 0;
+    public static long time = 0;
+    public static long hitTime = 0;
+    public static long goldTime = 0;
+    public static boolean isGameRun = false;
+    public static int endLevel = 18;
+
+    public static int level = 1;
+    public static boolean isGoldStatus = false;
+
+    public static int remainingBlockCount = 0;
+
     public  GameLogicHandler(){
         ballControl = new BallControl();
     }
