@@ -1,19 +1,11 @@
 package brickGame;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-
 import java.io.*;
-import java.util.ArrayList;
-
-import static brickGame.BallControl.*;
 
 public class Main extends Application {
 
@@ -23,6 +15,7 @@ public class Main extends Application {
     public static GameStateManager gameStateManager;
     public static boolean loadFromSave = false;
     public static Stage primaryStage;
+    public static SoundManager gameSoundManager;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -33,6 +26,9 @@ public class Main extends Application {
         fxmlLoader1.setControllerFactory(c -> {
             return new SettingsController();
         });
+
+        gameSoundManager = new SoundManager(Main.class.getResource("/bg-music.mp3"), SoundManager.MusicType.BG_MUSIC);
+        gameSoundManager.play();
     }
 
     private void initializeMenuScene() {

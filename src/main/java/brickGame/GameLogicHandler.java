@@ -48,6 +48,7 @@ public class GameLogicHandler implements Actionable {
                 try {
                     int hitCode = block.checkHitToBlock(xBall, yBall);
                     if (hitCode != Block.NO_HIT) {
+
                         score += 1;
 
                         new Score().show(block.x, block.y, 1);

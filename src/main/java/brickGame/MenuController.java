@@ -33,14 +33,17 @@ public class MenuController {
                 throw new RuntimeException(e);
             }
             gameState = GameStateManager.GameState.IN_PROGRESS;
+            //gameSoundManager.play();
         } else if (gameState == GameStateManager.GameState.PAUSED) {
             gameStateManager.loadGame();
             gameState = GameStateManager.GameState.IN_PROGRESS;
+            gameSoundManager.resume();
         } else if (gameState == GameStateManager.GameState.GAME_OVER) {
             gameStateManager.restartGame();
             resultBox.setVisible(false);
             gameState = GameStateManager.GameState.IN_PROGRESS;
         }
+        gameSoundManager.resume();
     }
 
     @FXML

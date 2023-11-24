@@ -38,12 +38,14 @@ public class Block implements Serializable {
     public static final int BLOCK_CHOCO = 100;
     public static final int BLOCK_STAR = 101;
     public static final int BLOCK_HEART = 102;
+    private SoundManager soundManager;
 
 
     public Block(int row, int column, int type) {
         this.row = row;
         this.column = column;
         this.type = type;
+        soundManager = new SoundManager(Main.class.getResource("/brick-break.mp3"), SoundManager.MusicType.BRICK_BREAK);
 
         draw();
     }
@@ -92,9 +94,11 @@ public class Block implements Serializable {
 
             if (dx < dy) {
                 // Collision on the x-axis
+                soundManager.play();
                 return xBall < x + blockWidth / 2 ? HIT_LEFT : HIT_RIGHT;
             } else {
                 // Collision on the y-axis
+                soundManager.play();
                 return yBall < y + blockHeight / 2 ? HIT_TOP : HIT_BOTTOM;
             }
         }

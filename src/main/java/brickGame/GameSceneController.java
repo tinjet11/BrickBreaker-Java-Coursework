@@ -22,7 +22,6 @@ import static brickGame.GameLogicHandler.*;
 public class GameSceneController {
     @FXML
     private AnchorPane gamePane;
-
     @FXML
     private Label scoreLabel;
     @FXML
@@ -190,6 +189,7 @@ public class GameSceneController {
         System.out.println("Pause button clicked");
         // Implement the pause functionality here
         gameStateManager.saveGame();
+        gameSoundManager.stop();
         // Rest of your code
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/Menu.fxml"));
@@ -212,9 +212,9 @@ public class GameSceneController {
             primaryStage.setScene(menuScene);
             primaryStage.show();
 
-            startbtn.setOnAction(actionEvent -> {
-                gameStateManager.loadGame();
-            });
+//            startbtn.setOnAction(actionEvent -> {
+//                gameStateManager.loadGame();
+//            });
         }
     }
 

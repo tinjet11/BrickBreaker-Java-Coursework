@@ -14,7 +14,7 @@
       <Label layoutX="34.0" layoutY="162.0" text="Initial heart number:" />
       <Label layoutX="36.0" layoutY="230.0" text="End level" />
       <Label layoutX="34.0" layoutY="315.0" text="Background music" />
-      <CheckBox layoutX="181.0" layoutY="324.0" mnemonicParsing="false" text="ON " textFill="WHITE" />
+      <CheckBox onAction="#muteAndUnmute" fx:id="soundCheckBox" layoutX="181.0" layoutY="324.0" mnemonicParsing="false" text="ON " textFill="WHITE" />
       <Label layoutX="35.0" layoutY="364.0" text="Background music volume" />
       <Slider layoutX="231.0" layoutY="374.0" value="50.0" />
       <HBox alignment="CENTER" layoutX="181.0" layoutY="162.0" prefHeight="35.0" prefWidth="100.0">

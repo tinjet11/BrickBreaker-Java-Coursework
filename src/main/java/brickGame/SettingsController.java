@@ -1,19 +1,15 @@
 package brickGame;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 
 import static brickGame.GameStateManager.gameState;
 import static brickGame.Main.*;
 import static brickGame.GameLogicHandler.*;
 public class SettingsController {
-
-
 
     @FXML
     private Slider heartNumberSlider;
@@ -34,13 +30,31 @@ public class SettingsController {
     private int currentHeart;
     private int currentEndLevel;
 
+    @FXML
+    private CheckBox soundCheckBox;
+
 
     public SettingsController() {
 
     }
 
-
-
+    @FXML
+    public void muteAndUnmute(){
+        //currently mute, then unMute
+        if(soundCheckBox.isSelected()) {
+            gameSoundManager.unMute();
+        }else{//currently unMute, then mute
+            gameSoundManager.mute();
+        }
+    }
+    @FXML
+    public void initialize(){
+        currentEndLevel = endLevel;
+        currentHeart = initialHeart;
+        initialHeartLabel.setText(String.valueOf(initialHeart));
+        endLevelLabel.setText(String.valueOf(endLevel));
+        soundCheckBox.setSelected(!gameSoundManager.getIsMute());
+    }
     @FXML
     public void back() {
         try {
@@ -72,13 +86,7 @@ public class SettingsController {
     }
 
 
-    @FXML
-    public void initialize(){
-        currentEndLevel = endLevel;
-        currentHeart = initialHeart;
-        initialHeartLabel.setText(String.valueOf(initialHeart));
-        endLevelLabel.setText(String.valueOf(endLevel));
-    }
+
 
     @FXML
     private void incrementHeart() {
