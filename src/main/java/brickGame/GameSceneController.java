@@ -1,5 +1,6 @@
 package brickGame;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,17 +9,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
+
 
 import java.io.IOException;
 
-import static brickGame.BallControl.ball;
 import static brickGame.GameStateManager.gameState;
 
 import static brickGame.Main.*;
 import static brickGame.InitGameComponent.*;
-import static brickGame.GameLogicHandler.*;
+
+
 public class GameSceneController {
     @FXML
     private AnchorPane gamePane;
@@ -31,16 +31,40 @@ public class GameSceneController {
     @FXML
     private Button pauseButton;
 
+    private GameEngine engine;
 
-    private GameLogicHandler gameLogicHandler;
+
     private MenuController menuController;
 
     public static final int LEFT = 1;
     public static final int RIGHT = 2;
+    private BallControl ballControl;
+    private GameLogicHandler gameLogicHandler;
 
-    public GameSceneController() {
-        this.gameLogicHandler = new GameLogicHandler();
+    private static GameSceneController instance;
+    private GameStateManager gameStateManager;
+    private GameSceneController() {
     }
+
+    public void setBallControl(BallControl ballControl) {
+        this.ballControl = ballControl;
+    }
+
+    public void setGameLogicHandler(GameLogicHandler gameLogicHandler) {
+        this.gameLogicHandler = gameLogicHandler;
+    }
+
+    public void setGameStateManager(GameStateManager gameStateManager) {
+        this.gameStateManager = gameStateManager;
+    }
+
+    public static GameSceneController getInstance() {
+        if (instance == null) {
+            instance = new GameSceneController();
+        }
+        return instance;
+    }
+
 
     public AnchorPane getGamePane() {
         return gamePane;
@@ -58,6 +82,44 @@ public class GameSceneController {
         levelLabel.setText(levelLabelText);
     }
 
+    public void showLoseScene() {
+        engine.stop();
+
+        System.out.println("heart: " + gameLogicHandler.getHeart());
+
+        try {
+            gameLogicHandler.setGameRun(false);
+            gameState = GameStateManager.GameState.GAME_OVER;
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/Menu.fxml"));
+            fxmlLoader.setControllerFactory(c -> {
+                return menuController = new MenuController();
+            });
+            Scene loseMenuScene = new Scene(fxmlLoader.load());
+
+            menuController.showMenuScene("Lose", loseMenuScene);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showWinScene() {
+        try {
+            gameState = GameStateManager.GameState.GAME_OVER;
+            gameLogicHandler.setGameRun(false);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/Menu.fxml"));
+            fxmlLoader.setControllerFactory(c -> {
+                return menuController = new MenuController();
+            });
+
+            Scene winMenuScene = new Scene(fxmlLoader.load());
+            menuController.showMenuScene("Win", winMenuScene);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // Example: Method to show the scene
     public void showScene(Scene gameScene) throws IOException {
@@ -68,66 +130,84 @@ public class GameSceneController {
             levelLabel = (Label) gameScene.lookup("#levelLabel");
             pauseButton = (Button) gameScene.lookup("#pauseButton");
 
-            if (!loadFromSave) {
-                if (level > 1) {
-                    new Score().showMessage("Level Up :)", 300, 300);
-                }
-                if (level == endLevel) {
-                    try{
-                        gameState =GameStateManager.GameState.GAME_OVER;
-                        isGameRun = false;
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/Menu.fxml"));
-                        fxmlLoader.setControllerFactory(c -> {
-                            return menuController = new MenuController();
-                        });
-
-                        Scene winMenuScene= new Scene(fxmlLoader.load());
-                        menuController.showMenuScene("Win",winMenuScene);
-
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
+            if (!gameStateManager.isLoadFromSave()) {
+                //if level equal to endLevel
+                if (gameLogicHandler.getLevel() == gameLogicHandler.getEndLevel()) {
+                    showWinScene();
                     return;
+                } else if (gameLogicHandler.getLevel() > 1) {
+                    new Score().showMessage("Level Up :)", 300, 300);
+                    setLevelLabel("Level: " + gameLogicHandler.getLevel());
                 }
 
-                InitGameComponent init = new InitGameComponent();
+                //init game component like block,ball and paddle
+                InitGameComponent init = new InitGameComponent(ballControl,gameLogicHandler);
                 init.initBall();
                 init.initPaddle();
                 init.initBoard();
-                gamePane.getChildren().addAll(rect, ball);
-            } else {
-                gamePane.getChildren().addAll(rect, ball);
             }
+            //this line very important, it makes sure the game scene can properly load
+            Platform.runLater(() -> {
+                System.out.println("add to root start");
+                //add ball and paddle to gamePane
+                gamePane.getChildren().addAll(paddle, ballControl.getBall());
 
-            // add blocks to the screen
-            for (Block block : blocks) {
-                gamePane.getChildren().add(block.rect);
-            }
+                // add blocks to the gamePane
+                for (Block block : blocks) {
+                    gamePane.getChildren().add(block.rect);
+                }
+                System.out.println("add to root end");
+            });
+
+            Platform.runLater(() -> {
+                try {
+                    System.out.println("set Scene show start");
+                    primaryStage.setScene(gameScene);
+                    primaryStage.setTitle("Brick Breaker Game");
+                    primaryStage.show();
+                    System.out.println("set Scene show end");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+
 
             gameScene.addEventFilter(KeyEvent.KEY_PRESSED, this::handleKeyPressed);
 
-            primaryStage.setScene(gameScene);
-            primaryStage.setTitle("Brick Breaker Game");
-            primaryStage.show();
+            if (gameLogicHandler.getLevel() != gameLogicHandler.getEndLevel()) {
+                System.out.println("132");
+                if (!gameStateManager.isLoadFromSave()) {
+                    System.out.println("134");
+                    gameLogicHandler.setRemainingBlockCount(blocks.size());
+                    if (gameLogicHandler.getLevel() >= 1 && gameLogicHandler.getLevel() < gameLogicHandler.getEndLevel()) {
+                        System.out.println("137");
 
-            if (level != endLevel) {
-                if (!loadFromSave) {
-                    remainingBlockCount = blocks.size();
-                    if (level >= 1 && level < endLevel) {
                         engine = new GameEngine();
                         engine.setOnAction(gameLogicHandler);
                         engine.setFps(120);
                         engine.start();
+                        gameStateManager.setEngine(engine);
+                        System.out.println("142");
                     }
+
                 } else {
+                    System.out.println("146");
                     engine = new GameEngine();
                     engine.setOnAction(gameLogicHandler);
                     engine.setFps(120);
                     engine.start();
-                    loadFromSave = false;
+                    gameStateManager.setEngine(engine);
+                    gameStateManager.setLoadFromSave(false);
                 }
+                System.out.println("153");
             }
+
+
+
         }
+
+        System.out.println("Scene show end");
     }
 
     @FXML
@@ -187,10 +267,9 @@ public class GameSceneController {
     @FXML
     private void handlePauseButton(ActionEvent event) {
         System.out.println("Pause button clicked");
-        // Implement the pause functionality here
+
         gameStateManager.saveGame();
         gameSoundManager.stop();
-        // Rest of your code
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/Menu.fxml"));
         fxmlLoader.setControllerFactory(c -> {
@@ -212,9 +291,6 @@ public class GameSceneController {
             primaryStage.setScene(menuScene);
             primaryStage.show();
 
-//            startbtn.setOnAction(actionEvent -> {
-//                gameStateManager.loadGame();
-//            });
         }
     }
 

@@ -9,11 +9,9 @@ import javafx.animation.Timeline;
 import javafx.util.Duration;
 import static brickGame.Main.*;
 public class Score {
-    private Main main;
-    private static final Duration ANIMATION_DURATION = Duration.seconds(1.5);
-    private static final double OPACITY_END_VALUE = 0.0;
-    private static final double SCALE_END_VALUE = 0.0;
-
+    private final Duration ANIMATION_DURATION = Duration.seconds(1.5);
+    private final double OPACITY_END_VALUE = 0.0;
+    private final double SCALE_END_VALUE = 0.0;
 
     public void show(double x, double y, int score) {
         String sign = (score >= 0) ? "+" : "";

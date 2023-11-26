@@ -9,179 +9,280 @@ import static brickGame.GameStateManager.gameState;
 import static brickGame.Main.*;
 import static brickGame.InitGameComponent.*;
 import static brickGame.GameLogicHandler.*;
+
 public class BallControl {
-    public static Circle ball;
-    public static double xBall;
-    public static double yBall;
 
-    public static boolean goDownBall                  = true;
-    public static boolean goRightBall                 = true;
-    public static boolean collideToPaddle = false;
-    public static boolean collideToPaddleAndMoveToRight = true;
-    public static boolean collideToRightWall           = false;
-    public static boolean collideToLeftWall            = false;
+    private static BallControl instance;
+    private GameLogicHandler gameLogicHandler;
 
-    public static boolean collideToRightBlock          = false;
-    public static boolean collideToBottomBlock         = false;
-    public static boolean collideToLeftBlock           = false;
-    public static boolean collideToTopBlock            = false;
-
-    public static double vX = 1.000;
-    public static double vY = 1.000;
-
-    private static MenuController menuController;
-
-    public static void resetcollideFlags() {
-
-        collideToPaddle = false;
-        collideToPaddleAndMoveToRight = false;
-        collideToRightWall = false;
-        collideToLeftWall = false;
-
-        collideToRightBlock = false;
-        collideToBottomBlock = false;
-        collideToLeftBlock = false;
-        collideToTopBlock = false;
-
-        ballOutOfBounds = false;
+    private BallControl() {
     }
-    public static boolean ballOutOfBounds = false; // Add this flag
 
-    public  void setPhysicsToBall() {
-        //v = ((time - hitTime) / 1000.000) + 1.000;
+    public static BallControl getInstance() {
+        if (instance == null) {
+            instance = new BallControl();
+        }
+        return instance;
+    }
 
-        if (goDownBall) {
-            yBall += vY;
+    private Circle ball;
+    private double xBall;
+    private double yBall;
+
+    private boolean goDownBall = true;
+    private boolean goRightBall = true;
+    private boolean collideToPaddle = false;
+    private boolean collideToPaddleAndMoveToRight = true;
+    private boolean collideToRightWall = false;
+    private boolean collideToLeftWall = false;
+
+    private boolean collideToRightBlock = false;
+    private boolean collideToBottomBlock = false;
+    private boolean collideToLeftBlock = false;
+    private boolean collideToTopBlock = false;
+
+    private double vX = 1.000;
+    private double vY = 1.000;
+
+
+    public void resetcollideFlags() {
+
+        setCollideToPaddle(false);
+        setCollideToPaddleAndMoveToRight(false);
+        setCollideToRightWall(false);
+        setCollideToLeftWall(false);
+
+        setCollideToRightBlock(false);
+        setCollideToBottomBlock(false);
+        setCollideToLeftBlock(false);
+        setCollideToTopBlock(false);
+    }
+
+    public void setPhysicsToBall() {
+        if (isGoDownBall()) {
+            setyBall(getyBall() + getvY());
         } else {
-            yBall -= vY;
+            setyBall(getyBall() - getvY());
         }
 
-        if (goRightBall) {
-            xBall += vX;
+        if (isGoRightBall()) {
+            setxBall(getxBall() + getvX());
         } else {
-            xBall -= vX;
+            setxBall(getxBall() - getvX());
         }
 
-        if (yBall <= 0) {
-            //vX = 1.000;
+        if (getyBall() <= 0) {
             resetcollideFlags();
-            goDownBall = true;
-        //    return;
+            setGoDownBall(true);
         }
-        if (yBall >= SCENE_HEIGHT) {
-            Platform.runLater(() -> {
-                goDownBall = false;
+
+        //if ball exceed the scene
+        if (getyBall() >= SCENE_HEIGHT) {
+                setGoDownBall(false);
                 resetcollideFlags();
-            });
-            if (!isGoldStatus) {
-                    //TODO gameover
-                    heart = heart - 1;
-                    ballOutOfBounds = true;
-                    new Score().show(SCENE_WIDTH / 2, SCENE_HEIGHT / 2, -1);
-
-                    if (heart <= 0) {
-                    //  new Score(main).showGameOver();
-                        engine.stop();
-
-                        try{
-                            isGameRun = false;
-                            gameState =GameStateManager.GameState.GAME_OVER;
-                            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/Menu.fxml"));
-                            fxmlLoader.setControllerFactory(c -> {
-                                return menuController = new MenuController();
-                            });
-                            Scene winMenuScene= new Scene(fxmlLoader.load());
-
-                            menuController.showMenuScene("Lose",winMenuScene);
-
-
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
+            if (!gameLogicHandler.isGoldStatus()) {
+                gameLogicHandler.deductHeart();
             }
-           // return;
         }
 
-        if (yBall >= yPaddle - BALL_RADIUS) {
-            //System.out.println("collide1");
-            if (xBall >= xPaddle && xBall <= xPaddle + PADDLE_WIDTH) {
-                hitTime = time;
+        if (getyBall() >= yPaddle - BALL_RADIUS) {
+            if (getxBall() >= xPaddle && getxBall() <= xPaddle + PADDLE_WIDTH) {
+                gameLogicHandler.setHitTime(gameLogicHandler.getTime());
                 resetcollideFlags();
-                collideToPaddle = true;
-                goDownBall = false;
+                setCollideToPaddle(true);
+                setGoDownBall(false);
 
-                double relation = (xBall - centerPaddleX) / (PADDLE_WIDTH / 2);
+                double relation = (getxBall() - centerPaddleX) / (PADDLE_WIDTH / 2);
 
                 if (Math.abs(relation) <= 0.3) {
                     //vX = 0;
-                    vX = Math.abs(relation);
+                    setvX(Math.abs(relation));
                 } else if (Math.abs(relation) > 0.3 && Math.abs(relation) <= 0.7) {
-                    vX = (Math.abs(relation) * 1.5) + (level / 3.500);
+                    setvX((Math.abs(relation) * 1.5) + (gameLogicHandler.getLevel() / 3.500));
                     //System.out.println("vX " + vX);
                 } else {
-                    vX = (Math.abs(relation) * 2) + (level / 3.500);
+                    setvX((Math.abs(relation) * 2) + (gameLogicHandler.getLevel() / 3.500));
                     //System.out.println("vX " + vX);
                 }
 
-                if (xBall - centerPaddleX > 0) {
-                    collideToPaddleAndMoveToRight = true;
+                if (getxBall() - centerPaddleX > 0) {
+                    setCollideToPaddleAndMoveToRight(true);
                 } else {
-                    collideToPaddleAndMoveToRight = false;
+                    setCollideToPaddleAndMoveToRight(false);
                 }
                 //System.out.println("collide2");
             }
         }
 
-        if (xBall >= SCENE_WIDTH) {
+        if (getxBall() >= SCENE_WIDTH) {
             resetcollideFlags();
-            //vX = 1.000;
-            collideToRightWall = true;
+            setCollideToRightWall(true);
         }
 
-        if (xBall <= 0) {
+        if (getxBall() <= 0) {
             resetcollideFlags();
-            //vX = 1.000;
-            collideToLeftWall = true;
+            setCollideToLeftWall(true);
         }
 
-        if (collideToPaddle) {
-            if (collideToPaddleAndMoveToRight) {
-                goRightBall = true;
+        if (isCollideToPaddle()) {
+            if (isCollideToPaddleAndMoveToRight()) {
+                setGoRightBall(true);
             } else {
-                goRightBall = false;
+                setGoRightBall(false);
             }
         }
 
         //Wall collide
 
-        if (collideToRightWall) {
-            goRightBall = false;
+        if (isCollideToRightWall()) {
+            setGoRightBall(false);
         }
 
-        if (collideToLeftWall) {
-            goRightBall = true;
+        if (isCollideToLeftWall()) {
+            setGoRightBall(true);
         }
 
         //Block collide
 
-        if (collideToRightBlock) {
-            goRightBall = true;
+        if (isCollideToRightBlock()) {
+            setGoRightBall(true);
         }
         //solve logic error
-        if (collideToLeftBlock) {
-            goRightBall = false;
+        if (isCollideToLeftBlock()) {
+            setGoRightBall(false);
         }
 
-        if (collideToTopBlock) {
-            goDownBall = false;
+        if (isCollideToTopBlock()) {
+            setGoDownBall(false);
         }
 
-        if (collideToBottomBlock) {
-            goDownBall = true;
+        if (isCollideToBottomBlock()) {
+            setGoDownBall(true);
         }
+    }
 
+    public Circle getBall() {
+        return ball;
+    }
 
+    public void setBall(Circle ball) {
+        this.ball = ball;
+    }
+
+    public double getxBall() {
+        return xBall;
+    }
+
+    public void setxBall(double xBall) {
+        this.xBall = xBall;
+    }
+
+    public double getyBall() {
+        return yBall;
+    }
+
+    public void setyBall(double yBall) {
+        this.yBall = yBall;
+    }
+
+    public boolean isGoDownBall() {
+        return goDownBall;
+    }
+
+    public void setGoDownBall(boolean goDownBall) {
+        this.goDownBall = goDownBall;
+    }
+
+    public boolean isGoRightBall() {
+        return goRightBall;
+    }
+
+    public void setGoRightBall(boolean goRightBall) {
+        this.goRightBall = goRightBall;
+    }
+
+    public boolean isCollideToPaddle() {
+        return collideToPaddle;
+    }
+
+    public void setCollideToPaddle(boolean collideToPaddle) {
+        this.collideToPaddle = collideToPaddle;
+    }
+
+    public boolean isCollideToPaddleAndMoveToRight() {
+        return collideToPaddleAndMoveToRight;
+    }
+
+    public void setCollideToPaddleAndMoveToRight(boolean collideToPaddleAndMoveToRight) {
+        this.collideToPaddleAndMoveToRight = collideToPaddleAndMoveToRight;
+    }
+
+    public boolean isCollideToRightWall() {
+        return collideToRightWall;
+    }
+
+    public void setCollideToRightWall(boolean collideToRightWall) {
+        this.collideToRightWall = collideToRightWall;
+    }
+
+    public boolean isCollideToLeftWall() {
+        return collideToLeftWall;
+    }
+
+    public void setCollideToLeftWall(boolean collideToLeftWall) {
+        this.collideToLeftWall = collideToLeftWall;
+    }
+
+    public boolean isCollideToRightBlock() {
+        return collideToRightBlock;
+    }
+
+    public void setCollideToRightBlock(boolean collideToRightBlock) {
+        this.collideToRightBlock = collideToRightBlock;
+    }
+
+    public boolean isCollideToBottomBlock() {
+        return collideToBottomBlock;
+    }
+
+    public void setCollideToBottomBlock(boolean collideToBottomBlock) {
+        this.collideToBottomBlock = collideToBottomBlock;
+    }
+
+    public boolean isCollideToLeftBlock() {
+        return collideToLeftBlock;
+    }
+
+    public void setCollideToLeftBlock(boolean collideToLeftBlock) {
+        this.collideToLeftBlock = collideToLeftBlock;
+    }
+
+    public boolean isCollideToTopBlock() {
+        return collideToTopBlock;
+    }
+
+    public void setCollideToTopBlock(boolean collideToTopBlock) {
+        this.collideToTopBlock = collideToTopBlock;
+    }
+
+    public double getvX() {
+        return vX;
+    }
+
+    public void setvX(double vX) {
+        this.vX = vX;
+    }
+
+    public double getvY() {
+        return vY;
+    }
+
+    public void setvY(double vY) {
+        this.vY = vY;
+    }
+
+    public void setGameLogicHandler(GameLogicHandler gameLogicHandler) {
+        this.gameLogicHandler = gameLogicHandler;
     }
 
 }

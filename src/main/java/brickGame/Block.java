@@ -9,14 +9,14 @@ import java.io.Serializable;
 
 import static brickGame.InitGameComponent.BALL_RADIUS;
 public class Block implements Serializable {
-    private static Block block = new Block(-1, -1, 99);
+    private static Block block = new Block(-1, -1, BLOCK_TYPE.BLOCK_NORMAL);
 
     public int row;
     public int column;
 
     public boolean isDestroyed = false;
 
-    public int type;
+    public BLOCK_TYPE type;
 
     public int x;
     public int y;
@@ -27,21 +27,25 @@ public class Block implements Serializable {
     private final int paddingH = 50;
     public Rectangle rect;
 
+    public enum HIT_STATE {
+        NO_HIT,
+        HIT_RIGHT,
+        HIT_BOTTOM,
+        HIT_LEFT,
+        HIT_TOP
+    }
 
-    public static final int NO_HIT = -1;
-    public static final int HIT_RIGHT = 0;
-    public static final int HIT_BOTTOM = 1;
-    public static final int HIT_LEFT = 2;
-    public static final int HIT_TOP = 3;
+    public enum BLOCK_TYPE {
+        BLOCK_NORMAL,
+        BLOCK_CHOCO,
+        BLOCK_STAR,
+        BLOCK_HEART,
+    }
 
-    public static final int BLOCK_NORMAL = 99;
-    public static final int BLOCK_CHOCO = 100;
-    public static final int BLOCK_STAR = 101;
-    public static final int BLOCK_HEART = 102;
     private SoundManager soundManager;
 
 
-    public Block(int row, int column, int type) {
+    public Block(int row, int column, BLOCK_TYPE type) {
         this.row = row;
         this.column = column;
         this.type = type;
@@ -60,15 +64,15 @@ public class Block implements Serializable {
         rect.setX(x);
         rect.setY(y);
 
-        if (type == BLOCK_CHOCO) {
+        if (type == BLOCK_TYPE.BLOCK_CHOCO) {
             Image image = new Image("/choco.jpg");
             ImagePattern pattern = new ImagePattern(image);
             rect.setFill(pattern);
-        } else if (type == BLOCK_HEART) {
+        } else if (type ==  BLOCK_TYPE.BLOCK_HEART) {
             Image image = new Image("/heart.jpg");
             ImagePattern pattern = new ImagePattern(image);
             rect.setFill(pattern);
-        } else if (type == BLOCK_STAR) {
+        } else if (type ==  BLOCK_TYPE.BLOCK_STAR) {
             Image image = new Image("/star.jpg");
             ImagePattern pattern = new ImagePattern(image);
             rect.setFill(pattern);
@@ -81,11 +85,10 @@ public class Block implements Serializable {
 
     }
 
-    public int checkHitToBlock(double xBall, double yBall) {
+    public HIT_STATE checkHitToBlock(double xBall, double yBall) {
         if (isDestroyed) {
-            return NO_HIT;
+            return HIT_STATE.NO_HIT;
         }
-
 
         if (xBall + BALL_RADIUS >= x && xBall - BALL_RADIUS <= x + blockWidth && yBall + BALL_RADIUS >= y && yBall - BALL_RADIUS <= y + blockHeight) {
             // Collision detected
@@ -94,16 +97,16 @@ public class Block implements Serializable {
 
             if (dx < dy) {
                 // Collision on the x-axis
-                soundManager.play();
-                return xBall < x + blockWidth / 2 ? HIT_LEFT : HIT_RIGHT;
+               // soundManager.play();
+                return xBall < x + blockWidth / 2 ? HIT_STATE.HIT_LEFT : HIT_STATE.HIT_RIGHT;
             } else {
                 // Collision on the y-axis
-                soundManager.play();
-                return yBall < y + blockHeight / 2 ? HIT_TOP : HIT_BOTTOM;
+                //soundManager.play();
+                return yBall < y + blockHeight / 2 ? HIT_STATE.HIT_TOP : HIT_STATE.HIT_BOTTOM;
             }
         }
 
-        return NO_HIT;
+        return HIT_STATE.NO_HIT;
     }
 
 

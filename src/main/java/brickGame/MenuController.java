@@ -1,6 +1,5 @@
 package brickGame;
 
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,9 +9,16 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import static brickGame.GameStateManager.gameState;
 import static brickGame.Main.*;
-import static brickGame.GameLogicHandler.*;
 
 public class MenuController {
+
+    private GameLogicHandler gameLogicHandler;
+    private GameStateManager gameStateManager;
+
+    public MenuController(){
+        gameLogicHandler = GameLogicHandler.getInstance();
+        gameStateManager = GameStateManager.getInstance();
+    }
 
     @FXML
     private VBox resultBox;
@@ -26,12 +32,9 @@ public class MenuController {
     public void onStartOrResume() {
 
         if (gameState == GameStateManager.GameState.ON_START) {
-            try {
                 gameStateManager.startGame();
                 System.out.println("clicked");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+
             gameState = GameStateManager.GameState.IN_PROGRESS;
             //gameSoundManager.play();
         } else if (gameState == GameStateManager.GameState.PAUSED) {
@@ -69,7 +72,7 @@ public class MenuController {
         resultBox.setVisible(true);
 
         Label scorePlaceholder = (Label) winMenuScene.lookup("#scoreLabel");
-        scorePlaceholder.setText(scorePlaceholder.getText() + String.valueOf(score));
+        scorePlaceholder.setText(scorePlaceholder.getText() + String.valueOf(gameLogicHandler.getScore()));
 
         if (state == "Lose") {
             Label resultLabel = (Label) winMenuScene.lookup("#resultLabel");

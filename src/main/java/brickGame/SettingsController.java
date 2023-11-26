@@ -33,9 +33,9 @@ public class SettingsController {
     @FXML
     private CheckBox soundCheckBox;
 
-
+    private GameLogicHandler gameLogicHandler;
     public SettingsController() {
-
+        gameLogicHandler = GameLogicHandler.getInstance();
     }
 
     @FXML
@@ -49,10 +49,10 @@ public class SettingsController {
     }
     @FXML
     public void initialize(){
-        currentEndLevel = endLevel;
-        currentHeart = initialHeart;
-        initialHeartLabel.setText(String.valueOf(initialHeart));
-        endLevelLabel.setText(String.valueOf(endLevel));
+        currentEndLevel = gameLogicHandler.getEndLevel();
+        currentHeart = gameLogicHandler.getInitialHeart();
+        initialHeartLabel.setText(String.valueOf(gameLogicHandler.getInitialHeart()));
+        endLevelLabel.setText(String.valueOf(gameLogicHandler.getEndLevel()));
         soundCheckBox.setSelected(!gameSoundManager.getIsMute());
     }
     @FXML
@@ -90,11 +90,12 @@ public class SettingsController {
 
     @FXML
     private void incrementHeart() {
-        if (!isGameRun) {
+
+        if (!gameLogicHandler.isGameRun()) {
             if (currentHeart != maxHeart) {
                 currentHeart++;
                 initialHeartLabel.setText(String.valueOf(currentHeart));
-                initialHeart = currentHeart;
+                gameLogicHandler.setInitialHeart(currentHeart);
             }
         }
 
@@ -102,11 +103,11 @@ public class SettingsController {
 
     @FXML
     private void decrementHeart() {
-        if (!isGameRun) {
+        if (!gameLogicHandler.isGameRun()) {
             if (currentHeart != minHeart) {
                 currentHeart--;
                 initialHeartLabel.setText(String.valueOf(currentHeart));
-                initialHeart = currentHeart;
+                gameLogicHandler.setInitialHeart(currentHeart);
             }
         }
     }
@@ -114,11 +115,11 @@ public class SettingsController {
 
     @FXML
     private void incrementLevel() {
-        if (!isGameRun) {
+        if (!gameLogicHandler.isGameRun()) {
             if (currentEndLevel != maxLevel) {
                 currentEndLevel++;
                 endLevelLabel.setText(String.valueOf(currentEndLevel));
-                endLevel = currentEndLevel;
+                gameLogicHandler.setEndLevel(currentEndLevel);
             }
         }
 
@@ -126,11 +127,11 @@ public class SettingsController {
 
     @FXML
     private void decrementLevel() {
-        if (!isGameRun) {
+        if (!gameLogicHandler.isGameRun()) {
             if (currentEndLevel != minLevel) {
                 currentEndLevel--;
                 endLevelLabel.setText(String.valueOf(currentEndLevel));
-                endLevel = currentEndLevel;
+                gameLogicHandler.setEndLevel(currentEndLevel);
             }
         }
     }

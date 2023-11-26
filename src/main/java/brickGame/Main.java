@@ -1,6 +1,7 @@
 package brickGame;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -9,17 +10,39 @@ import java.io.*;
 
 public class Main extends Application {
 
-    public static GameEngine engine;
-
     public static AnchorPane root;
-    public static GameStateManager gameStateManager;
-    public static boolean loadFromSave = false;
+
     public static Stage primaryStage;
     public static SoundManager gameSoundManager;
 
+    private GameLogicHandler gameLogicHandler;
+    private BallControl ballControl;
+    private GameSceneController gameSceneController;
+    private  GameStateManager gameStateManager;
     @Override
     public void start(Stage primaryStage) throws Exception {
-        gameStateManager = new GameStateManager();
+        gameLogicHandler = GameLogicHandler.getInstance();
+        ballControl = BallControl.getInstance();
+        gameSceneController = GameSceneController.getInstance();
+        gameStateManager = GameStateManager.getInstance();
+
+
+        gameLogicHandler.setBallControl(ballControl);
+        gameLogicHandler.setGameSceneController(gameSceneController);
+        gameLogicHandler.setGameStateManager(gameStateManager);
+
+        ballControl.setGameLogicHandler(gameLogicHandler);
+
+        gameSceneController.setBallControl(ballControl);
+        gameSceneController.setGameLogicHandler(gameLogicHandler);
+        gameSceneController.setGameStateManager(gameStateManager);
+
+        gameStateManager.setBallControl(ballControl);
+        gameStateManager.setGameLogicHandler(gameLogicHandler);
+        gameStateManager.setGameSceneController(gameSceneController);
+
+
+
         this.primaryStage = primaryStage;
         initializeMenuScene();
         FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("fxml/Settings.fxml"));
@@ -28,7 +51,10 @@ public class Main extends Application {
         });
 
         gameSoundManager = new SoundManager(Main.class.getResource("/bg-music.mp3"), SoundManager.MusicType.BG_MUSIC);
-        gameSoundManager.play();
+        Platform.runLater(()->{
+            gameSoundManager.play();
+        });
+
     }
 
     private void initializeMenuScene() {
