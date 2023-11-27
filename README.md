@@ -3,11 +3,22 @@
 
 
 ## General refactoring work that I have done
-- fixing typo issue to have a more readable code
 - use lambda expression
 - set multiple field to final and static (to share among classes)
-- change variable involve break to paddle (better naming, the previous one is not easy to understand)
 
+Change variable name for readability and more understandable
+- change break to paddle in InitGameComponent
+- change rect to paddle in InitGameComponent
+- fixing some typo among the code base
+
+Use enum to replace static int constants 
+- HIT_CODE in Block.java
+- BLOCK_TYPE in Block.java
+- GameState (newly added) in GameStateManager
+
+Apply Singleton framework to several file
+- encapsulate the variable which is static in my early development
+- make them private and create getter and setter method
 
 ## New File
 
@@ -68,35 +79,55 @@
 
 ### Block.java
 - change the hit logic so that don't have penetrated issue
+- Use enum to replace static int constants
+  - HIT_CODE in Block.java
+  - BLOCK_TYPE in Block.java
+- remove color because decided to use one type of normal brick only.
 
 ### BlockSerialize.java
 - rename file to BlockSerialize
+- change the data types of variable "type" from int to enum BLOCK_TYPE
 
 ### Bonus.java
-- change the public variable to private variable
-- create getter and setter for some private variable
+- encapsulate the variables and create getter and setter for them
+- add a Platform.runLater thread inside draw method
 
 ### GameEngine.java
-- inside stop() method, I change all the thread.stop() to thread.interrupt
-- move OnAction interface to its own file
-- add platform run later to Update() and PhysicsCalculation()
-- add a break statement inside the while loop of Update() and PhysicsCalculation() to prevent the program being stucked
+- Interface Name Change:
+  - Original: OnAction
+  - Amended: Actionable
+
+- Platform.runLater for UI Operations:
+  - In the amended version, the Platform.runLater() method is used to wrap UI operations inside the Update() and PhysicsCalculation() methods. This ensures that UI-related tasks are executed on the JavaFX Application Thread.
+
+- Thread Interruption instead of Stop:
+  - The stop() method in the amended version replaces the use of the deprecated stop() method with interrupt() for stopping threads (updateThread, physicsThread, timeThread). This is a safer and more modern approach to thread termination.
+
+- Fps Calculation Change:
+  - The calculation of the frames per second (fps) conversion has been updated in the setFps method.
+
+- Exception Handling:
+  - Exception handling has been enhanced in the amended version. The catch blocks now explicitly break out of the while loop when an exception occurs.
 
 ### LoadSave.java
-- change some variable typo error
+Variable Declaration:
+- In the amended version, a local variable saveFile is introduced for clarity in checking the existence of the save file.
+File Path Consistency:
+- The file path for saving and loading (SAVE_PATH) is now consistent in the amended version.
+ArrayList Object Read:
+- The reading of the ArrayList object has been updated to a more explicit form.
+Exception Handling:
+- Exception handling has been maintained with e.printStackTrace().
 
 ### Main.java
 - 
 
 ### Score.java
-- add a constructor,which have main instance as parameter
 - utilizes JavaFX's Timeline and KeyFrame for animation instead of creating a separate thread and using Thread.sleep()
 - removed unused import statements
 - Code formatting is improved, and lambda expressions are used for conciseness in certain places, like the Platform.runLater() calls.
 - remove showWin() and showGameOver() method
 - change the show() method, utilise the showMessage() method thus prevent any code duplication
-
-
 
 
 
@@ -234,6 +265,7 @@ nextlevel run twice
 ### Block.java
 
 - Changed the collision logic to avoid penetration issues.
+- use enum to replace the original HIT_STATE which use int
 
 ### BlockSerialize.java
 
@@ -295,3 +327,10 @@ nextlevel run twice
     - **Issue:** Difficulty in separating UI code from the main logic using FXML and controllers.
     - **Solution:** Found a solution by referring to external sources, successfully implementing the MVC pattern by separating UI code into FXML files and corresponding controllers.
 
+5. **Game become unresponsive unexpectedly:** (It takes me 3 day to figure out what happen)
+    - **Issue:** When level increase, then the game will become unresponsive and this situation happen inconsistent.
+                 The thread as i see in activity monitor will also increase by 100++ for each level, at the end the program crash                
+    - **Solution:** Found that this is a issue after i added the game sound, fix it by commented out the code related to game sound manager
+                    Right now the thread is remains at 40 and the program run smoothly
+    - **Future** Will need to implement the game sound logic properly
+   

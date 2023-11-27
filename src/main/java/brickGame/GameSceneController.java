@@ -9,11 +9,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 
 import java.io.IOException;
-
-import static brickGame.GameStateManager.gameState;
 
 import static brickGame.Main.*;
 import static brickGame.InitGameComponent.*;
@@ -36,13 +35,32 @@ public class GameSceneController {
 
     private MenuController menuController;
 
-    public static final int LEFT = 1;
-    public static final int RIGHT = 2;
+    private final int LEFT = 1;
+    private final int RIGHT = 2;
     private BallControl ballControl;
     private GameLogicHandler gameLogicHandler;
 
     private static GameSceneController instance;
     private GameStateManager gameStateManager;
+
+    private InitGameComponent initGameComponent;
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    private Stage primaryStage;
+
+    public SoundManager getGameSoundManager() {
+        return gameSoundManager;
+    }
+
+    public void setGameSoundManager(SoundManager gameSoundManager) {
+        this.gameSoundManager = gameSoundManager;
+    }
+
+    private SoundManager gameSoundManager;
+
     private GameSceneController() {
     }
 
@@ -66,22 +84,6 @@ public class GameSceneController {
     }
 
 
-    public AnchorPane getGamePane() {
-        return gamePane;
-    }
-
-    public void setScoreLabel(String scoreLabelText) {
-        scoreLabel.setText(scoreLabelText);
-    }
-
-    public void setHeartLabel(String heartLabelText) {
-        heartLabel.setText(heartLabelText);
-    }
-
-    public void setLevelLabel(String levelLabelText) {
-        levelLabel.setText(levelLabelText);
-    }
-
     public void showLoseScene() {
         engine.stop();
 
@@ -89,7 +91,7 @@ public class GameSceneController {
 
         try {
             gameLogicHandler.setGameRun(false);
-            gameState = GameStateManager.GameState.GAME_OVER;
+            gameStateManager.setGameState(GameStateManager.GameState.GAME_OVER);
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/Menu.fxml"));
             fxmlLoader.setControllerFactory(c -> {
                 return menuController = new MenuController();
@@ -106,7 +108,7 @@ public class GameSceneController {
 
     public void showWinScene() {
         try {
-            gameState = GameStateManager.GameState.GAME_OVER;
+            gameStateManager.setGameState(GameStateManager.GameState.WIN);
             gameLogicHandler.setGameRun(false);
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/Menu.fxml"));
             fxmlLoader.setControllerFactory(c -> {
@@ -121,6 +123,7 @@ public class GameSceneController {
         }
     }
 
+
     // Example: Method to show the scene
     public void showScene(Scene gameScene) throws IOException {
         if (primaryStage != null) {
@@ -131,83 +134,68 @@ public class GameSceneController {
             pauseButton = (Button) gameScene.lookup("#pauseButton");
 
             if (!gameStateManager.isLoadFromSave()) {
+
+                if (gameLogicHandler.getLevel() > 1) {
+                    new Score().showMessage("Level Up :)", 300, 300);
+                    setLevelLabel("Level: " + gameLogicHandler.getLevel());
+                }
                 //if level equal to endLevel
                 if (gameLogicHandler.getLevel() == gameLogicHandler.getEndLevel()) {
                     showWinScene();
                     return;
-                } else if (gameLogicHandler.getLevel() > 1) {
-                    new Score().showMessage("Level Up :)", 300, 300);
-                    setLevelLabel("Level: " + gameLogicHandler.getLevel());
                 }
 
                 //init game component like block,ball and paddle
-                InitGameComponent init = new InitGameComponent(ballControl,gameLogicHandler);
-                init.initBall();
-                init.initPaddle();
-                init.initBoard();
+                initGameComponent.initBall();
+                initGameComponent.initPaddle();
+                initGameComponent.initBoard();
             }
-            //this line very important, it makes sure the game scene can properly load
-            Platform.runLater(() -> {
-                System.out.println("add to root start");
-                //add ball and paddle to gamePane
-                gamePane.getChildren().addAll(paddle, ballControl.getBall());
 
-                // add blocks to the gamePane
-                for (Block block : blocks) {
-                    gamePane.getChildren().add(block.rect);
-                }
-                System.out.println("add to root end");
-            });
+            //   Platform.runLater(() -> {
+            System.out.println("add to root start");
+            //add ball and paddle to gamePane
+            gamePane.getChildren().addAll(initGameComponent.getPaddle(), ballControl.getBall());
 
-            Platform.runLater(() -> {
-                try {
-                    System.out.println("set Scene show start");
-                    primaryStage.setScene(gameScene);
-                    primaryStage.setTitle("Brick Breaker Game");
-                    primaryStage.show();
-                    System.out.println("set Scene show end");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-
-
-
+            // add blocks to the gamePane
+            for (Block block : initGameComponent.getBlocks()) {
+                gamePane.getChildren().add(block.rect);
+            }
+            System.out.println("add to root end");
+      //      });
             gameScene.addEventFilter(KeyEvent.KEY_PRESSED, this::handleKeyPressed);
+//this line very important, it makes sure the game scene can properly load
+            //  Platform.runLater(() -> {
+            try {
+                System.out.println("set Scene show start");
+                primaryStage.setScene(gameScene);
+                primaryStage.setTitle("Brick Breaker Game");
+                primaryStage.show();
+                System.out.println("set Scene show end");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //   });
+
 
             if (gameLogicHandler.getLevel() != gameLogicHandler.getEndLevel()) {
-                System.out.println("132");
+                startEngine();
                 if (!gameStateManager.isLoadFromSave()) {
-                    System.out.println("134");
-                    gameLogicHandler.setRemainingBlockCount(blocks.size());
-                    if (gameLogicHandler.getLevel() >= 1 && gameLogicHandler.getLevel() < gameLogicHandler.getEndLevel()) {
-                        System.out.println("137");
-
-                        engine = new GameEngine();
-                        engine.setOnAction(gameLogicHandler);
-                        engine.setFps(120);
-                        engine.start();
-                        gameStateManager.setEngine(engine);
-                        System.out.println("142");
-                    }
-
+                    gameLogicHandler.setRemainingBlockCount(initGameComponent.getBlocks().size());
                 } else {
-                    System.out.println("146");
-                    engine = new GameEngine();
-                    engine.setOnAction(gameLogicHandler);
-                    engine.setFps(120);
-                    engine.start();
-                    gameStateManager.setEngine(engine);
                     gameStateManager.setLoadFromSave(false);
                 }
-                System.out.println("153");
             }
-
-
-
         }
 
         System.out.println("Scene show end");
+    }
+
+    public void startEngine() {
+        engine = new GameEngine();
+        engine.setOnAction(gameLogicHandler);
+        engine.setFps(120);
+        engine.start();
+        gameStateManager.setEngine(engine);
     }
 
     @FXML
@@ -232,24 +220,24 @@ public class GameSceneController {
 
 
     private void move(final int direction) {
-        //Move the platform
+        //Move the paddle
         new Thread(new Runnable() {
             @Override
             public void run() {
                 int sleepTime = 4;
                 for (int i = 0; i < 30; i++) {
-                    if (xPaddle == (SCENE_WIDTH - PADDLE_WIDTH) && direction == RIGHT) {
+                    if (initGameComponent.getxPaddle() == (initGameComponent.getSCENE_WIDTH() - initGameComponent.getPADDLE_WIDTH()) && direction == RIGHT) {
                         return;
                     }
-                    if (xPaddle == 0 && direction == LEFT) {
+                    if (initGameComponent.getxPaddle() == 0 && direction == LEFT) {
                         return;
                     }
                     if (direction == RIGHT) {
-                        xPaddle++;
+                        initGameComponent.setxPaddle(initGameComponent.getxPaddle() + 1);
                     } else {
-                        xPaddle--;
+                        initGameComponent.setxPaddle(initGameComponent.getxPaddle() - 1);
                     }
-                    centerPaddleX = xPaddle + HALF_PADDLE_WIDTH;
+                    initGameComponent.setCenterPaddleX(initGameComponent.getxPaddle() + initGameComponent.getHALF_PADDLE_WIDTH());
                     try {
                         Thread.sleep(sleepTime);
                     } catch (InterruptedException e) {
@@ -284,7 +272,7 @@ public class GameSceneController {
         menuScene.getStylesheets().add("style.css");
         Button startbtn = (Button) menuScene.lookup("#startButton");
         startbtn.setText("Resume");
-        gameState = GameStateManager.GameState.PAUSED;
+        gameStateManager.setGameState(GameStateManager.GameState.PAUSED);
 
         if (primaryStage != null) {
             primaryStage.setTitle("Brick Breaker Game");
@@ -294,5 +282,27 @@ public class GameSceneController {
         }
     }
 
+    public AnchorPane getGamePane() {
+        return gamePane;
+    }
 
+    public void setScoreLabel(String scoreLabelText) {
+        scoreLabel.setText(scoreLabelText);
+    }
+
+    public void setHeartLabel(String heartLabelText) {
+        heartLabel.setText(heartLabelText);
+    }
+
+    public void setLevelLabel(String levelLabelText) {
+        levelLabel.setText(levelLabelText);
+    }
+
+    public void setInitGameComponent(InitGameComponent initGameComponent) {
+        this.initGameComponent = initGameComponent;
+    }
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
 }

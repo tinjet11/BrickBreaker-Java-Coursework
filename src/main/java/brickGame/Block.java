@@ -7,7 +7,7 @@ import javafx.scene.shape.Rectangle;
 
 import java.io.Serializable;
 
-import static brickGame.InitGameComponent.BALL_RADIUS;
+
 public class Block implements Serializable {
     private static Block block = new Block(-1, -1, BLOCK_TYPE.BLOCK_NORMAL);
 
@@ -26,6 +26,7 @@ public class Block implements Serializable {
     private final int paddingTop = blockHeight * 2;
     private final int paddingH = 50;
     public Rectangle rect;
+    private final int BALL_RADIUS = 10;
 
     public enum HIT_STATE {
         NO_HIT,
@@ -49,8 +50,7 @@ public class Block implements Serializable {
         this.row = row;
         this.column = column;
         this.type = type;
-        soundManager = new SoundManager(Main.class.getResource("/brick-break.mp3"), SoundManager.MusicType.BRICK_BREAK);
-
+        //soundManager = new SoundManager(Main.class.getResource("/brick-break.mp3"), SoundManager.MusicType.BRICK_BREAK);
         draw();
     }
 

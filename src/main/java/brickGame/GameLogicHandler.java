@@ -4,6 +4,8 @@ import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 
+import java.util.Iterator;
+
 import static brickGame.Main.*;
 import static brickGame.InitGameComponent.*;
 
@@ -23,6 +25,8 @@ public class GameLogicHandler implements Actionable {
     private BallControl ballControl;
     private GameSceneController gameSceneController;
 
+    private InitGameComponent initGameComponent;
+
     private GameStateManager gameStateManager;
 
     public void setGameSceneController(GameSceneController gameSceneController) {this.gameSceneController = gameSceneController;}
@@ -35,7 +39,7 @@ public class GameLogicHandler implements Actionable {
     }
 
     private int heart = 1000;
-    private int initialHeart = 3;
+    private int initialHeart = 1000;
 
     private int score = 0;
     private long time = 0;
@@ -44,10 +48,12 @@ public class GameLogicHandler implements Actionable {
     private boolean isGameRun = false;
     private int endLevel = 18;
 
-    private int level = 11;
+    private int level = 10;
     private boolean isGoldStatus = false;
 
     private int remainingBlockCount = 0;
+
+
 
 
     @Override
@@ -56,15 +62,17 @@ public class GameLogicHandler implements Actionable {
                     gameSceneController.setScoreLabel("Score: " + getScore());
                     gameSceneController.setHeartLabel("Heart : " + getHeart());
 
-                    paddle.setX(xPaddle);
-                    paddle.setY(yPaddle);
+                    initGameComponent.getPaddle().setX(initGameComponent.getxPaddle());
+                    initGameComponent.getPaddle().setY(initGameComponent.getyPaddle());
+
                     ballControl.getBall().setCenterX(ballControl.getxBall());
                     ballControl.getBall().setCenterY(ballControl.getyBall());
-                }
-        );
+                });
 
         if (ballControl.getyBall() >= Block.getPaddingTop() && ballControl.getyBall() <= (Block.getHeight() * (getLevel() + 1)) + Block.getPaddingTop()) {
-            for (final Block block : blocks) {
+            Iterator<Block> iterator = initGameComponent.getBlocks().iterator();
+            while (iterator.hasNext()) {
+                Block block = iterator.next();
                 try {
                     Block.HIT_STATE hitCode = block.checkHitToBlock(ballControl.getxBall(), ballControl.getyBall());
                     if (hitCode != Block.HIT_STATE.NO_HIT) {
@@ -83,7 +91,7 @@ public class GameLogicHandler implements Actionable {
                             choco.setTimeCreated(getTime());
                             Platform.runLater(() -> root.getChildren().add(choco.choco));
 
-                            chocos.add(choco);
+                            initGameComponent.getChocos().add(choco);
                         }
 
                         if (block.type == Block.BLOCK_TYPE.BLOCK_STAR) {
@@ -92,8 +100,8 @@ public class GameLogicHandler implements Actionable {
                                 ballControl.getBall().setFill(new ImagePattern(new Image("goldball.png")));
                                 System.out.println("gold ball");
                                 root.getStyleClass().add("goldRoot");
-                                setGoldStatus(true);
                             });
+                                setGoldStatus(true);
                         }
 
                         if (block.type == Block.BLOCK_TYPE.BLOCK_HEART) {
@@ -101,7 +109,7 @@ public class GameLogicHandler implements Actionable {
                             System.out.println("heart hitted");
                         }
 
-                        Platform.runLater(() -> {
+                     //  Platform.runLater(() -> {
                             if (hitCode == Block.HIT_STATE.HIT_RIGHT) {
                                 ballControl.setCollideToRightBlock(true);
                             } else if (hitCode == Block.HIT_STATE.HIT_BOTTOM) {
@@ -111,7 +119,8 @@ public class GameLogicHandler implements Actionable {
                             } else if (hitCode == Block.HIT_STATE.HIT_TOP) {
                                 ballControl.setCollideToTopBlock(true);
                             }
-                        });
+                    //    });
+                        iterator.remove();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -133,7 +142,8 @@ public class GameLogicHandler implements Actionable {
 
     public void deductHeart() {
         heart = heart - 1;
-        new Score().show(SCENE_WIDTH / 2, SCENE_HEIGHT / 2, -1);
+        new Score().show(initGameComponent.getSCENE_WIDTH() / 2, initGameComponent.getSCENE_HEIGHT() / 2, -1);
+
         System.out.println("heart: " + heart);
 
         if (heart <= 0) {
@@ -154,33 +164,48 @@ public class GameLogicHandler implements Actionable {
         if (level != endLevel && isGameRun) {
             checkDestroyedCount();
         }
-        ballControl.setPhysicsToBall();
+        Platform.runLater(()->{
+            ballControl.setPhysicsToBall();
+        });
+
 
         if (time - goldTime > 5000) {
-            Platform.runLater(() -> {
+       //     Platform.runLater(() -> {
                 ballControl.getBall().setFill(new ImagePattern(new Image("ball.png")));
                 root.getStyleClass().remove("goldRoot");
                 isGoldStatus = false;
-            });
+          //  });
 
         }
         //this part is about the Bonus object
-        for (Bonus choco : chocos) {
-            if (choco.getY() > SCENE_HEIGHT || choco.isTaken()) {
+        Iterator<Bonus> iterator = initGameComponent.getChocos().iterator();
+        while (iterator.hasNext()) {
+            Bonus choco = iterator.next();
+
+            if (choco.getY() > initGameComponent.getSCENE_HEIGHT() || choco.isTaken()) {
                 continue;
             }
+            if (choco.getY() >= initGameComponent.getyPaddle() && choco.getY() <=  initGameComponent.getyPaddle() + initGameComponent.getPADDLE_HEIGHT() && choco.getX() >=  initGameComponent.getxPaddle() && choco.getX() <= initGameComponent.getxPaddle() + initGameComponent.getPADDLE_WIDTH()) {
 
-            if (choco.getY() >= yPaddle && choco.getY() <= yPaddle + PADDLE_HEIGHT && choco.getX() >= xPaddle && choco.getX() <= xPaddle + PADDLE_WIDTH) {
-                choco.setTaken(true);
-                choco.choco.setVisible(false);
-                setScore(getScore() + 3);
-                new Score().show(choco.getX(), choco.getY(), 3);
+                if (choco.choco != null) {
+                    choco.setTaken(true);
+                    choco.choco.setVisible(false);
+                    setScore(getScore() + 3);
+                    new Score().show(choco.getX(), choco.getY(), 3);
+                    iterator.remove();  // Use the iterator to remove the element
+                    continue;
+                }
+
             }
-            choco.setY(choco.getY() + ((getTime() - choco.getTimeCreated()) / 1000.000) + 1.000);
-            Platform.runLater(() -> {
-                choco.choco.setY(choco.getY());
-            });
+
+            if (choco.choco != null) {
+                choco.setY(choco.getY() + ((getTime() - choco.getTimeCreated()) / 1000.000) + 1.000);
+                Platform.runLater(() -> {
+                    choco.choco.setY(choco.getY());
+                });
+            }
         }
+
     }
 
 
@@ -282,4 +307,7 @@ public class GameLogicHandler implements Actionable {
     }
 
 
+    public void setInitGameComponent(InitGameComponent initGameComponent) {
+        this.initGameComponent = initGameComponent;
+    }
 }

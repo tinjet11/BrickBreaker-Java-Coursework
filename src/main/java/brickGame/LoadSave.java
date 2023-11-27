@@ -6,9 +6,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
-import static brickGame.GameStateManager.SAVE_PATH;
 
 public class LoadSave {
+
+    private   final String SAVE_PATH_DIR = "save"; // Relative to the project directory
+
+    // Construct the complete path using the directory and filename
+    private final String SAVE_PATH = SAVE_PATH_DIR + "/save.mdds";
     public boolean isExistHeartBlock;
     public boolean isGoldStatus;
     public boolean goDownBall;

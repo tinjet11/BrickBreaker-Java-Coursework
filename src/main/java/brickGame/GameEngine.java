@@ -24,25 +24,21 @@ public class GameEngine {
     public void setFps(int fps) {
         this.fps = (int) 500 / fps;
     }
-//
+
+    private long time = 0;
+
+    private Thread timeThread;
+
 //    private synchronized void Update() {
-//        updateThread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while (!updateThread.isInterrupted()) {
-//                    try {
-//                        Platform.runLater(() -> {
-//                            onAction.onUpdate();
-//                        });
-//                        Thread.sleep(fps);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                        break;
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        break;
-//                    }
+//        updateThread = new Thread(() -> {
+//            try {
+//                while (!Thread.currentThread().isInterrupted()) {
+//                    Platform.runLater(() -> onAction.onUpdate());
+//                    Thread.sleep(fps);
 //                }
+//            } catch (InterruptedException e) {
+//                // Restore interrupted status
+//                Thread.currentThread().interrupt();
 //            }
 //        });
 //        updateThread.start();
@@ -53,24 +49,16 @@ public class GameEngine {
 //        onAction.onInit();
 //    }
 //
-//    private synchronized void PhysicsCalculation() {
-//        physicsThread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while (!physicsThread.isInterrupted()) {
-//                    try {
-//                        Platform.runLater(() -> {
-//                            onAction.onPhysicsUpdate();
-//                        });
-//                        Thread.sleep(fps);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                        break;
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        break;
-//                    }
+//    private void PhysicsCalculation() {
+//        physicsThread = new Thread(() -> {
+//            try {
+//                while (!Thread.currentThread().isInterrupted()) {
+//                    Platform.runLater(() -> onAction.onPhysicsUpdate());
+//                    Thread.sleep(fps);
 //                }
+//            } catch (InterruptedException e) {
+//                // Restore interrupted status
+//                Thread.currentThread().interrupt();
 //            }
 //        });
 //
@@ -91,35 +79,41 @@ public class GameEngine {
 //    public void stop() {
 //        if (!isStopped) {
 //            isStopped = true;
-//            updateThread.interrupt();
-//            physicsThread.interrupt();
-//            timeThread.interrupt();
+//            try {
+//                updateThread.interrupt();
+//                physicsThread.interrupt();
+//                timeThread.interrupt();
+//
+//                // Wait for threads to finish
+//                updateThread.join();
+//                physicsThread.join();
+//                timeThread.join();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//                // Handle the exception as needed
+//            }
 //        }
 //    }
-
-    private long time = 0;
-
-    private Thread timeThread;
-
+//
+//
+//
 //    private void TimeStart() {
-//        timeThread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    while (!timeThread.isInterrupted()) {
-//                        time++;
-//                        onAction.onTime(time);
-//                        Thread.sleep(1);
-//                    }
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
+//        timeThread = new Thread(() -> {
+//            try {
+//                while (!Thread.currentThread().isInterrupted()) {
+//                    time++;
+//                    Platform.runLater(() -> onAction.onTime(time));
+//                    Thread.sleep(1);
 //                }
+//            } catch (InterruptedException e) {
+//                // Restore interrupted status
+//                Thread.currentThread().interrupt();
 //            }
 //        });
+//
 //        timeThread.start();
 //    }
+//}
 
         private void initialize() {
         onAction.onInit();

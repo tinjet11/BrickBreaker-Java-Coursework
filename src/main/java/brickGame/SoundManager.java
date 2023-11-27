@@ -29,7 +29,7 @@ public class SoundManager {
 
         if(musicType == MusicType.BG_MUSIC){
             // Set up the event handler for looping
-            mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(javafx.util.Duration.ZERO));
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         }
 
 

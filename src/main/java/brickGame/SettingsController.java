@@ -1,14 +1,12 @@
 package brickGame;
 
-import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
-import static brickGame.GameStateManager.gameState;
 import static brickGame.Main.*;
-import static brickGame.GameLogicHandler.*;
 public class SettingsController {
 
     @FXML
@@ -34,8 +32,19 @@ public class SettingsController {
     private CheckBox soundCheckBox;
 
     private GameLogicHandler gameLogicHandler;
+    private GameStateManager gameStateManager;
+
+    private  GameSceneController gameSceneController;
+
+    private GameStateManager.GameState gameState;
+    private SoundManager gameSoundManager;
+    private Stage primaryStage;
     public SettingsController() {
         gameLogicHandler = GameLogicHandler.getInstance();
+        gameStateManager = GameStateManager.getInstance();
+        gameSceneController = GameSceneController.getInstance();
+        primaryStage = gameSceneController.getPrimaryStage();
+       // gameSoundManager = gameSceneController.getGameSoundManager();
     }
 
     @FXML
@@ -67,11 +76,12 @@ public class SettingsController {
 
             Button startButton = (Button) menuScene.lookup("#startButton");
 
+            gameState = gameStateManager.getGameState();
             if (gameState == GameStateManager.GameState.ON_START) {
                 startButton.setText("Start Game");
             } else if (gameState == GameStateManager.GameState.PAUSED) {
                 startButton.setText("Resume");
-            } else if (gameState == GameStateManager.GameState.GAME_OVER) {
+            } else if ( gameState == GameStateManager.GameState.GAME_OVER || gameState == GameStateManager.GameState.WIN) {
                 startButton.setText("Play Again");
             }
 

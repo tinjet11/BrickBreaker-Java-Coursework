@@ -6,8 +6,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
 import java.io.IOException;
-import static brickGame.GameStateManager.gameState;
 import static brickGame.Main.*;
 
 public class MenuController {
@@ -15,9 +16,22 @@ public class MenuController {
     private GameLogicHandler gameLogicHandler;
     private GameStateManager gameStateManager;
 
+    private GameSceneController gameSceneController;
+
+    private GameStateManager.GameState gameState;
+
+    private Stage primaryStage;
+
+    private SoundManager gameSoundManager;
+
+
     public MenuController(){
         gameLogicHandler = GameLogicHandler.getInstance();
         gameStateManager = GameStateManager.getInstance();
+        gameSceneController = GameSceneController.getInstance();
+
+        primaryStage = gameSceneController.getPrimaryStage();
+       // gameSoundManager = gameSceneController.getGameSoundManager();
     }
 
     @FXML
@@ -30,23 +44,22 @@ public class MenuController {
 
     @FXML
     public void onStartOrResume() {
-
+        gameState = gameStateManager.getGameState();
         if (gameState == GameStateManager.GameState.ON_START) {
                 gameStateManager.startGame();
                 System.out.println("clicked");
-
-            gameState = GameStateManager.GameState.IN_PROGRESS;
+                gameStateManager.setGameState(GameStateManager.GameState.IN_PROGRESS);
             //gameSoundManager.play();
         } else if (gameState == GameStateManager.GameState.PAUSED) {
             gameStateManager.loadGame();
-            gameState = GameStateManager.GameState.IN_PROGRESS;
+            gameStateManager.setGameState(GameStateManager.GameState.IN_PROGRESS);
             gameSoundManager.resume();
-        } else if (gameState == GameStateManager.GameState.GAME_OVER) {
+        } else if (gameState == GameStateManager.GameState.GAME_OVER || gameState == GameStateManager.GameState.WIN) {
             gameStateManager.restartGame();
             resultBox.setVisible(false);
-            gameState = GameStateManager.GameState.IN_PROGRESS;
+            gameStateManager.setGameState(GameStateManager.GameState.IN_PROGRESS);
         }
-        gameSoundManager.resume();
+        //gameSoundManager.resume();
     }
 
     @FXML

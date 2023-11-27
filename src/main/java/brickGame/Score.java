@@ -30,7 +30,11 @@ public class Score {
         KeyFrame scaleXFrame = new KeyFrame(ANIMATION_DURATION, new KeyValue(label.scaleXProperty(), SCALE_END_VALUE));
         KeyFrame scaleYFrame = new KeyFrame(ANIMATION_DURATION, new KeyValue(label.scaleYProperty(), SCALE_END_VALUE));
         timeline.getKeyFrames().addAll(opacityFrame, scaleXFrame, scaleYFrame);
-        timeline.setOnFinished(event -> root.getChildren().remove(label));
+
+        timeline.setOnFinished(event -> {
+            Platform.runLater(() -> root.getChildren().remove(label));
+        });
+
         Platform.runLater(() -> timeline.play());
     }
 

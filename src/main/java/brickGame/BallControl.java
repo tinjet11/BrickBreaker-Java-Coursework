@@ -1,19 +1,14 @@
 package brickGame;
 
-import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.shape.Circle;
 
-import static brickGame.GameStateManager.gameState;
-import static brickGame.Main.*;
+import javafx.scene.shape.Circle;
 import static brickGame.InitGameComponent.*;
-import static brickGame.GameLogicHandler.*;
 
 public class BallControl {
 
     private static BallControl instance;
     private GameLogicHandler gameLogicHandler;
+    private InitGameComponent initGameComponent;
 
     private BallControl() {
     }
@@ -77,7 +72,7 @@ public class BallControl {
         }
 
         //if ball exceed the scene
-        if (getyBall() >= SCENE_HEIGHT) {
+        if (getyBall() >= initGameComponent.getSCENE_HEIGHT()) {
                 setGoDownBall(false);
                 resetcollideFlags();
             if (!gameLogicHandler.isGoldStatus()) {
@@ -85,14 +80,15 @@ public class BallControl {
             }
         }
 
-        if (getyBall() >= yPaddle - BALL_RADIUS) {
-            if (getxBall() >= xPaddle && getxBall() <= xPaddle + PADDLE_WIDTH) {
+        if (getyBall() >= initGameComponent.getyPaddle() - initGameComponent.getBALL_RADIUS()) {
+            if (getxBall() >= initGameComponent.getxPaddle() && getxBall() <= initGameComponent.getxPaddle() + initGameComponent.getPADDLE_WIDTH()) {
                 gameLogicHandler.setHitTime(gameLogicHandler.getTime());
                 resetcollideFlags();
                 setCollideToPaddle(true);
                 setGoDownBall(false);
 
-                double relation = (getxBall() - centerPaddleX) / (PADDLE_WIDTH / 2);
+
+                double relation = (getxBall() -   initGameComponent.getCenterPaddleX()) / ( initGameComponent.getPADDLE_WIDTH() / 2);
 
                 if (Math.abs(relation) <= 0.3) {
                     //vX = 0;
@@ -105,7 +101,7 @@ public class BallControl {
                     //System.out.println("vX " + vX);
                 }
 
-                if (getxBall() - centerPaddleX > 0) {
+                if (getxBall() -  initGameComponent.getCenterPaddleX() > 0) {
                     setCollideToPaddleAndMoveToRight(true);
                 } else {
                     setCollideToPaddleAndMoveToRight(false);
@@ -114,7 +110,7 @@ public class BallControl {
             }
         }
 
-        if (getxBall() >= SCENE_WIDTH) {
+        if (getxBall() >=   initGameComponent.getSCENE_WIDTH()) {
             resetcollideFlags();
             setCollideToRightWall(true);
         }
@@ -285,4 +281,7 @@ public class BallControl {
         this.gameLogicHandler = gameLogicHandler;
     }
 
+    public void setInitGameComponent(InitGameComponent initGameComponent) {
+        this.initGameComponent = initGameComponent;
+    }
 }
