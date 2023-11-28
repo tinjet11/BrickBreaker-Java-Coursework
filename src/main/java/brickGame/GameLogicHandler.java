@@ -6,8 +6,8 @@ import javafx.scene.paint.ImagePattern;
 
 import java.util.Iterator;
 
-import static brickGame.Main.*;
-import static brickGame.InitGameComponent.*;
+import static brickGame.Main.root;
+
 
 public class GameLogicHandler implements Actionable {
     private static GameLogicHandler instance;
@@ -24,9 +24,7 @@ public class GameLogicHandler implements Actionable {
 
     private BallControl ballControl;
     private GameSceneController gameSceneController;
-
     private InitGameComponent initGameComponent;
-
     private GameStateManager gameStateManager;
 
     public void setGameSceneController(GameSceneController gameSceneController) {this.gameSceneController = gameSceneController;}
@@ -47,14 +45,11 @@ public class GameLogicHandler implements Actionable {
     private long goldTime = 0;
     private boolean isGameRun = false;
     private int endLevel = 18;
-
     private int level = 10;
     private boolean isGoldStatus = false;
-
     private int remainingBlockCount = 0;
 
-
-
+    private GameEngine engine;
 
     @Override
     public void onUpdate() {
@@ -133,10 +128,24 @@ public class GameLogicHandler implements Actionable {
         }
     }
 
+    public void stopEngine(){
+        engine.stop();
+    }
+
+    public void startEngine(){
+        engine.start();
+    }
+
+    public void setUpEngine(){
+        engine = new GameEngine();
+        engine.setOnAction(this);
+        engine.setFps(120);
+        startEngine();
+    }
+
 
     @Override
     public void onInit() {
-
 
     }
 
@@ -169,11 +178,11 @@ public class GameLogicHandler implements Actionable {
         });
 
 
-        if (time - goldTime > 5000) {
+        if (time - goldTime > 5000 && isGoldStatus) {
        //     Platform.runLater(() -> {
                 ballControl.getBall().setFill(new ImagePattern(new Image("ball.png")));
                 root.getStyleClass().remove("goldRoot");
-                isGoldStatus = false;
+                setGoldStatus(false);
           //  });
 
         }

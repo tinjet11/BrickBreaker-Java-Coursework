@@ -12,6 +12,8 @@ public class GameEngine {
     private int fps = 15;
     private Thread updateThread;
     private Thread physicsThread;
+    private Thread timeThread;
+
     public boolean isStopped = true;
 
     public void setOnAction(Actionable onAction) {
@@ -26,94 +28,6 @@ public class GameEngine {
     }
 
     private long time = 0;
-
-    private Thread timeThread;
-
-//    private synchronized void Update() {
-//        updateThread = new Thread(() -> {
-//            try {
-//                while (!Thread.currentThread().isInterrupted()) {
-//                    Platform.runLater(() -> onAction.onUpdate());
-//                    Thread.sleep(fps);
-//                }
-//            } catch (InterruptedException e) {
-//                // Restore interrupted status
-//                Thread.currentThread().interrupt();
-//            }
-//        });
-//        updateThread.start();
-//    }
-//
-//
-//    private void Initialize() {
-//        onAction.onInit();
-//    }
-//
-//    private void PhysicsCalculation() {
-//        physicsThread = new Thread(() -> {
-//            try {
-//                while (!Thread.currentThread().isInterrupted()) {
-//                    Platform.runLater(() -> onAction.onPhysicsUpdate());
-//                    Thread.sleep(fps);
-//                }
-//            } catch (InterruptedException e) {
-//                // Restore interrupted status
-//                Thread.currentThread().interrupt();
-//            }
-//        });
-//
-//        physicsThread.start();
-//    }
-//
-//
-//    public void start() {
-//        time = 0;
-//        Initialize();
-//        Update();
-//        PhysicsCalculation();
-//        TimeStart();
-//        isStopped = false;
-//    }
-//
-//    //change from .stop to .interrupt
-//    public void stop() {
-//        if (!isStopped) {
-//            isStopped = true;
-//            try {
-//                updateThread.interrupt();
-//                physicsThread.interrupt();
-//                timeThread.interrupt();
-//
-//                // Wait for threads to finish
-//                updateThread.join();
-//                physicsThread.join();
-//                timeThread.join();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//                // Handle the exception as needed
-//            }
-//        }
-//    }
-//
-//
-//
-//    private void TimeStart() {
-//        timeThread = new Thread(() -> {
-//            try {
-//                while (!Thread.currentThread().isInterrupted()) {
-//                    time++;
-//                    Platform.runLater(() -> onAction.onTime(time));
-//                    Thread.sleep(1);
-//                }
-//            } catch (InterruptedException e) {
-//                // Restore interrupted status
-//                Thread.currentThread().interrupt();
-//            }
-//        });
-//
-//        timeThread.start();
-//    }
-//}
 
         private void initialize() {
         onAction.onInit();

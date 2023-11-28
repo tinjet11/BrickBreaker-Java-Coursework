@@ -1,7 +1,6 @@
 package brickGame;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -50,7 +49,6 @@ public class Main extends Application {
 
         initGameComponent.setBallControl(ballControl);
         initGameComponent.setGameLogicHandler(gameLogicHandler);
-
         System.out.println("All set");
         this.primaryStage = primaryStage;
         initializeMenuScene();
@@ -65,6 +63,37 @@ public class Main extends Application {
             //   gameSoundManager.play();
     //    });
 
+    }
+
+    private void initializeSingleton(){
+        gameLogicHandler = GameLogicHandler.getInstance();
+        ballControl = BallControl.getInstance();
+        gameSceneController = GameSceneController.getInstance();
+        gameStateManager = GameStateManager.getInstance();
+        initGameComponent = InitGameComponent.getInstance();
+
+
+        gameLogicHandler.setBallControl(ballControl);
+        gameLogicHandler.setGameSceneController(gameSceneController);
+        gameLogicHandler.setGameStateManager(gameStateManager);
+        gameLogicHandler.setInitGameComponent(initGameComponent);
+
+        ballControl.setGameLogicHandler(gameLogicHandler);
+        ballControl.setInitGameComponent(initGameComponent);
+
+        gameSceneController.setBallControl(ballControl);
+        gameSceneController.setGameLogicHandler(gameLogicHandler);
+        gameSceneController.setGameStateManager(gameStateManager);
+        gameSceneController.setInitGameComponent(initGameComponent);
+        gameSceneController.setPrimaryStage(primaryStage);
+
+        gameStateManager.setBallControl(ballControl);
+        gameStateManager.setGameLogicHandler(gameLogicHandler);
+        gameStateManager.setGameSceneController(gameSceneController);
+        gameStateManager.setInitGameComponent(initGameComponent);
+
+        initGameComponent.setBallControl(ballControl);
+        initGameComponent.setGameLogicHandler(gameLogicHandler);
     }
 
     private void initializeMenuScene() {

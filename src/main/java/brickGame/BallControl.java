@@ -2,6 +2,7 @@ package brickGame;
 
 
 import javafx.scene.shape.Circle;
+
 import static brickGame.InitGameComponent.*;
 
 public class BallControl {
@@ -54,6 +55,40 @@ public class BallControl {
     }
 
     public void setPhysicsToBall() {
+        controlBallMovement();
+        checkCollisionWithVerticalWall();
+
+        if (getyBall() >= initGameComponent.getyPaddle() - initGameComponent.getBALL_RADIUS()) {
+            if (getxBall() >= initGameComponent.getxPaddle() && getxBall() <= initGameComponent.getxPaddle() + initGameComponent.getPADDLE_WIDTH()) {
+                gameLogicHandler.setHitTime(gameLogicHandler.getTime());
+                resetcollideFlags();
+                setCollideToPaddle(true);
+                setGoDownBall(false);
+
+                double relation = (getxBall() - initGameComponent.getCenterPaddleX()) / (initGameComponent.getPADDLE_WIDTH() / 2);
+
+                if (Math.abs(relation) <= 0.3) {
+                    setvX(Math.abs(relation));
+                } else if (Math.abs(relation) > 0.3 && Math.abs(relation) <= 0.7) {
+                    setvX((Math.abs(relation) * 1.5) + (gameLogicHandler.getLevel() / 3.500));
+                } else {
+                    setvX((Math.abs(relation) * 2) + (gameLogicHandler.getLevel() / 3.500));
+                }
+
+                if (getxBall() - initGameComponent.getCenterPaddleX() > 0) {
+                    setCollideToPaddleAndMoveToRight(true);
+                } else {
+                    setCollideToPaddleAndMoveToRight(false);
+                }
+            }
+        }
+        checkCollisionWithHorizontalWall();
+        collideToPaddlePhysics();
+        collideToWallPhysics();
+        collideToBlockPhysics();
+    }
+
+    private void controlBallMovement() {
         if (isGoDownBall()) {
             setyBall(getyBall() + getvY());
         } else {
@@ -65,7 +100,9 @@ public class BallControl {
         } else {
             setxBall(getxBall() - getvX());
         }
+    }
 
+    private void checkCollisionWithVerticalWall() {
         if (getyBall() <= 0) {
             resetcollideFlags();
             setGoDownBall(true);
@@ -73,44 +110,17 @@ public class BallControl {
 
         //if ball exceed the scene
         if (getyBall() >= initGameComponent.getSCENE_HEIGHT()) {
-                setGoDownBall(false);
-                resetcollideFlags();
+            setGoDownBall(false);
+            resetcollideFlags();
             if (!gameLogicHandler.isGoldStatus()) {
                 gameLogicHandler.deductHeart();
             }
         }
 
-        if (getyBall() >= initGameComponent.getyPaddle() - initGameComponent.getBALL_RADIUS()) {
-            if (getxBall() >= initGameComponent.getxPaddle() && getxBall() <= initGameComponent.getxPaddle() + initGameComponent.getPADDLE_WIDTH()) {
-                gameLogicHandler.setHitTime(gameLogicHandler.getTime());
-                resetcollideFlags();
-                setCollideToPaddle(true);
-                setGoDownBall(false);
+    }
 
-
-                double relation = (getxBall() -   initGameComponent.getCenterPaddleX()) / ( initGameComponent.getPADDLE_WIDTH() / 2);
-
-                if (Math.abs(relation) <= 0.3) {
-                    //vX = 0;
-                    setvX(Math.abs(relation));
-                } else if (Math.abs(relation) > 0.3 && Math.abs(relation) <= 0.7) {
-                    setvX((Math.abs(relation) * 1.5) + (gameLogicHandler.getLevel() / 3.500));
-                    //System.out.println("vX " + vX);
-                } else {
-                    setvX((Math.abs(relation) * 2) + (gameLogicHandler.getLevel() / 3.500));
-                    //System.out.println("vX " + vX);
-                }
-
-                if (getxBall() -  initGameComponent.getCenterPaddleX() > 0) {
-                    setCollideToPaddleAndMoveToRight(true);
-                } else {
-                    setCollideToPaddleAndMoveToRight(false);
-                }
-                //System.out.println("collide2");
-            }
-        }
-
-        if (getxBall() >=   initGameComponent.getSCENE_WIDTH()) {
+    private void checkCollisionWithHorizontalWall() {
+        if (getxBall() >= initGameComponent.getSCENE_WIDTH()) {
             resetcollideFlags();
             setCollideToRightWall(true);
         }
@@ -119,7 +129,9 @@ public class BallControl {
             resetcollideFlags();
             setCollideToLeftWall(true);
         }
+    }
 
+    private void collideToPaddlePhysics() {
         if (isCollideToPaddle()) {
             if (isCollideToPaddleAndMoveToRight()) {
                 setGoRightBall(true);
@@ -127,9 +139,9 @@ public class BallControl {
                 setGoRightBall(false);
             }
         }
+    }
 
-        //Wall collide
-
+    private void collideToWallPhysics() {
         if (isCollideToRightWall()) {
             setGoRightBall(false);
         }
@@ -137,9 +149,9 @@ public class BallControl {
         if (isCollideToLeftWall()) {
             setGoRightBall(true);
         }
+    }
 
-        //Block collide
-
+    private void collideToBlockPhysics() {
         if (isCollideToRightBlock()) {
             setGoRightBall(true);
         }

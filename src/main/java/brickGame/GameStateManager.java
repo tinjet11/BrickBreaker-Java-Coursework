@@ -4,18 +4,16 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.ImagePattern;
 
 import java.io.*;
 import java.util.ArrayList;
 import static brickGame.Main.*;
 
 public class GameStateManager {
-
-    public void setEngine(GameEngine engine) {
-        this.engine = engine;
-    }
 
     public GameState getGameState() {
         return gameState;
@@ -53,7 +51,6 @@ public class GameStateManager {
 
     private boolean loadFromSave = false;
 
-    private GameEngine engine;
     private Scene gameScene;
     private BallControl ballControl;
     private GameLogicHandler gameLogicHandler;
@@ -128,11 +125,11 @@ public class GameStateManager {
         // Set the flag to indicate that nextLevel is in progress
      //   new Thread(() -> {
             try {
-                Thread.sleep(1);
+              //  Thread.sleep(1);
                 Platform.runLater(() -> {
                 System.out.println("inside try");
 
-                engine.stop();
+                gameLogicHandler.stopEngine();
                 System.out.println("engine stopped");
 
                 ballControl.setvX(1.000);
@@ -181,7 +178,8 @@ public class GameStateManager {
             File file = new File(SAVE_PATH);
             ObjectOutputStream outputStream = null;
 
-            engine.stop();
+            gameLogicHandler.stopEngine();
+
             try {
                 outputStream = new ObjectOutputStream(new FileOutputStream(file));
 
@@ -285,6 +283,8 @@ public class GameStateManager {
         for (BlockSerialize ser : loadSave.blocks) {
             initGameComponent.getBlocks().add(new Block(ser.row, ser.j, ser.type));
         }
+
+
 
         try {
             loadFromSave = true;

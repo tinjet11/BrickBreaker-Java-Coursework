@@ -30,9 +30,6 @@ public class GameSceneController {
     @FXML
     private Button pauseButton;
 
-    private GameEngine engine;
-
-
     private MenuController menuController;
 
     private final int LEFT = 1;
@@ -85,7 +82,7 @@ public class GameSceneController {
 
 
     public void showLoseScene() {
-        engine.stop();
+        gameLogicHandler.stopEngine();
 
         System.out.println("heart: " + gameLogicHandler.getHeart());
 
@@ -149,6 +146,13 @@ public class GameSceneController {
                 initGameComponent.initBall();
                 initGameComponent.initPaddle();
                 initGameComponent.initBoard();
+            } else {
+                if (gameLogicHandler.isGoldStatus()) {
+                    Platform.runLater(() -> {
+                        root.getStyleClass().add("goldRoot");
+                        System.out.println("gold root added");
+                    });
+                }
             }
 
             //   Platform.runLater(() -> {
@@ -161,7 +165,7 @@ public class GameSceneController {
                 gamePane.getChildren().add(block.rect);
             }
             System.out.println("add to root end");
-      //      });
+            //      });
             gameScene.addEventFilter(KeyEvent.KEY_PRESSED, this::handleKeyPressed);
 //this line very important, it makes sure the game scene can properly load
             //  Platform.runLater(() -> {
@@ -178,7 +182,8 @@ public class GameSceneController {
 
 
             if (gameLogicHandler.getLevel() != gameLogicHandler.getEndLevel()) {
-                startEngine();
+
+                gameLogicHandler.setUpEngine();
                 if (!gameStateManager.isLoadFromSave()) {
                     gameLogicHandler.setRemainingBlockCount(initGameComponent.getBlocks().size());
                 } else {
@@ -188,14 +193,6 @@ public class GameSceneController {
         }
 
         System.out.println("Scene show end");
-    }
-
-    public void startEngine() {
-        engine = new GameEngine();
-        engine.setOnAction(gameLogicHandler);
-        engine.setFps(120);
-        engine.start();
-        gameStateManager.setEngine(engine);
     }
 
     @FXML
@@ -257,7 +254,7 @@ public class GameSceneController {
         System.out.println("Pause button clicked");
 
         gameStateManager.saveGame();
-        gameSoundManager.stop();
+        //  gameSoundManager.stop();
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/Menu.fxml"));
         fxmlLoader.setControllerFactory(c -> {
