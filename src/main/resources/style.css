@@ -1,12 +1,16 @@
 .root {
     -fx-background-color: #1d1d1d;
+       -fx-font-family: 'Montserrat';
  /*    -fx-background-image: url('/bg.jpg');
         -fx-background-size: cover; *//* Adjust as needed *//*
         -fx-background-repeat: no-repeat;*/
 }
 
 .goldRoot {
-    -fx-background-color: #4b4a08;
+       -fx-background-color: linear-gradient(to bottom, #4b0082, #8a2be2);
+       -fx-effect: dropshadow(three-pass-box, rgba(138, 43, 226, 0.7), 10, 0, 0, 0);
+       -fx-font-family: 'Montserrat';
+
 }
 
 .label {
@@ -23,8 +27,9 @@
 
 .button {
     -fx-font-size: 16px;
-    -fx-background-color: #4CAF50; /* Green color, you can change it */
-    -fx-text-fill: #ffffff;
+    -fx-background-color: linear-gradient(to bottom, #4b0082, #8a2be2);
+    -fx-effect: dropshadow(three-pass-box, rgba(138, 43, 226, 0.7), 10, 0, 0, 0);
+    -fx-text-fill: white;
 }
 
 .button.second {
