@@ -9,7 +9,6 @@ import java.io.*;
 
 public class Main extends Application {
 
-    public static AnchorPane root;
     private  Stage primaryStage;
 
     private GameLogicHandler gameLogicHandler;

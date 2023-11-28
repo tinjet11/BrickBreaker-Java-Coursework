@@ -123,7 +123,7 @@ public class GameSceneController {
             if (!gameStateManager.isLoadFromSave()) {
 
                 if (gameLogicHandler.getLevel() > 1) {
-                    new Score().showMessage("Level Up :)", 300, 300);
+                    new Score(getGamePane()).showMessage("Level Up :)", 300, 300);
                     setLevelLabel("Level: " + gameLogicHandler.getLevel());
                 }
                 //if level equal to endLevel
@@ -138,10 +138,13 @@ public class GameSceneController {
                 initGameComponent.initBoard();
             } else {
                 if (gameLogicHandler.isGoldStatus()) {
-                    Platform.runLater(() -> {
-                        root.getStyleClass().add("goldRoot");
-                        System.out.println("gold root added");
-                    });
+                   // Platform.runLater(() -> {
+                    System.out.println("Before modification: " + getGamePane().getStyleClass());
+
+                    getGamePane().getStyleClass().add("goldRoot");
+                    System.out.println("gold root added. time: " + gameLogicHandler.getTime());
+                    System.out.println("gold root added. gold time: " + gameLogicHandler.getGoldTime());
+                    //});
                 }
             }
 

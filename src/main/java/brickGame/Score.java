@@ -6,12 +6,21 @@ import javafx.scene.control.Label;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 import static brickGame.Main.*;
 public class Score {
     private final Duration ANIMATION_DURATION = Duration.seconds(1.5);
     private final double OPACITY_END_VALUE = 0.0;
     private final double SCALE_END_VALUE = 0.0;
+
+    private AnchorPane root;
+
+    public Score(AnchorPane root){
+
+        this.root = root;
+    }
+
 
     public void show(double x, double y, int score) {
         String sign = (score >= 0) ? "+" : "";
