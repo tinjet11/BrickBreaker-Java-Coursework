@@ -37,41 +37,27 @@ public class SettingsController {
     private  GameSceneController gameSceneController;
 
     private GameStateManager.GameState gameState;
-    private SoundManager gameSoundManager;
+
     private Stage primaryStage;
     public SettingsController() {
         gameLogicHandler = GameLogicHandler.getInstance();
         gameStateManager = GameStateManager.getInstance();
         gameSceneController = GameSceneController.getInstance();
         primaryStage = gameSceneController.getPrimaryStage();
-       // gameSoundManager = gameSceneController.getGameSoundManager();
     }
 
-    @FXML
-    public void muteAndUnmute(){
-        //currently mute, then unMute
-        if(soundCheckBox.isSelected()) {
-            gameSoundManager.unMute();
-        }else{//currently unMute, then mute
-            gameSoundManager.mute();
-        }
-    }
     @FXML
     public void initialize(){
         currentEndLevel = gameLogicHandler.getEndLevel();
         currentHeart = gameLogicHandler.getInitialHeart();
         initialHeartLabel.setText(String.valueOf(gameLogicHandler.getInitialHeart()));
         endLevelLabel.setText(String.valueOf(gameLogicHandler.getEndLevel()));
-        soundCheckBox.setSelected(!gameSoundManager.getIsMute());
     }
     @FXML
     public void back() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(SettingsController.class.getResource("fxml/Menu.fxml"));
 
-//            fxmlLoader.setControllerFactory(c -> {
-//                return new MenuController();
-//            });
             Scene menuScene = new Scene(fxmlLoader.load());
 
             Button startButton = (Button) menuScene.lookup("#startButton");
@@ -84,8 +70,6 @@ public class SettingsController {
             } else if ( gameState == GameStateManager.GameState.GAME_OVER || gameState == GameStateManager.GameState.WIN) {
                 startButton.setText("Play Again");
             }
-
-
 
             primaryStage.setTitle("Brick Breaker Game");
             primaryStage.setScene(menuScene);

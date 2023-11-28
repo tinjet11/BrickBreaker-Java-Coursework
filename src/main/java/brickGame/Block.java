@@ -43,9 +43,6 @@ public class Block implements Serializable {
         BLOCK_HEART,
     }
 
-    private SoundManager soundManager;
-
-
     public Block(int row, int column, BLOCK_TYPE type) {
         this.row = row;
         this.column = column;

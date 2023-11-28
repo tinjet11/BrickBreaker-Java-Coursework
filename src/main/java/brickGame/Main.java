@@ -11,7 +11,6 @@ public class Main extends Application {
 
     public static AnchorPane root;
     private  Stage primaryStage;
-    private  SoundManager gameSoundManager;
 
     private GameLogicHandler gameLogicHandler;
     private BallControl ballControl;
@@ -56,44 +55,6 @@ public class Main extends Application {
         fxmlLoader1.setControllerFactory(c -> {
             return new SettingsController();
         });
-
-       // gameSoundManager = new SoundManager(Main.class.getResource("/bg-music.mp3"), SoundManager.MusicType.BG_MUSIC);
-       // gameSceneController.setGameSoundManager(gameSoundManager);
-       // Platform.runLater(()->{
-            //   gameSoundManager.play();
-    //    });
-
-    }
-
-    private void initializeSingleton(){
-        gameLogicHandler = GameLogicHandler.getInstance();
-        ballControl = BallControl.getInstance();
-        gameSceneController = GameSceneController.getInstance();
-        gameStateManager = GameStateManager.getInstance();
-        initGameComponent = InitGameComponent.getInstance();
-
-
-        gameLogicHandler.setBallControl(ballControl);
-        gameLogicHandler.setGameSceneController(gameSceneController);
-        gameLogicHandler.setGameStateManager(gameStateManager);
-        gameLogicHandler.setInitGameComponent(initGameComponent);
-
-        ballControl.setGameLogicHandler(gameLogicHandler);
-        ballControl.setInitGameComponent(initGameComponent);
-
-        gameSceneController.setBallControl(ballControl);
-        gameSceneController.setGameLogicHandler(gameLogicHandler);
-        gameSceneController.setGameStateManager(gameStateManager);
-        gameSceneController.setInitGameComponent(initGameComponent);
-        gameSceneController.setPrimaryStage(primaryStage);
-
-        gameStateManager.setBallControl(ballControl);
-        gameStateManager.setGameLogicHandler(gameLogicHandler);
-        gameStateManager.setGameSceneController(gameSceneController);
-        gameStateManager.setInitGameComponent(initGameComponent);
-
-        initGameComponent.setBallControl(ballControl);
-        initGameComponent.setGameLogicHandler(gameLogicHandler);
     }
 
     private void initializeMenuScene() {

@@ -48,16 +48,6 @@ public class GameSceneController {
 
     private Stage primaryStage;
 
-    public SoundManager getGameSoundManager() {
-        return gameSoundManager;
-    }
-
-    public void setGameSoundManager(SoundManager gameSoundManager) {
-        this.gameSoundManager = gameSoundManager;
-    }
-
-    private SoundManager gameSoundManager;
-
     private GameSceneController() {
     }
 

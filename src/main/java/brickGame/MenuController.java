@@ -7,9 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-import static brickGame.Main.*;
+
 
 public class MenuController {
 
@@ -22,16 +21,13 @@ public class MenuController {
 
     private Stage primaryStage;
 
-    private SoundManager gameSoundManager;
-
-
     public MenuController(){
         gameLogicHandler = GameLogicHandler.getInstance();
         gameStateManager = GameStateManager.getInstance();
         gameSceneController = GameSceneController.getInstance();
 
         primaryStage = gameSceneController.getPrimaryStage();
-       // gameSoundManager = gameSceneController.getGameSoundManager();
+
     }
 
     @FXML
@@ -49,17 +45,14 @@ public class MenuController {
                 gameStateManager.startGame();
                 System.out.println("clicked");
                 gameStateManager.setGameState(GameStateManager.GameState.IN_PROGRESS);
-            //gameSoundManager.play();
         } else if (gameState == GameStateManager.GameState.PAUSED) {
             gameStateManager.loadGame();
             gameStateManager.setGameState(GameStateManager.GameState.IN_PROGRESS);
-            gameSoundManager.resume();
         } else if (gameState == GameStateManager.GameState.GAME_OVER || gameState == GameStateManager.GameState.WIN) {
             gameStateManager.restartGame();
             resultBox.setVisible(false);
             gameStateManager.setGameState(GameStateManager.GameState.IN_PROGRESS);
         }
-        //gameSoundManager.resume();
     }
 
     @FXML
