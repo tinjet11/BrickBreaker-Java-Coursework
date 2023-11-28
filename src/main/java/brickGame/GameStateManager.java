@@ -93,16 +93,13 @@ public class GameStateManager {
                     if (previousRoot instanceof AnchorPane) {
                         ((AnchorPane) previousRoot).getChildren().clear();
                     }
-                    System.out.println("resoure clear");
+                    System.out.println("resource clear");
                 }
 
                 // Assign the new scene to gameScene
                 gameScene = newGameScene;
 
-
                 gameSceneController.showScene(gameScene);
-
-                root = gameSceneController.getGamePane();
                 gameSceneController.setLevelLabel("Level: " + gameLogicHandler.getLevel());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -140,6 +137,7 @@ public class GameStateManager {
                 gameLogicHandler.setGoldStatus(false);
 
                 initGameComponent.setExistHeartBlock(false);
+                initGameComponent.setExistBombBlock(false);
 
                 gameLogicHandler.setHitTime(0);
                 gameLogicHandler.setTime(0);
@@ -147,6 +145,7 @@ public class GameStateManager {
 
                 initGameComponent.getBlocks().clear();
                 initGameComponent.getChocos().clear();
+                initGameComponent.getBombs().clear();
 
                 gameLogicHandler.setRemainingBlockCount(0);
 
@@ -278,6 +277,7 @@ public class GameStateManager {
 
         initGameComponent.getBlocks().clear();
         initGameComponent.getChocos().clear();
+        initGameComponent.getBombs().clear();
 
 
         for (BlockSerialize ser : loadSave.blocks) {
@@ -323,6 +323,7 @@ public class GameStateManager {
             gameLogicHandler.setGoldStatus(false);
 
             initGameComponent.setExistHeartBlock(false);
+            initGameComponent.setExistBombBlock(false);
             gameLogicHandler.setHitTime(0);
             gameLogicHandler.setTime(0);
             gameLogicHandler.setGoldTime(0);
@@ -330,6 +331,7 @@ public class GameStateManager {
 
             initGameComponent.getBlocks().clear();
             initGameComponent.getChocos().clear();
+            initGameComponent.getBombs().clear();
 
             startGame();
         } catch (Exception e) {

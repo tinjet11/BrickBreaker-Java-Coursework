@@ -39,8 +39,12 @@ public class InitGameComponent {
     private final int BALL_RADIUS = 10;
     private boolean isExistHeartBlock = false;
 
+    private boolean isExistBombBlock = false;
+
     private ArrayList<Block> blocks = new ArrayList<>();
     private ArrayList<Bonus> chocos = new ArrayList<>();
+
+    private ArrayList<Penalty> bombs = new ArrayList<>();
 
     //set up the brick in the game according to the current level
     public void initBoard() {
@@ -53,7 +57,6 @@ public class InitGameComponent {
                 Block.BLOCK_TYPE type;
                 if (r % 10 == 1) {
                     type = Block.BLOCK_TYPE.BLOCK_CHOCO;
-
                 } else if (r % 10 == 2) {
                     if (!isExistHeartBlock()) {
                         type = Block.BLOCK_TYPE.BLOCK_HEART;
@@ -63,7 +66,18 @@ public class InitGameComponent {
                     }
                 } else if (r % 10 == 3) {
                     type = Block.BLOCK_TYPE.BLOCK_STAR;
-                } else {
+                }
+                else if (r % 10 == 4) {
+                    if (!isExistBombBlock) {
+                        type = Block.BLOCK_TYPE.BLOCK_BOMB;
+                        setExistBombBlock(true);
+                    } else {
+                        type =Block.BLOCK_TYPE.BLOCK_NORMAL;
+                    }
+
+                }
+                // TODO: add new block which will drop a item, need to catch it else will minus point
+                else {
                     type = Block.BLOCK_TYPE.BLOCK_NORMAL;
                 }
                 getBlocks().add(new Block(j, i, type));
@@ -197,5 +211,13 @@ public class InitGameComponent {
 
     public void setChocos(ArrayList<Bonus> chocos) {
         this.chocos = chocos;
+    }
+
+    public ArrayList<Penalty> getBombs() {
+        return bombs;
+    }
+
+    public void setExistBombBlock(boolean existBombBlock) {
+        isExistBombBlock = existBombBlock;
     }
 }

@@ -2,11 +2,11 @@ package brickGame;
 
 import javafx.application.Platform;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.ImagePattern;
 
 import java.util.Iterator;
 
-import static brickGame.Main.root;
 
 
 public class GameLogicHandler implements Actionable {
@@ -51,6 +51,8 @@ public class GameLogicHandler implements Actionable {
 
     private GameEngine engine;
 
+
+
     @Override
     public void onUpdate() {
         Platform.runLater(() -> {
@@ -74,7 +76,7 @@ public class GameLogicHandler implements Actionable {
 
                         setScore(getScore() + 1);
 
-                        new Score().show(block.x, block.y, 1);
+                        new Score(gameSceneController.getGamePane()).show(block.x, block.y, 1);
 
                         block.rect.setVisible(false);
                         block.isDestroyed = true;
@@ -84,18 +86,30 @@ public class GameLogicHandler implements Actionable {
                         if (block.type == Block.BLOCK_TYPE.BLOCK_CHOCO) {
                             final Bonus choco = new Bonus(block.row, block.column);
                             choco.setTimeCreated(getTime());
-                            Platform.runLater(() -> root.getChildren().add(choco.choco));
+                            Platform.runLater(() -> gameSceneController.getGamePane().getChildren().add(choco.element));
 
                             initGameComponent.getChocos().add(choco);
                         }
+                        //new bomb
+                        if (block.type == Block.BLOCK_TYPE.BLOCK_BOMB) {
+                            final Penalty bomb = new Penalty(block.row, block.column);
+                            bomb.setTimeCreated(getTime());
+                            Platform.runLater(() -> gameSceneController.getGamePane().getChildren().add(bomb.element));
+
+                            initGameComponent.getBombs().add(bomb);
+                        }
 
                         if (block.type == Block.BLOCK_TYPE.BLOCK_STAR) {
-                            Platform.runLater(() -> {
-                                setGoldTime(getTime());
-                                ballControl.getBall().setFill(new ImagePattern(new Image("goldball.png")));
-                                System.out.println("gold ball");
-                                root.getStyleClass().add("goldRoot");
-                            });
+                            setGoldTime(getTime());
+
+                            if(!isGoldStatus){
+                                Platform.runLater(() -> {
+                                    ballControl.getBall().setFill(new ImagePattern(new Image("goldball.png")));
+                                    System.out.println("gold ball");
+                                    gameSceneController.getGamePane().getStyleClass().add("goldRoot");
+                                });
+                            }
+
                                 setGoldStatus(true);
                         }
 
@@ -151,7 +165,7 @@ public class GameLogicHandler implements Actionable {
 
     public void deductHeart() {
         heart = heart - 1;
-        new Score().show(initGameComponent.getSCENE_WIDTH() / 2, initGameComponent.getSCENE_HEIGHT() / 2, -1);
+        new Score(gameSceneController.getGamePane()).show(initGameComponent.getSCENE_WIDTH() / 2, initGameComponent.getSCENE_HEIGHT() / 2, -1);
 
         System.out.println("heart: " + heart);
 
@@ -179,13 +193,22 @@ public class GameLogicHandler implements Actionable {
 
 
         if (time - goldTime > 5000 && isGoldStatus) {
-       //     Platform.runLater(() -> {
-                ballControl.getBall().setFill(new ImagePattern(new Image("ball.png")));
-                root.getStyleClass().remove("goldRoot");
-                setGoldStatus(false);
-          //  });
+            Platform.runLater(() -> {
+                System.out.println("Inside Platform.runLater");
+                System.out.println("Before modification: " + gameSceneController.getGamePane().getStyleClass());
 
+                ballControl.getBall().setFill(new ImagePattern(new Image("ball.png")));
+                gameSceneController.getGamePane().getStyleClass().remove("goldRoot");
+                setGoldStatus(false);
+
+                System.out.println("After modification: " + gameSceneController.getGamePane().getStyleClass());
+                System.out.println("gold removed");
+                System.out.println("gold root remove. time: " + getTime());
+                System.out.println("gold root remove. gold time: " + getGoldTime());
+
+            });
         }
+
         //this part is about the Bonus object
         Iterator<Bonus> iterator = initGameComponent.getChocos().iterator();
         while (iterator.hasNext()) {
@@ -196,25 +219,53 @@ public class GameLogicHandler implements Actionable {
             }
             if (choco.getY() >= initGameComponent.getyPaddle() && choco.getY() <=  initGameComponent.getyPaddle() + initGameComponent.getPADDLE_HEIGHT() && choco.getX() >=  initGameComponent.getxPaddle() && choco.getX() <= initGameComponent.getxPaddle() + initGameComponent.getPADDLE_WIDTH()) {
 
-                if (choco.choco != null) {
+                if (choco.element != null) {
                     choco.setTaken(true);
-                    choco.choco.setVisible(false);
+                    choco.element.setVisible(false);
                     setScore(getScore() + 3);
-                    new Score().show(choco.getX(), choco.getY(), 3);
+                    new Score(gameSceneController.getGamePane()).show(choco.getX(), choco.getY(), 3);
                     iterator.remove();  // Use the iterator to remove the element
                     continue;
                 }
-
             }
-
-            if (choco.choco != null) {
+            if (choco.element != null) {
                 choco.setY(choco.getY() + ((getTime() - choco.getTimeCreated()) / 1000.000) + 1.000);
                 Platform.runLater(() -> {
-                    choco.choco.setY(choco.getY());
+                    choco.element.setY(choco.getY());
                 });
             }
         }
 
+
+        //this part is about the Penalty object
+        Iterator<Penalty> penaltyIterator = initGameComponent.getBombs().iterator();
+        while (penaltyIterator.hasNext()) {
+            Penalty bomb = penaltyIterator.next();
+
+            if (bomb.getY() > initGameComponent.getSCENE_HEIGHT()) {
+                setScore(getScore() - 10);
+                new Score(gameSceneController.getGamePane()).show(initGameComponent.getSCENE_WIDTH()/2, initGameComponent.getSCENE_HEIGHT()/2, -10);
+                penaltyIterator.remove();
+                continue;
+            }
+
+
+            if (bomb.getY() >= initGameComponent.getyPaddle() && bomb.getY() <= initGameComponent.getyPaddle() + initGameComponent.getPADDLE_HEIGHT() && bomb.getX() >=  initGameComponent.getxPaddle() && bomb.getX() <= initGameComponent.getxPaddle() + initGameComponent.getPADDLE_WIDTH()) {
+
+                if (bomb.element != null) {
+                    bomb.setTaken(true);
+                    bomb.element.setVisible(false);
+                    penaltyIterator.remove();  // Use the iterator to remove the element
+                    continue;
+                }
+            }
+            if (bomb.element != null) {
+                bomb.setY(bomb.getY() + ((getTime() - bomb.getTimeCreated()) / 1000.000) + 1.000);
+                Platform.runLater(() -> {
+                    bomb.element.setY(bomb.getY());
+                });
+            }
+        }
     }
 
 
@@ -319,4 +370,6 @@ public class GameLogicHandler implements Actionable {
     public void setInitGameComponent(InitGameComponent initGameComponent) {
         this.initGameComponent = initGameComponent;
     }
+
+
 }

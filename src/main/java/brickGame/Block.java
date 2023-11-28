@@ -41,6 +41,8 @@ public class Block implements Serializable {
         BLOCK_CHOCO,
         BLOCK_STAR,
         BLOCK_HEART,
+
+        BLOCK_BOMB,
     }
 
     public Block(int row, int column, BLOCK_TYPE type) {
@@ -73,8 +75,12 @@ public class Block implements Serializable {
             Image image = new Image("/star.jpg");
             ImagePattern pattern = new ImagePattern(image);
             rect.setFill(pattern);
-        } else {
-            // rect.setFill(color);
+        }else if (type ==  BLOCK_TYPE.BLOCK_BOMB) {
+            Image image = new Image("/penalty.jpeg");
+            ImagePattern pattern = new ImagePattern(image);
+            rect.setFill(pattern);
+        }
+        else {
             Image image = new Image("/brick.jpg");
             ImagePattern pattern = new ImagePattern(image);
             rect.setFill(pattern);
