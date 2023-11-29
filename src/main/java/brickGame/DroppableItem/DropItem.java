@@ -1,21 +1,19 @@
-package brickGame;
+package brickGame.DroppableItem;
 
-import javafx.application.Platform;
-import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
+import brickGame.*;
 import javafx.scene.shape.Rectangle;
 
 import java.io.Serializable;
 
-public abstract class GameElement implements Serializable {
-    protected Rectangle element;
+public abstract class DropItem implements Serializable {
+    public Rectangle element;
 
     private double x;
     private double y;
     private long timeCreated;
     private boolean taken = false;
 
-    public GameElement(int row, int column) {
+    public DropItem(int row, int column) {
         x = (column * (Block.getWidth())) + Block.getPaddingH() + (Block.getWidth() / 2) - 15;
         y = (row * (Block.getHeight())) + Block.getPaddingTop() + (Block.getHeight() / 2) - 15;
 

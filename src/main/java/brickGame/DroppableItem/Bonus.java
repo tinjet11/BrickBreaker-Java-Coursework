@@ -1,4 +1,4 @@
-package brickGame;
+package brickGame.DroppableItem;
 
 import javafx.application.Platform;
 import javafx.scene.image.Image;
@@ -69,7 +69,7 @@ import java.util.Random;
 //    }
 //}
 
-public class Bonus extends GameElement {
+public class Bonus extends DropItem {
     public Bonus(int row, int column) {
         super(row, column);
     }
