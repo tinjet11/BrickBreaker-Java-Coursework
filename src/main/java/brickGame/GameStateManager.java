@@ -1,17 +1,14 @@
 package brickGame;
 
+import brickGame.Controller.GameSceneController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.ImagePattern;
 
 import java.io.*;
 import java.util.ArrayList;
-import static brickGame.Main.*;
 
 public class GameStateManager {
 
@@ -64,7 +61,7 @@ public class GameStateManager {
     private Scene gameScene;
     private BallControl ballControl;
     private GameLogicHandler gameLogicHandler;
-    private  GameSceneController gameSceneController;
+    private GameSceneController gameSceneController;
     private InitGameComponent initGameComponent;
 
     public void setGameSceneController(GameSceneController gameSceneController) {
@@ -86,38 +83,38 @@ public class GameStateManager {
         return instance;
     }
     public void startGame(){
-        //TODO: fix this issue
-//        if (gameLogicHandler.getLevel() == 1 && !isLoadFromSave()) {
-//            gameLogicHandler.setHeart(gameLogicHandler.getInitialHeart());
-//        }
-
         gameLogicHandler.setGameRun(true);
             try {
-                FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("fxml/GameScene.fxml"));
-                fxmlLoader1.setControllerFactory(c -> gameSceneController);
+                //if level equal to endLevel
+                if (gameLogicHandler.getLevel() == gameLogicHandler.getEndLevel()) {
+                    gameSceneController.showWinScene();
+                }else{
 
-                Scene newGameScene = new Scene(fxmlLoader1.load());
+                    FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("fxml/GameScene.fxml"));
+                    fxmlLoader1.setControllerFactory(c -> gameSceneController);
 
-                // Clear resources from the previous scene
-                if (gameScene != null) {
-                    Parent previousRoot = gameScene.getRoot();
-                    if (previousRoot instanceof AnchorPane) {
-                        ((AnchorPane) previousRoot).getChildren().clear();
+                    Scene gameScene = new Scene(fxmlLoader1.load());
+
+                    if (gameLogicHandler.getLevel() > 1) {
+                        new Score(gameSceneController.getGamePane()).showMessage("Level Up :)", 300, 300);
+                        gameSceneController.setLevelLabel("Level: " + gameLogicHandler.getLevel());
                     }
-                    System.out.println("resource clear");
+
+                    gameSceneController.showGameScene(gameScene);
+
+                    if (gameLogicHandler.getLevel() != gameLogicHandler.getEndLevel()) {
+                        gameLogicHandler.setUpEngine();
+                        if (!isLoadFromSave()) {
+                            gameLogicHandler.setRemainingBlockCount(initGameComponent.getBlocks().size());
+                        } else {
+                            setLoadFromSave(false);
+                        }
+                    }
                 }
-
-                // Assign the new scene to gameScene
-                gameScene = newGameScene;
-
-                gameSceneController.showScene(gameScene);
-                gameSceneController.setLevelLabel("Level: " + gameLogicHandler.getLevel());
             } catch (IOException e) {
                 e.printStackTrace();
                 System.err.println("Error loading GameScene.fxml: " + e.getMessage());
             }
-
-
     }
 
     private boolean nextLevelInProgress = false;

@@ -1,5 +1,7 @@
 package brickGame;
 
+import brickGame.DroppableItem.Bonus;
+import brickGame.DroppableItem.Penalty;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;

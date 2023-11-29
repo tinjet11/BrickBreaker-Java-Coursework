@@ -1,5 +1,8 @@
 package brickGame;
 
+import brickGame.Controller.GameSceneController;
+import brickGame.DroppableItem.Bonus;
+import brickGame.DroppableItem.Penalty;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
@@ -35,16 +38,16 @@ public class GameLogicHandler implements Actionable {
         this.gameStateManager = gameStateManager;
     }
 
-    private int heart = 1000;
-    private int initialHeart = 1000;
+    private int heart = 3;
+    private int initialHeart = 3;
 
     private int score = 0;
     private long time = 0;
     private long hitTime = 0;
     private long goldTime = 0;
     private boolean isGameRun = false;
-    private int endLevel = 18;
-    private int level = 10;
+    private int endLevel = 19;
+    private int level = 18;
     private boolean isGoldStatus = false;
     private int remainingBlockCount = 0;
 
@@ -108,7 +111,6 @@ public class GameLogicHandler implements Actionable {
                                     gameSceneController.getGamePane().getStyleClass().add("goldRoot");
                                 });
                             }
-
                                 setGoldStatus(true);
                         }
 
@@ -170,6 +172,7 @@ public class GameLogicHandler implements Actionable {
 
         if (heart <= 0) {
             gameSceneController.showLoseScene();
+            stopEngine();
         }
     }
 

@@ -40,8 +40,6 @@ public class LoadSave {
     public double vX;
     public ArrayList<BlockSerialize> blocks = new ArrayList<BlockSerialize>();
 
-
-
     public void destroySaveGameFile(){
         File saveFile = new File(SAVE_PATH);
         if (saveFile.exists()) {

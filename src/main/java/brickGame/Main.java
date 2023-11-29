@@ -1,10 +1,12 @@
 package brickGame;
 
+import brickGame.Controller.GameSceneController;
+import brickGame.Controller.MenuController;
+import brickGame.Controller.SettingsController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.*;
 
