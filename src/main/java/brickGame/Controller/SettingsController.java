@@ -1,12 +1,13 @@
-package brickGame;
+package brickGame.Controller;
 
+import brickGame.Controller.GameSceneController;
+import brickGame.GameLogicHandler;
+import brickGame.GameStateManager;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import static brickGame.Main.*;
 public class SettingsController {
 
     @FXML
@@ -34,7 +35,7 @@ public class SettingsController {
     private GameLogicHandler gameLogicHandler;
     private GameStateManager gameStateManager;
 
-    private  GameSceneController gameSceneController;
+    private GameSceneController gameSceneController;
 
     private GameStateManager.GameState gameState;
 

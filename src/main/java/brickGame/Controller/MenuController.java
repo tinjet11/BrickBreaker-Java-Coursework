@@ -1,5 +1,6 @@
-package brickGame;
+package brickGame.Controller;
 
+import brickGame.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
