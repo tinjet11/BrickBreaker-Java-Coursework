@@ -1,13 +1,16 @@
 package brickGame;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 
@@ -133,18 +136,21 @@ public class GameSceneController {
                 initGameComponent.initPaddle();
                 initGameComponent.initBoard();
             } else {
-                if (gameLogicHandler.isGoldStatus()) {
-                   // Platform.runLater(() -> {
-                    System.out.println("Before modification: " + getGamePane().getStyleClass());
+                //if the game first open and is loadFromSave
+                if(gameStateManager.isGameFirstOpen()){
+                    initGameComponent.initBall();
+                    initGameComponent.initPaddle();
+                }
 
+                if (gameLogicHandler.isGoldStatus()) {
+                    System.out.println("Before modification: " + getGamePane().getStyleClass());
                     getGamePane().getStyleClass().add("goldRoot");
                     System.out.println("gold root added. time: " + gameLogicHandler.getTime());
                     System.out.println("gold root added. gold time: " + gameLogicHandler.getGoldTime());
-                    //});
                 }
             }
 
-            //   Platform.runLater(() -> {
+            gameStateManager.setGameFirstOpen(false);
             System.out.println("add to root start");
             //add ball and paddle to gamePane
             gamePane.getChildren().addAll(initGameComponent.getPaddle(), ballControl.getBall());
@@ -154,10 +160,9 @@ public class GameSceneController {
                 gamePane.getChildren().add(block.rect);
             }
             System.out.println("add to root end");
-            //      });
+
             gameScene.addEventFilter(KeyEvent.KEY_PRESSED, this::handleKeyPressed);
-//this line very important, it makes sure the game scene can properly load
-            //  Platform.runLater(() -> {
+
             try {
                 System.out.println("set Scene show start");
                 primaryStage.setScene(gameScene);
@@ -167,7 +172,7 @@ public class GameSceneController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            //   });
+
 
 
             if (gameLogicHandler.getLevel() != gameLogicHandler.getEndLevel()) {
@@ -256,8 +261,9 @@ public class GameSceneController {
             throw new RuntimeException(e);
         }
 
-        Button startbtn = (Button) menuScene.lookup("#startButton");
-        startbtn.setText("Resume");
+        Button startBtn = (Button) menuScene.lookup("#startButton");
+        startBtn.setText("Resume");
+
         gameStateManager.setGameState(GameStateManager.GameState.PAUSED);
 
         if (primaryStage != null) {

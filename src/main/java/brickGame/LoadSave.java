@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class LoadSave {
 
-    private   final String SAVE_PATH_DIR = "save"; // Relative to the project directory
+    private final String SAVE_PATH_DIR = "save"; // Relative to the project directory
 
     // Construct the complete path using the directory and filename
     private final String SAVE_PATH = SAVE_PATH_DIR + "/save.mdds";
@@ -40,6 +40,23 @@ public class LoadSave {
     public double vX;
     public ArrayList<BlockSerialize> blocks = new ArrayList<BlockSerialize>();
 
+
+
+    public void destroySaveGameFile(){
+        File saveFile = new File(SAVE_PATH);
+        if (saveFile.exists()) {
+           saveFile.delete();
+        }
+    }
+    public boolean checkSaveGameFileExist() {
+        File saveFile = new File(SAVE_PATH);
+        if (saveFile.exists()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 
     public void read() {
         File saveFile = new File(SAVE_PATH);

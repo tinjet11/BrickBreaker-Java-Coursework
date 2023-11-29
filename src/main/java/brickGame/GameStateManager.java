@@ -27,6 +27,14 @@ public class GameStateManager {
         this.initGameComponent = initGameComponent;
     }
 
+    public boolean isGameFirstOpen() {
+        return gameFirstOpen;
+    }
+
+    public void setGameFirstOpen(boolean gameFirstOpen) {
+        this.gameFirstOpen = gameFirstOpen;
+    }
+
     public enum GameState {
         ON_START,
         IN_PROGRESS,
@@ -50,6 +58,8 @@ public class GameStateManager {
     }
 
     private boolean loadFromSave = false;
+
+    private boolean gameFirstOpen = true;
 
     private Scene gameScene;
     private BallControl ballControl;
@@ -76,10 +86,11 @@ public class GameStateManager {
         return instance;
     }
     public void startGame(){
+        //TODO: fix this issue
+//        if (gameLogicHandler.getLevel() == 1 && !isLoadFromSave()) {
+//            gameLogicHandler.setHeart(gameLogicHandler.getInitialHeart());
+//        }
 
-        if (gameLogicHandler.getLevel() == 1) {
-            gameLogicHandler.setHeart(gameLogicHandler.getInitialHeart());
-        }
         gameLogicHandler.setGameRun(true);
             try {
                 FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("fxml/GameScene.fxml"));
@@ -288,17 +299,6 @@ public class GameStateManager {
 
         try {
             loadFromSave = true;
-            if (loadFromSave) {
-                // Delete the saved game file
-                File saveFile = new File(SAVE_PATH);
-                if (saveFile.exists()) {
-                    if (saveFile.delete()) {
-                        System.out.println("Deleted the saved game file.");
-                    } else {
-                        System.err.println("Failed to delete the saved game file.");
-                    }
-                }
-            }
             startGame();
         } catch (Exception e) {
             e.printStackTrace();

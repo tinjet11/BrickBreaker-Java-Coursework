@@ -3,6 +3,7 @@ package brickGame;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.*;
@@ -52,7 +53,7 @@ public class Main extends Application {
         initializeMenuScene();
         FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("fxml/Settings.fxml"));
         fxmlLoader1.setControllerFactory(c -> {
-            return new SettingsController();
+            return new SettingsController(primaryStage.getScene());
         });
     }
 
@@ -67,6 +68,10 @@ public class Main extends Application {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        //only set the loadBtn visible when the Game first open
+        Button loadBtn = (Button) menuScene.lookup("#loadButton");
+        loadBtn.setVisible(true);
 
         primaryStage.setTitle("Brick Breaker Game");
         primaryStage.setScene(menuScene);

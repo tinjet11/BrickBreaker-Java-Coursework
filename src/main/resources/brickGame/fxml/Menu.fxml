@@ -20,11 +20,12 @@
          <children>
             <Label fx:id="resultLabel" styleClass="title-label" text="Congratulations! You Win!" />
             <Label fx:id="scoreLabel" styleClass="score-label" text="Your Score is: " />
-            <Label fx:id="highestScoreLabel" styleClass="score-label" text="Your allTime highest score is: " />
+            <Label fx:id="highestScoreLabel" styleClass="score-label" text="Your all time highest score is: " />
          </children>
       </VBox>
-      <VBox layoutX="189.0" layoutY="327.0" prefHeight="200.0" prefWidth="123.0" spacing="20.0">
+      <VBox layoutX="189.0" layoutY="350.0" prefHeight="200.0" prefWidth="123.0" spacing="20.0">
          <children>
+            <Button visible="false" fx:id="loadButton" mnemonicParsing="false" prefHeight="31.0" prefWidth="117.0" onAction="#onLoad" text="Load Game" />
             <Button fx:id="startButton" alignment="CENTER" mnemonicParsing="false" onAction="#onStartOrResume" prefHeight="30.0" prefWidth="115.0" text="Start Game" />
             <Button fx:id="settingsButton" alignment="CENTER" mnemonicParsing="false" onAction="#onOpenSettings" prefHeight="25.0" prefWidth="152.0" text="Settings" />
             <Button fx:id="exitButton" alignment="CENTER" mnemonicParsing="false" onAction="#onExit" prefHeight="25.0" prefWidth="105.0" text="Quit" />
