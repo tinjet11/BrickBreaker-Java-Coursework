@@ -21,6 +21,7 @@ public class MenuController {
 
     private Stage primaryStage;
 
+    private int highestScore;
     public MenuController(){
         gameLogicHandler = GameLogicHandler.getInstance();
         gameStateManager = GameStateManager.getInstance();
@@ -73,12 +74,23 @@ public class MenuController {
     }
 
     public void showMenuScene(String state, Scene winMenuScene) throws IOException {
+        HighScore highScore = new HighScore();
+        highestScore = highScore.getHighestGameScore();
+        highScore.setHighestGameScore(gameLogicHandler.getScore());
+
 
         VBox resultBox = (VBox) winMenuScene.lookup("#resultBox");
         resultBox.setVisible(true);
 
         Label scorePlaceholder = (Label) winMenuScene.lookup("#scoreLabel");
+        Label highestScorePlaceholder = (Label) winMenuScene.lookup("#highestScoreLabel");
         scorePlaceholder.setText(scorePlaceholder.getText() + String.valueOf(gameLogicHandler.getScore()));
+
+        if(highestScore > gameLogicHandler.getScore()){
+            highestScorePlaceholder.setText(highestScorePlaceholder.getText() + String.valueOf(highestScore));
+        }else{
+            highestScorePlaceholder.setText("Your new allTime highest score is: " + String.valueOf(gameLogicHandler.getScore()));
+        }
 
         if (state == "Lose") {
             Label resultLabel = (Label) winMenuScene.lookup("#resultLabel");

@@ -16,10 +16,11 @@
          </image>
       </ImageView>
       <Label layoutX="215.0" layoutY="117.0" text="Menu" />
-      <VBox fx:id="resultBox" layoutX="112.0" layoutY="167.0" prefHeight="83.0" prefWidth="331.0" visible="false">
+      <VBox fx:id="resultBox" layoutX="112.0" layoutY="167.0" prefHeight="147.0" prefWidth="331.0" visible="false">
          <children>
             <Label fx:id="resultLabel" styleClass="title-label" text="Congratulations! You Win!" />
             <Label fx:id="scoreLabel" styleClass="score-label" text="Your Score is: " />
+            <Label fx:id="highestScoreLabel" styleClass="score-label" text="Your allTime highest score is: " />
          </children>
       </VBox>
       <VBox layoutX="189.0" layoutY="327.0" prefHeight="200.0" prefWidth="123.0" spacing="20.0">
