@@ -1,6 +1,5 @@
 package brickGame;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,9 +12,6 @@ import javafx.stage.Stage;
 
 
 import java.io.IOException;
-
-import static brickGame.Main.*;
-import static brickGame.InitGameComponent.*;
 
 
 public class GameSceneController {
@@ -259,7 +255,7 @@ public class GameSceneController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        menuScene.getStylesheets().add("style.css");
+
         Button startbtn = (Button) menuScene.lookup("#startButton");
         startbtn.setText("Resume");
         gameStateManager.setGameState(GameStateManager.GameState.PAUSED);

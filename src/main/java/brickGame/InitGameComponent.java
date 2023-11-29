@@ -102,7 +102,7 @@ public class InitGameComponent {
         // Create the ball object with the specified radius and image pattern
         Circle ball = new Circle();
         ball.setRadius(getBALL_RADIUS());
-        ball.setFill(new ImagePattern(new Image("/ball.png")));
+        ball.setFill(new ImagePattern(new Image(getClass().getResourceAsStream("/images/ball.png"))));
 
         // Set the ball's properties in the BallControl instance
         ballControl.setxBall(xBall);
@@ -119,7 +119,7 @@ public class InitGameComponent {
         getPaddle().setX(getxPaddle());
         getPaddle().setY(getyPaddle());
 
-        ImagePattern pattern = new ImagePattern(new Image("/block.jpg"));
+        ImagePattern pattern = new ImagePattern(new Image(getClass().getResourceAsStream("/images/paddle.jpg")));
 
         getPaddle().setFill(pattern);
         System.out.println("init paddle  completed");

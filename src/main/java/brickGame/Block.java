@@ -28,6 +28,13 @@ public class Block implements Serializable {
     public Rectangle rect;
     private final int BALL_RADIUS = 10;
 
+    private  final String IMAGE_PATH_CHOCO = "/images/choco.jpg";
+    private  final String IMAGE_PATH_HEART = "/images/heart.jpg";
+    private  final String IMAGE_PATH_STAR = "/images/star.jpg";
+    private  final String IMAGE_PATH_BOMB = "/images/penalty.jpeg";
+    private  final String IMAGE_PATH_DEFAULT = "/images/brick.jpg";
+
+
     public enum HIT_STATE {
         NO_HIT,
         HIT_RIGHT,
@@ -63,29 +70,33 @@ public class Block implements Serializable {
         rect.setX(x);
         rect.setY(y);
 
-        if (type == BLOCK_TYPE.BLOCK_CHOCO) {
-            Image image = new Image("/choco.jpg");
-            ImagePattern pattern = new ImagePattern(image);
-            rect.setFill(pattern);
-        } else if (type ==  BLOCK_TYPE.BLOCK_HEART) {
-            Image image = new Image("/heart.jpg");
-            ImagePattern pattern = new ImagePattern(image);
-            rect.setFill(pattern);
-        } else if (type ==  BLOCK_TYPE.BLOCK_STAR) {
-            Image image = new Image("/star.jpg");
-            ImagePattern pattern = new ImagePattern(image);
-            rect.setFill(pattern);
-        }else if (type ==  BLOCK_TYPE.BLOCK_BOMB) {
-            Image image = new Image("/penalty.jpeg");
-            ImagePattern pattern = new ImagePattern(image);
-            rect.setFill(pattern);
-        }
-        else {
-            Image image = new Image("/brick.jpg");
-            ImagePattern pattern = new ImagePattern(image);
-            rect.setFill(pattern);
+        ImagePattern pattern = loadImagePattern();
+        rect.setFill(pattern);
+
+    }
+
+
+    private ImagePattern loadImagePattern() {
+        String imagePath;
+        switch (type) {
+            case BLOCK_CHOCO:
+                imagePath = IMAGE_PATH_CHOCO;
+                break;
+            case BLOCK_HEART:
+                imagePath = IMAGE_PATH_HEART;
+                break;
+            case BLOCK_STAR:
+                imagePath = IMAGE_PATH_STAR;
+                break;
+            case BLOCK_BOMB:
+                imagePath = IMAGE_PATH_BOMB;
+                break;
+            default:
+                imagePath = IMAGE_PATH_DEFAULT;
         }
 
+        Image image = new Image(getClass().getResourceAsStream(imagePath));
+        return new ImagePattern(image);
     }
 
     public HIT_STATE checkHitToBlock(double xBall, double yBall) {

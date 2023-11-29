@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
-import java.io.Serializable;
 import java.util.Random;
 
 //public class Bonus implements Serializable {
@@ -85,12 +84,12 @@ public class Bonus extends GameElement {
             element.setY(getY());
             String url;
             if (new Random().nextInt(20) % 2 == 0) {
-                url = "/bonus1.png";
+                url = "/images/bonus1.png";
             } else {
-                url = "/bonus2.png";
+                url = "/images/bonus2.png";
             }
 
-            element.setFill(new ImagePattern(new Image(url)));
+            element.setFill(new ImagePattern(new Image(getClass().getResourceAsStream(url))));
         });
     }
 }

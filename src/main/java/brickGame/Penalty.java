@@ -19,9 +19,9 @@ public class Penalty extends GameElement {
             element.setX(getX());
             element.setY(getY());
 
-            String url = "/bomb.png"; // Adjust the image path for penalty
+            String url = "/images/bomb.png"; // Adjust the image path for penalty
 
-            element.setFill(new ImagePattern(new Image(url)));
+            element.setFill(new ImagePattern(new Image(getClass().getResourceAsStream(url))));
         });
     }
 }

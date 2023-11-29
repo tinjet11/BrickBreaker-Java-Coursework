@@ -2,7 +2,6 @@ package brickGame;
 
 import javafx.application.Platform;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.ImagePattern;
 
 import java.util.Iterator;
@@ -104,7 +103,7 @@ public class GameLogicHandler implements Actionable {
 
                             if(!isGoldStatus){
                                 Platform.runLater(() -> {
-                                    ballControl.getBall().setFill(new ImagePattern(new Image("goldball.png")));
+                                    ballControl.getBall().setFill(new ImagePattern(new Image(getClass().getResourceAsStream("/images/goldball.png"))));
                                     System.out.println("gold ball");
                                     gameSceneController.getGamePane().getStyleClass().add("goldRoot");
                                 });
@@ -197,7 +196,7 @@ public class GameLogicHandler implements Actionable {
                 System.out.println("Inside Platform.runLater");
                 System.out.println("Before modification: " + gameSceneController.getGamePane().getStyleClass());
 
-                ballControl.getBall().setFill(new ImagePattern(new Image("ball.png")));
+                ballControl.getBall().setFill(new ImagePattern(new Image(getClass().getResourceAsStream("/images/ball.png"))));
                 gameSceneController.getGamePane().getStyleClass().remove("goldRoot");
                 setGoldStatus(false);
 
