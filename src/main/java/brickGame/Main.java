@@ -53,10 +53,6 @@ public class Main extends Application {
         System.out.println("All set");
         this.primaryStage = primaryStage;
         initializeMenuScene();
-        FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("fxml/Settings.fxml"));
-        fxmlLoader1.setControllerFactory(c -> {
-            return new SettingsController(primaryStage.getScene());
-        });
     }
 
     private void initializeMenuScene() {
