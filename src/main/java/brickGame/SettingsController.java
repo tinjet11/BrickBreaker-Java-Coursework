@@ -38,12 +38,15 @@ public class SettingsController {
 
     private GameStateManager.GameState gameState;
 
+    private Scene menuScene;
+
     private Stage primaryStage;
-    public SettingsController() {
+    public SettingsController(Scene menuScene) {
         gameLogicHandler = GameLogicHandler.getInstance();
         gameStateManager = GameStateManager.getInstance();
         gameSceneController = GameSceneController.getInstance();
         primaryStage = gameSceneController.getPrimaryStage();
+        this.menuScene = menuScene;
     }
 
     @FXML
@@ -56,20 +59,20 @@ public class SettingsController {
     @FXML
     public void back() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(SettingsController.class.getResource("fxml/Menu.fxml"));
+//            FXMLLoader fxmlLoader = new FXMLLoader(SettingsController.class.getResource("fxml/Menu.fxml"));
+//
+//            Scene menuScene = new Scene(fxmlLoader.load());
 
-            Scene menuScene = new Scene(fxmlLoader.load());
-
-            Button startButton = (Button) menuScene.lookup("#startButton");
-
-            gameState = gameStateManager.getGameState();
-            if (gameState == GameStateManager.GameState.ON_START) {
-                startButton.setText("Start Game");
-            } else if (gameState == GameStateManager.GameState.PAUSED) {
-                startButton.setText("Resume");
-            } else if ( gameState == GameStateManager.GameState.GAME_OVER || gameState == GameStateManager.GameState.WIN) {
-                startButton.setText("Play Again");
-            }
+//            Button startButton = (Button) menuScene.lookup("#startButton");
+//
+//            gameState = gameStateManager.getGameState();
+//            if (gameState == GameStateManager.GameState.ON_START) {
+//                startButton.setText("Start Game");
+//            } else if (gameState == GameStateManager.GameState.PAUSED) {
+//                startButton.setText("Resume");
+//            } else if ( gameState == GameStateManager.GameState.GAME_OVER || gameState == GameStateManager.GameState.WIN) {
+//                startButton.setText("Play Again");
+//            }
 
             primaryStage.setTitle("Brick Breaker Game");
             primaryStage.setScene(menuScene);
