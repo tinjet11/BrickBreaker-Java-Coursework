@@ -9,9 +9,10 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+
+import static brickGame.Block.BLOCK_HEIGHT;
+import static brickGame.Block.BLOCK_PADDING_TOP;
 
 
 public class GameLogicHandler implements Actionable {
@@ -62,9 +63,9 @@ public class GameLogicHandler implements Actionable {
 
     private void onHitAction(Block block) {
         setScore(getScore() + 1);
-        new Score(gameSceneController.getGamePane()).show(block.x, block.y, 1);
-        block.rect.setVisible(false);
-        block.isDestroyed = true;
+        new ScoreAnimation(gameSceneController.getGamePane()).show(block.getX(), block.getY(), 1);
+        block.getRect().setVisible(false);
+        block.setDestroyed(true);
         remainingBlockCount--;
     }
 
@@ -81,7 +82,7 @@ public class GameLogicHandler implements Actionable {
             ballControl.getBall().setCenterY(ballControl.getyBall());
         });
 
-        if (ballControl.getyBall() >= Block.getPaddingTop() && ballControl.getyBall() <= (Block.getHeight() * (getLevel() + 1)) + Block.getPaddingTop()) {
+        if (ballControl.getyBall() >= BLOCK_PADDING_TOP && ballControl.getyBall() <= (BLOCK_HEIGHT * (getLevel() + 1)) + BLOCK_PADDING_TOP) {
             Iterator<Block> iterator = initGameComponent.getBlocks().iterator();
             while (iterator.hasNext()) {
                 Block block = iterator.next();
@@ -89,16 +90,11 @@ public class GameLogicHandler implements Actionable {
                     Block.HIT_STATE hitCode = block.checkHitToBlock(ballControl.getxBall(), ballControl.getyBall());
                     if (hitCode != Block.HIT_STATE.NO_HIT) {
 
-//                        setScore(getScore() + 1);
-//                        new Score(gameSceneController.getGamePane()).show(block.x, block.y, 1);
-//                        block.rect.setVisible(false);
-//                        block.isDestroyed = true;
-//                        remainingBlockCount--;
                         ballControl.resetcollideFlags();
 
-                        if (block.type == Block.BLOCK_TYPE.BLOCK_CHOCO) {
+                        if (block.getType() == Block.BLOCK_TYPE.BLOCK_CHOCO) {
                             onHitAction(block);
-                            final Bonus choco = new Bonus(block.row, block.column);
+                            final Bonus choco = new Bonus(block.getRow(), block.getColumn());
                             choco.setTimeCreated(getTime());
                             Platform.runLater(() -> gameSceneController.getGamePane().getChildren().add(choco.element));
 
@@ -106,9 +102,9 @@ public class GameLogicHandler implements Actionable {
                             iterator.remove();
                         }
                         //new bomb
-                        if (block.type == Block.BLOCK_TYPE.BLOCK_BOMB) {
+                        if (block.getType() == Block.BLOCK_TYPE.BLOCK_BOMB) {
                             onHitAction(block);
-                            final Penalty bomb = new Penalty(block.row, block.column);
+                            final Penalty bomb = new Penalty(block.getRow(), block.getColumn());
                             bomb.setTimeCreated(getTime());
                             Platform.runLater(() -> gameSceneController.getGamePane().getChildren().add(bomb.element));
 
@@ -116,7 +112,7 @@ public class GameLogicHandler implements Actionable {
                             iterator.remove();
                         }
 
-                        if (block.type == Block.BLOCK_TYPE.BLOCK_STAR) {
+                        if (block.getType() == Block.BLOCK_TYPE.BLOCK_STAR) {
                             onHitAction(block);
                             setGoldTime(getTime());
 
@@ -131,28 +127,28 @@ public class GameLogicHandler implements Actionable {
                             iterator.remove();
                         }
 
-                        if (block.type == Block.BLOCK_TYPE.BLOCK_HEART) {
+                        if (block.getType() == Block.BLOCK_TYPE.BLOCK_HEART) {
                             onHitAction(block);
                             heart++;
                             System.out.println("heart hitted");
                             iterator.remove();
                         }
 
-                        if (block.type == Block.BLOCK_TYPE.BLOCK_CONCRETE) {
+                        if (block.getType() == Block.BLOCK_TYPE.BLOCK_CONCRETE) {
                             System.out.println("Concrete hit");
                             Platform.runLater(() -> {
-                                block.isDestroyed = true;
-                                block.type = Block.BLOCK_TYPE.BLOCK_NORMAL;
+                                block.setDestroyed(true);
+                                block.setType(Block.BLOCK_TYPE.BLOCK_NORMAL);
 
                                 Image image = new Image(getClass().getResourceAsStream("/images/brick.jpg"));
                                 ImagePattern imagePattern = new ImagePattern(image);
 
-                                block.rect.setFill(imagePattern);
+                                block.getRect().setFill(imagePattern);
                                 System.out.println("Block replaced with normal block");
 
                                 PauseTransition pause = new PauseTransition(Duration.millis(100));
                                 pause.setOnFinished(event -> {
-                                    block.isDestroyed = false;
+                                    block.setDestroyed(false);
                                     System.out.println("isDestroyed set to false");
                                 });
                                 pause.play();
@@ -160,7 +156,7 @@ public class GameLogicHandler implements Actionable {
                         }
 
 
-                        if (block.type == Block.BLOCK_TYPE.BLOCK_NORMAL) {
+                        if (block.getType() == Block.BLOCK_TYPE.BLOCK_NORMAL) {
                             System.out.println("Normal hit");
                             onHitAction(block);
                             iterator.remove();
@@ -212,7 +208,7 @@ public class GameLogicHandler implements Actionable {
 
     public void deductHeart() {
         heart = heart - 1;
-        new Score(gameSceneController.getGamePane()).show(initGameComponent.getSCENE_WIDTH() / 2, initGameComponent.getSCENE_HEIGHT() / 2, -1);
+        new ScoreAnimation(gameSceneController.getGamePane()).show(initGameComponent.getSCENE_WIDTH() / 2, initGameComponent.getSCENE_HEIGHT() / 2, -1);
 
         System.out.println("heart: " + heart);
 
@@ -238,7 +234,6 @@ public class GameLogicHandler implements Actionable {
         Platform.runLater(() -> {
             ballControl.setPhysicsToBall();
         });
-
 
         if (time - goldTime > 5000 && isGoldStatus) {
             Platform.runLater(() -> {
@@ -271,7 +266,7 @@ public class GameLogicHandler implements Actionable {
                     choco.setTaken(true);
                     choco.element.setVisible(false);
                     setScore(getScore() + 3);
-                    new Score(gameSceneController.getGamePane()).show(choco.getX(), choco.getY(), 3);
+                    new ScoreAnimation(gameSceneController.getGamePane()).show(choco.getX(), choco.getY(), 3);
                     iterator.remove();  // Use the iterator to remove the element
                     continue;
                 }
@@ -284,7 +279,6 @@ public class GameLogicHandler implements Actionable {
             }
         }
 
-
         //this part is about the Penalty object
         Iterator<Penalty> penaltyIterator = initGameComponent.getBombs().iterator();
         while (penaltyIterator.hasNext()) {
@@ -292,13 +286,15 @@ public class GameLogicHandler implements Actionable {
 
             if (bomb.getY() > initGameComponent.getSCENE_HEIGHT()) {
                 setScore(getScore() - 10);
-                new Score(gameSceneController.getGamePane()).show(initGameComponent.getSCENE_WIDTH() / 2, initGameComponent.getSCENE_HEIGHT() / 2, -10);
+                new ScoreAnimation(gameSceneController.getGamePane()).show(initGameComponent.getSCENE_WIDTH() / 2, initGameComponent.getSCENE_HEIGHT() / 2, -10);
                 penaltyIterator.remove();
                 continue;
             }
 
-
-            if (bomb.getY() >= initGameComponent.getyPaddle() && bomb.getY() <= initGameComponent.getyPaddle() + initGameComponent.getPADDLE_HEIGHT() && bomb.getX() >= initGameComponent.getxPaddle() && bomb.getX() <= initGameComponent.getxPaddle() + initGameComponent.getPADDLE_WIDTH()) {
+            if (bomb.getY() >= initGameComponent.getyPaddle()
+                    && bomb.getY() <= initGameComponent.getyPaddle() + initGameComponent.getPADDLE_HEIGHT()
+                    && bomb.getX() >= initGameComponent.getxPaddle()
+                    && bomb.getX() <= initGameComponent.getxPaddle() + initGameComponent.getPADDLE_WIDTH()) {
 
                 if (bomb.element != null) {
                     bomb.setTaken(true);
@@ -313,6 +309,7 @@ public class GameLogicHandler implements Actionable {
                     bomb.element.setY(bomb.getY());
                 });
             }
+
         }
     }
 

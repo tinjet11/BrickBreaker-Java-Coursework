@@ -10,6 +10,8 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static brickGame.Block.BLOCK_HEIGHT;
+
 public class InitGameComponent {
 
     private  static  InitGameComponent instance;
@@ -99,7 +101,7 @@ public class InitGameComponent {
         double xBall = Math.max(getBALL_RADIUS(), Math.min(random.nextInt(getSCENE_WIDTH() - getBALL_RADIUS()) + 1, getSCENE_WIDTH() - getBALL_RADIUS()));
 
         // Ensure that the ball starts above the screen's bottom edge
-        int minYBall = ((gameLogicHandler.getLevel() + 1) * Block.getHeight()) + 2 * getBALL_RADIUS();
+        int minYBall = ((gameLogicHandler.getLevel() + 1) * BLOCK_HEIGHT) + 2 * getBALL_RADIUS();
 
         // Randomly set the y-coordinate within the valid range
         double yBall = Math.max(minYBall, Math.min(random.nextInt(getSCENE_HEIGHT() - minYBall) + minYBall, getSCENE_HEIGHT() - minYBall));

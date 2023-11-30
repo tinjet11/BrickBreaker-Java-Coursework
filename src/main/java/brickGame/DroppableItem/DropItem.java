@@ -1,9 +1,10 @@
 package brickGame.DroppableItem;
 
-import brickGame.*;
 import javafx.scene.shape.Rectangle;
 
 import java.io.Serializable;
+
+import static brickGame.Block.*;
 
 public abstract class DropItem implements Serializable {
     public Rectangle element;
@@ -14,8 +15,8 @@ public abstract class DropItem implements Serializable {
     private boolean taken = false;
 
     public DropItem(int row, int column) {
-        x = (column * (Block.getWidth())) + Block.getPaddingH() + (Block.getWidth() / 2) - 15;
-        y = (row * (Block.getHeight())) + Block.getPaddingTop() + (Block.getHeight() / 2) - 15;
+        x = (column * BLOCK_WIDTH) + BLOCK_PADDING_H + (BLOCK_WIDTH / 2) - 15;
+        y = (row * BLOCK_HEIGHT) + BLOCK_PADDING_TOP + (BLOCK_HEIGHT / 2) - 15;
 
         draw();
     }
