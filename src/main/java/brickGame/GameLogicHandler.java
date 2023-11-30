@@ -46,7 +46,7 @@ public class GameLogicHandler implements Actionable {
     private long hitTime = 0;
     private long goldTime = 0;
     private boolean isGameRun = false;
-    private int endLevel = 19;
+    private int endLevel = 21;
     private int level = 18;
     private boolean isGoldStatus = false;
     private int remainingBlockCount = 0;

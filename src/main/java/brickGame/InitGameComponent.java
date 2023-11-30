@@ -32,12 +32,12 @@ public class InitGameComponent {
     private Rectangle paddle;
     private double xPaddle = 0.0f;
     private double centerPaddleX;
-    private double yPaddle = 640.0f;
+    private double yPaddle = 690.0f;
     private final int PADDLE_WIDTH = 130;
     private final int PADDLE_HEIGHT = 10;
     private final int HALF_PADDLE_WIDTH = getPADDLE_WIDTH() / 2;
     private final int SCENE_WIDTH = 500;
-    private final int SCENE_HEIGHT = 700;
+    private final int SCENE_HEIGHT = 750;
     private final int BALL_RADIUS = 10;
     private boolean isExistHeartBlock = false;
 
