@@ -3,9 +3,7 @@ package brickGame;
 import brickGame.Controller.GameSceneController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -40,7 +38,7 @@ public class GameStateManager {
         WIN,
     }
 
-    private   final String SAVE_PATH_DIR = "save"; // Relative to the project directory
+    private final String SAVE_PATH_DIR = "save"; // Relative to the project directory
 
     // Construct the complete path using the directory and filename
     private final String SAVE_PATH = SAVE_PATH_DIR + "/save.mdds";
@@ -67,6 +65,7 @@ public class GameStateManager {
     public void setGameSceneController(GameSceneController gameSceneController) {
         this.gameSceneController = gameSceneController;
     }
+
     public void setBallControl(BallControl ballControl) {
         this.ballControl = ballControl;
     }
@@ -74,47 +73,41 @@ public class GameStateManager {
     public void setGameLogicHandler(GameLogicHandler gameLogicHandler) {
         this.gameLogicHandler = gameLogicHandler;
     }
-    private  static  GameStateManager instance;
-    private GameStateManager() {}
+
+    private static GameStateManager instance;
+
+    private GameStateManager() {
+    }
+
     public static GameStateManager getInstance() {
         if (instance == null) {
             instance = new GameStateManager();
         }
         return instance;
     }
-    public void startGame(){
+
+    public void startGame() {
         gameLogicHandler.setGameRun(true);
-            try {
-                //if level equal to endLevel
-                if (gameLogicHandler.getLevel() == gameLogicHandler.getEndLevel()) {
-                    gameSceneController.showWinScene();
-                }else{
+        try {
+            //if level equal to endLevel
+            if (gameLogicHandler.getLevel() == gameLogicHandler.getEndLevel()) {
+                gameSceneController.showWinScene();
+            } else {
+                FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("/fxml/GameScene.fxml"));
+                fxmlLoader1.setControllerFactory(c -> gameSceneController);
 
-                    FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("/fxml/GameScene.fxml"));
-                    fxmlLoader1.setControllerFactory(c -> gameSceneController);
+                Scene gameScene = new Scene(fxmlLoader1.load());
+                gameSceneController.showGameScene(gameScene);
+                gameLogicHandler.setUpEngine();
 
-                    Scene gameScene = new Scene(fxmlLoader1.load());
-
-                    if (gameLogicHandler.getLevel() > 1) {
-                        new Score(gameSceneController.getGamePane()).showMessage("Level Up :)", 300, 300);
-                        gameSceneController.setLevelLabel("Level: " + gameLogicHandler.getLevel());
-                    }
-
-                    gameSceneController.showGameScene(gameScene);
-
-                    if (gameLogicHandler.getLevel() != gameLogicHandler.getEndLevel()) {
-                        gameLogicHandler.setUpEngine();
-                        if (!isLoadFromSave()) {
-                            gameLogicHandler.setRemainingBlockCount(initGameComponent.getBlocks().size());
-                        } else {
-                            setLoadFromSave(false);
-                        }
-                    }
+                if (isLoadFromSave()) {
+                    setLoadFromSave(false);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("Error loading GameScene.fxml: " + e.getMessage());
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error loading GameScene.fxml: " + e.getMessage());
+        }
     }
 
     private boolean nextLevelInProgress = false;
@@ -128,10 +121,10 @@ public class GameStateManager {
         System.out.println("level: " + gameLogicHandler.getLevel());
 
         // Set the flag to indicate that nextLevel is in progress
-     //   new Thread(() -> {
-            try {
-              //  Thread.sleep(1);
-                Platform.runLater(() -> {
+        //   new Thread(() -> {
+        try {
+            //  Thread.sleep(1);
+            Platform.runLater(() -> {
                 System.out.println("inside try");
 
                 gameLogicHandler.stopEngine();
@@ -159,23 +152,23 @@ public class GameStateManager {
 
                 if (gameLogicHandler.getLevel() < gameLogicHandler.getEndLevel()) {
                     gameLogicHandler.addLevel();
-                    System.out.println("level added: current level: "+  gameLogicHandler.getLevel());
+                    System.out.println("level added: current level: " + gameLogicHandler.getLevel());
                 }
                 // gameLogicHandler.setGoldStatus(true);
                 System.out.println("before start game");
                 startGame();
                 System.out.println("after start game");
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.printf("%s", "nextLevel function in Main.java:");
-            } finally {
-                // Reset the flag to indicate that nextLevel is completed
-                nextLevelInProgress = false;
-                //gameLogicHandler.setGameRun(true);
-                System.out.println("nextlevel run completed");
-            }
-       // }).start();
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.printf("%s", "nextLevel function in Main.java:");
+        } finally {
+            // Reset the flag to indicate that nextLevel is completed
+            nextLevelInProgress = false;
+            //gameLogicHandler.setGameRun(true);
+            System.out.println("nextlevel run completed");
+        }
+        // }).start();
 
     }
 
@@ -219,10 +212,10 @@ public class GameStateManager {
 
                 ArrayList<BlockSerialize> blockSerializables = new ArrayList<>();
                 for (Block block : initGameComponent.getBlocks()) {
-                    if (block.isDestroyed) {
+                    if (block.isDestroyed()) {
                         continue;
                     }
-                    blockSerializables.add(new BlockSerialize(block.row, block.column, block.type));
+                    blockSerializables.add(new BlockSerialize(block.getRow(), block.getColumn(), block.getType()));
                 }
 
                 System.out.println(blockSerializables.size());
@@ -255,43 +248,42 @@ public class GameStateManager {
         LoadSave loadSave = new LoadSave();
         loadSave.read();
 
-        initGameComponent.setExistHeartBlock(loadSave.isExistHeartBlock);
-        gameLogicHandler.setGoldStatus(loadSave.isGoldStatus);
-        ballControl.setGoDownBall(loadSave.goDownBall);
-        ballControl.setGoRightBall(loadSave.goRightBall);
-        ballControl.setCollideToPaddle(loadSave.collideToPaddle);
-        ballControl.setCollideToPaddleAndMoveToRight(loadSave.collideTopPaddleAndMoveToRight);
-        ballControl.setCollideToRightWall(loadSave.collideToRightWall);
-        ballControl.setCollideToLeftWall(loadSave.collideToLeftWall);
-        ballControl.setCollideToRightBlock(loadSave.collideToRightBlock);
-        ballControl.setCollideToBottomBlock(loadSave.collideToBottomBlock);
-        ballControl.setCollideToLeftBlock(loadSave.collideToLeftBlock);
-        ballControl.setCollideToTopBlock(loadSave.collideToTopBlock);
-        gameLogicHandler.setLevel(loadSave.level);
-        gameLogicHandler.setScore(loadSave.score);
-        gameLogicHandler.setHeart(loadSave.heart);
-        gameLogicHandler.setRemainingBlockCount(loadSave.remainingBlockCount);
+        initGameComponent.setExistHeartBlock(loadSave.isExistHeartBlock());
+        gameLogicHandler.setGoldStatus(loadSave.isGoldStatus());
+        ballControl.setGoDownBall(loadSave.isGoDownBall());
+        ballControl.setGoRightBall(loadSave.isGoRightBall());
+        ballControl.setCollideToPaddle(loadSave.isCollideToPaddle());
+        ballControl.setCollideToPaddleAndMoveToRight(loadSave.isCollideTopPaddleAndMoveToRight());
+        ballControl.setCollideToRightWall(loadSave.isCollideToRightWall());
+        ballControl.setCollideToLeftWall(loadSave.isCollideToLeftWall());
+        ballControl.setCollideToRightBlock(loadSave.isCollideToRightBlock());
+        ballControl.setCollideToBottomBlock(loadSave.isCollideToBottomBlock());
+        ballControl.setCollideToLeftBlock(loadSave.isCollideToLeftBlock());
+        ballControl.setCollideToTopBlock(loadSave.isCollideToTopBlock());
+        gameLogicHandler.setLevel(loadSave.getLevel());
+        gameLogicHandler.setScore(loadSave.getScore());
+        gameLogicHandler.setHeart(loadSave.getHeart());
+        gameLogicHandler.setRemainingBlockCount(loadSave.getRemainingBlockCount());
 
-        ballControl.setxBall(loadSave.xBall);
-        ballControl.setyBall(loadSave.yBall);
+        ballControl.setxBall(loadSave.getxBall());
+        ballControl.setyBall(loadSave.getyBall());
 
-        initGameComponent.setxPaddle(loadSave.xPaddle);
-        initGameComponent.setyPaddle(loadSave.yPaddle);
-        initGameComponent.setCenterPaddleX(loadSave.centerPaddleX);
+        initGameComponent.setxPaddle(loadSave.getxPaddle());
+        initGameComponent.setyPaddle(loadSave.getyPaddle());
+        initGameComponent.setCenterPaddleX(loadSave.getCenterPaddleX());
 
-        gameLogicHandler.setTime(loadSave.time);
-        gameLogicHandler.setGoldTime(loadSave.goldTime);
-        ballControl.setvX(loadSave.vX);
+        gameLogicHandler.setTime(loadSave.getTime());
+        gameLogicHandler.setGoldTime(loadSave.getGoldTime());
+        ballControl.setvX(loadSave.getvX());
 
         initGameComponent.getBlocks().clear();
         initGameComponent.getChocos().clear();
         initGameComponent.getBombs().clear();
 
 
-        for (BlockSerialize ser : loadSave.blocks) {
+        for (BlockSerialize ser : loadSave.getBlocks()) {
             initGameComponent.getBlocks().add(new Block(ser.row, ser.j, ser.type));
         }
-
 
 
         try {

@@ -112,7 +112,7 @@ public class GameSceneController {
     /**
      * Displays the main game scene with the specified Scene object.
      * Initializes game components like blocks, ball, and paddle based on the game state.
-     * If the game is not loaded from a save, it initializes these components from scratch.
+     * If the game is not loaded from a save, it initializes these components from scratch,show level up as well as set level label
      * If the game is loaded from a save, it may initialize the ball and paddle if it's the first game open
      * and may add a "goldRoot" style to the gamePane if the GoldStatus is true.
      *
@@ -127,12 +127,16 @@ public class GameSceneController {
         heartLabel = (Label) gameScene.lookup("#heartLabel");
         levelLabel = (Label) gameScene.lookup("#levelLabel");
 
+        setLevelLabel("Level: " + gameLogicHandler.getLevel());
+
         //if is not load from save
         if (!gameStateManager.isLoadFromSave()) {
             //init game component like block,ball and paddle
             initGameComponent.initBall();
             initGameComponent.initPaddle();
             initGameComponent.initBoard();
+            gameLogicHandler.setRemainingBlockCount(initGameComponent.getBlocks().size());
+            new ScoreAnimation(getGamePane()).showMessage("Level Up :)", 300, 300);
         } else {
 
             //if the game first open,call initBall and initPaddle method
@@ -155,7 +159,7 @@ public class GameSceneController {
 
         // add blocks to the gamePane
         for (Block block : initGameComponent.getBlocks()) {
-            gamePane.getChildren().add(block.rect);
+            gamePane.getChildren().add(block.getRect());
         }
 
         gameScene.addEventFilter(KeyEvent.KEY_PRESSED, this::handleKeyPressed);
