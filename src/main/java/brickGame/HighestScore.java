@@ -2,11 +2,9 @@ package brickGame;
 
 import java.io.*;
 
-public class HighScore {
+public class HighestScore {
     public int highestScore;
-    private   final String SAVE_PATH_DIR = "save"; // Relative to the project directory
-
-    // Construct the complete path using the directory and filename
+    private   final String SAVE_PATH_DIR = "save";
     private final String SAVE_PATH = SAVE_PATH_DIR + "/highestScore.mdds";
 
     public void setHighestGameScore(int score) {
@@ -16,7 +14,6 @@ public class HighScore {
                 new File(SAVE_PATH_DIR).mkdirs();
                 File file = new File(SAVE_PATH);
                 ObjectOutputStream outputStream = null;
-
 
                 try {
                     outputStream = new ObjectOutputStream(new FileOutputStream(file));

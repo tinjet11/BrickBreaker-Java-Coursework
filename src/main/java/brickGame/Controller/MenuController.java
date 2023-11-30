@@ -110,7 +110,7 @@ public class MenuController {
         LoadSave loadSave = new LoadSave();
         loadSave.destroySaveGameFile();
 
-        HighScore highScore = new HighScore();
+        HighestScore highScore = new HighestScore();
         highestScore = highScore.getHighestGameScore();
         highScore.setHighestGameScore(gameLogicHandler.getScore());
 
