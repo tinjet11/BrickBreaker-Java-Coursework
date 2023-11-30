@@ -76,11 +76,14 @@ public class InitGameComponent {
                     } else {
                         type =Block.BLOCK_TYPE.BLOCK_NORMAL;
                     }
-
                 }
+//                else if (r % 10 == 5) {
+//                        type = Block.BLOCK_TYPE.BLOCK_CONCRETE;
+//                }
                 // TODO: add new block which will drop a item, need to catch it else will minus point
                 else {
-                    type = Block.BLOCK_TYPE.BLOCK_NORMAL;
+                  //  type = Block.BLOCK_TYPE.BLOCK_NORMAL;
+                    type = Block.BLOCK_TYPE.BLOCK_CONCRETE;
                 }
                 getBlocks().add(new Block(j, i, type));
                 //System.out.println("colors " + r % (colors.length));

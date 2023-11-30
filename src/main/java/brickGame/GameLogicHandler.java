@@ -3,12 +3,15 @@ package brickGame;
 import brickGame.Controller.GameSceneController;
 import brickGame.DroppableItem.Bonus;
 import brickGame.DroppableItem.Penalty;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
+import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-
+import java.util.List;
 
 
 public class GameLogicHandler implements Actionable {
@@ -29,7 +32,10 @@ public class GameLogicHandler implements Actionable {
     private InitGameComponent initGameComponent;
     private GameStateManager gameStateManager;
 
-    public void setGameSceneController(GameSceneController gameSceneController) {this.gameSceneController = gameSceneController;}
+    public void setGameSceneController(GameSceneController gameSceneController) {
+        this.gameSceneController = gameSceneController;
+    }
+
     public void setBallControl(BallControl ballControl) {
         this.ballControl = ballControl;
     }
@@ -54,19 +60,26 @@ public class GameLogicHandler implements Actionable {
     private GameEngine engine;
 
 
+    private void onHitAction(Block block) {
+        setScore(getScore() + 1);
+        new Score(gameSceneController.getGamePane()).show(block.x, block.y, 1);
+        block.rect.setVisible(false);
+        block.isDestroyed = true;
+        remainingBlockCount--;
+    }
 
     @Override
     public void onUpdate() {
         Platform.runLater(() -> {
-                    gameSceneController.setScoreLabel("Score: " + getScore());
-                    gameSceneController.setHeartLabel("Heart : " + getHeart());
+            gameSceneController.setScoreLabel("Score: " + getScore());
+            gameSceneController.setHeartLabel("Heart : " + getHeart());
 
-                    initGameComponent.getPaddle().setX(initGameComponent.getxPaddle());
-                    initGameComponent.getPaddle().setY(initGameComponent.getyPaddle());
+            initGameComponent.getPaddle().setX(initGameComponent.getxPaddle());
+            initGameComponent.getPaddle().setY(initGameComponent.getyPaddle());
 
-                    ballControl.getBall().setCenterX(ballControl.getxBall());
-                    ballControl.getBall().setCenterY(ballControl.getyBall());
-                });
+            ballControl.getBall().setCenterX(ballControl.getxBall());
+            ballControl.getBall().setCenterY(ballControl.getyBall());
+        });
 
         if (ballControl.getyBall() >= Block.getPaddingTop() && ballControl.getyBall() <= (Block.getHeight() * (getLevel() + 1)) + Block.getPaddingTop()) {
             Iterator<Block> iterator = initGameComponent.getBlocks().iterator();
@@ -76,61 +89,95 @@ public class GameLogicHandler implements Actionable {
                     Block.HIT_STATE hitCode = block.checkHitToBlock(ballControl.getxBall(), ballControl.getyBall());
                     if (hitCode != Block.HIT_STATE.NO_HIT) {
 
-                        setScore(getScore() + 1);
-
-                        new Score(gameSceneController.getGamePane()).show(block.x, block.y, 1);
-
-                        block.rect.setVisible(false);
-                        block.isDestroyed = true;
-                        remainingBlockCount--;
+//                        setScore(getScore() + 1);
+//                        new Score(gameSceneController.getGamePane()).show(block.x, block.y, 1);
+//                        block.rect.setVisible(false);
+//                        block.isDestroyed = true;
+//                        remainingBlockCount--;
                         ballControl.resetcollideFlags();
 
                         if (block.type == Block.BLOCK_TYPE.BLOCK_CHOCO) {
+                            onHitAction(block);
                             final Bonus choco = new Bonus(block.row, block.column);
                             choco.setTimeCreated(getTime());
                             Platform.runLater(() -> gameSceneController.getGamePane().getChildren().add(choco.element));
 
                             initGameComponent.getChocos().add(choco);
+                            iterator.remove();
                         }
                         //new bomb
                         if (block.type == Block.BLOCK_TYPE.BLOCK_BOMB) {
+                            onHitAction(block);
                             final Penalty bomb = new Penalty(block.row, block.column);
                             bomb.setTimeCreated(getTime());
                             Platform.runLater(() -> gameSceneController.getGamePane().getChildren().add(bomb.element));
 
                             initGameComponent.getBombs().add(bomb);
+                            iterator.remove();
                         }
 
                         if (block.type == Block.BLOCK_TYPE.BLOCK_STAR) {
+                            onHitAction(block);
                             setGoldTime(getTime());
 
-                            if(!isGoldStatus){
+                            if (!isGoldStatus) {
                                 Platform.runLater(() -> {
                                     ballControl.getBall().setFill(new ImagePattern(new Image(getClass().getResourceAsStream("/images/goldball.png"))));
                                     System.out.println("gold ball");
                                     gameSceneController.getGamePane().getStyleClass().add("goldRoot");
                                 });
                             }
-                                setGoldStatus(true);
+                            setGoldStatus(true);
+                            iterator.remove();
                         }
 
                         if (block.type == Block.BLOCK_TYPE.BLOCK_HEART) {
+                            onHitAction(block);
                             heart++;
                             System.out.println("heart hitted");
+                            iterator.remove();
                         }
 
-                     //  Platform.runLater(() -> {
-                            if (hitCode == Block.HIT_STATE.HIT_RIGHT) {
-                                ballControl.setCollideToRightBlock(true);
-                            } else if (hitCode == Block.HIT_STATE.HIT_BOTTOM) {
-                                ballControl.setCollideToBottomBlock(true);
-                            } else if (hitCode == Block.HIT_STATE.HIT_LEFT) {
-                                ballControl.setCollideToLeftBlock(true);
-                            } else if (hitCode == Block.HIT_STATE.HIT_TOP) {
-                                ballControl.setCollideToTopBlock(true);
-                            }
-                    //    });
-                        iterator.remove();
+                        if (block.type == Block.BLOCK_TYPE.BLOCK_CONCRETE) {
+                            System.out.println("Concrete hit");
+                            Platform.runLater(() -> {
+                                block.isDestroyed = true;
+                                block.type = Block.BLOCK_TYPE.BLOCK_NORMAL;
+
+                                Image image = new Image(getClass().getResourceAsStream("/images/brick.jpg"));
+                                ImagePattern imagePattern = new ImagePattern(image);
+
+                                block.rect.setFill(imagePattern);
+                                System.out.println("Block replaced with normal block");
+
+                                PauseTransition pause = new PauseTransition(Duration.millis(100));
+                                pause.setOnFinished(event -> {
+                                    block.isDestroyed = false;
+                                    System.out.println("isDestroyed set to false");
+                                });
+                                pause.play();
+                            });
+                        }
+
+
+                        if (block.type == Block.BLOCK_TYPE.BLOCK_NORMAL) {
+                            System.out.println("Normal hit");
+                            onHitAction(block);
+                            iterator.remove();
+                        }
+
+
+                        if (hitCode == Block.HIT_STATE.HIT_RIGHT) {
+                            ballControl.setCollideToRightBlock(true);
+                        } else if (hitCode == Block.HIT_STATE.HIT_BOTTOM) {
+                            ballControl.setCollideToBottomBlock(true);
+                        } else if (hitCode == Block.HIT_STATE.HIT_LEFT) {
+                            ballControl.setCollideToLeftBlock(true);
+                        } else if (hitCode == Block.HIT_STATE.HIT_TOP) {
+                            ballControl.setCollideToTopBlock(true);
+                        }
+
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -139,19 +186,18 @@ public class GameLogicHandler implements Actionable {
                     break;
                 }
             }
-
         }
     }
 
-    public void stopEngine(){
+    public void stopEngine() {
         engine.stop();
     }
 
-    public void startEngine(){
+    public void startEngine() {
         engine.start();
     }
 
-    public void setUpEngine(){
+    public void setUpEngine() {
         engine = new GameEngine();
         engine.setOnAction(this);
         engine.setFps(120);
@@ -189,7 +235,7 @@ public class GameLogicHandler implements Actionable {
         if (level != endLevel && isGameRun) {
             checkDestroyedCount();
         }
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             ballControl.setPhysicsToBall();
         });
 
@@ -219,7 +265,7 @@ public class GameLogicHandler implements Actionable {
             if (choco.getY() > initGameComponent.getSCENE_HEIGHT() || choco.isTaken()) {
                 continue;
             }
-            if (choco.getY() >= initGameComponent.getyPaddle() && choco.getY() <=  initGameComponent.getyPaddle() + initGameComponent.getPADDLE_HEIGHT() && choco.getX() >=  initGameComponent.getxPaddle() && choco.getX() <= initGameComponent.getxPaddle() + initGameComponent.getPADDLE_WIDTH()) {
+            if (choco.getY() >= initGameComponent.getyPaddle() && choco.getY() <= initGameComponent.getyPaddle() + initGameComponent.getPADDLE_HEIGHT() && choco.getX() >= initGameComponent.getxPaddle() && choco.getX() <= initGameComponent.getxPaddle() + initGameComponent.getPADDLE_WIDTH()) {
 
                 if (choco.element != null) {
                     choco.setTaken(true);
@@ -246,13 +292,13 @@ public class GameLogicHandler implements Actionable {
 
             if (bomb.getY() > initGameComponent.getSCENE_HEIGHT()) {
                 setScore(getScore() - 10);
-                new Score(gameSceneController.getGamePane()).show(initGameComponent.getSCENE_WIDTH()/2, initGameComponent.getSCENE_HEIGHT()/2, -10);
+                new Score(gameSceneController.getGamePane()).show(initGameComponent.getSCENE_WIDTH() / 2, initGameComponent.getSCENE_HEIGHT() / 2, -10);
                 penaltyIterator.remove();
                 continue;
             }
 
 
-            if (bomb.getY() >= initGameComponent.getyPaddle() && bomb.getY() <= initGameComponent.getyPaddle() + initGameComponent.getPADDLE_HEIGHT() && bomb.getX() >=  initGameComponent.getxPaddle() && bomb.getX() <= initGameComponent.getxPaddle() + initGameComponent.getPADDLE_WIDTH()) {
+            if (bomb.getY() >= initGameComponent.getyPaddle() && bomb.getY() <= initGameComponent.getyPaddle() + initGameComponent.getPADDLE_HEIGHT() && bomb.getX() >= initGameComponent.getxPaddle() && bomb.getX() <= initGameComponent.getxPaddle() + initGameComponent.getPADDLE_WIDTH()) {
 
                 if (bomb.element != null) {
                     bomb.setTaken(true);

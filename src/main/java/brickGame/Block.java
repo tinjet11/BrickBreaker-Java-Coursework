@@ -32,6 +32,8 @@ public class Block implements Serializable {
     private  final String IMAGE_PATH_HEART = "/images/heart.jpg";
     private  final String IMAGE_PATH_STAR = "/images/star.jpg";
     private  final String IMAGE_PATH_BOMB = "/images/penalty.jpeg";
+
+    private  final String IMAGE_PATH_CONCRETE = "/images/brick-concrete.jpeg";
     private  final String IMAGE_PATH_DEFAULT = "/images/brick.jpg";
 
 
@@ -49,6 +51,7 @@ public class Block implements Serializable {
         BLOCK_STAR,
         BLOCK_HEART,
 
+        BLOCK_CONCRETE,
         BLOCK_BOMB,
     }
 
@@ -72,11 +75,10 @@ public class Block implements Serializable {
 
         ImagePattern pattern = loadImagePattern();
         rect.setFill(pattern);
-
     }
 
 
-    private ImagePattern loadImagePattern() {
+    public ImagePattern loadImagePattern() {
         String imagePath;
         switch (type) {
             case BLOCK_CHOCO:
@@ -91,6 +93,9 @@ public class Block implements Serializable {
             case BLOCK_BOMB:
                 imagePath = IMAGE_PATH_BOMB;
                 break;
+            case BLOCK_CONCRETE:
+                imagePath = IMAGE_PATH_CONCRETE;
+                break;
             default:
                 imagePath = IMAGE_PATH_DEFAULT;
         }
@@ -100,6 +105,7 @@ public class Block implements Serializable {
     }
 
     public HIT_STATE checkHitToBlock(double xBall, double yBall) {
+
         if (isDestroyed) {
             return HIT_STATE.NO_HIT;
         }
