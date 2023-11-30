@@ -90,7 +90,7 @@ public class MenuController {
     @FXML
     public void onOpenSettings() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/Settings.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/Settings.fxml"));
             fxmlLoader.setControllerFactory(c -> {
                 return new SettingsController(primaryStage.getScene());
             });

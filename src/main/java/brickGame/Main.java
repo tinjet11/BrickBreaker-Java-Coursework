@@ -56,7 +56,7 @@ public class Main extends Application {
     }
 
     private void initializeMenuScene() {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("fxml/Menu.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/Menu.fxml"));
         Scene menuScene = null;
         fxmlLoader.setControllerFactory(c -> {
             return new MenuController();

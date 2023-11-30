@@ -90,7 +90,7 @@ public class GameStateManager {
                     gameSceneController.showWinScene();
                 }else{
 
-                    FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("fxml/GameScene.fxml"));
+                    FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("/fxml/GameScene.fxml"));
                     fxmlLoader1.setControllerFactory(c -> gameSceneController);
 
                     Scene gameScene = new Scene(fxmlLoader1.load());

@@ -68,7 +68,7 @@ public class GameSceneController {
     private Scene loadMenuScene(){
         Scene menuScene = null;
         try{
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/brickGame/fxml/Menu.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Menu.fxml"));
             fxmlLoader.setControllerFactory(c -> {
                 return menuController = new MenuController();
             });
