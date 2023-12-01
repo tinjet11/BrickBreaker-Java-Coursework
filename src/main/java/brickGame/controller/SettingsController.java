@@ -1,8 +1,7 @@
-package brickGame.Controller;
+package brickGame.controller;
 
-import brickGame.Controller.GameSceneController;
-import brickGame.GameLogicHandler;
-import brickGame.GameStateManager;
+import brickGame.handler.GameLogicHandler;
+import brickGame.model.GameStateManager;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;

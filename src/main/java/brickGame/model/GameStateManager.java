@@ -1,6 +1,9 @@
-package brickGame;
+package brickGame.model;
 
-import brickGame.Controller.GameSceneController;
+import brickGame.serialization.BlockSerialize;
+import brickGame.serialization.LoadSave;
+import brickGame.controller.GameSceneController;
+import brickGame.handler.GameLogicHandler;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -56,7 +59,6 @@ public class GameStateManager {
 
     private boolean gameFirstOpen = true;
 
-    private Scene gameScene;
     private BallControl ballControl;
     private GameLogicHandler gameLogicHandler;
     private GameSceneController gameSceneController;
@@ -140,7 +142,7 @@ public class GameStateManager {
                 initGameComponent.setExistHeartBlock(false);
                 initGameComponent.setExistBombBlock(false);
 
-                gameLogicHandler.setHitTime(0);
+                //gameLogicHandler.setHitTime(0);
                 gameLogicHandler.setTime(0);
                 gameLogicHandler.setGoldTime(0);
 
@@ -313,7 +315,7 @@ public class GameStateManager {
 
             initGameComponent.setExistHeartBlock(false);
             initGameComponent.setExistBombBlock(false);
-            gameLogicHandler.setHitTime(0);
+            //gameLogicHandler.setHitTime(0);
             gameLogicHandler.setTime(0);
             gameLogicHandler.setGoldTime(0);
 

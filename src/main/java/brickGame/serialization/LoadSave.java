@@ -1,4 +1,4 @@
-package brickGame;
+package brickGame.serialization;
 
 import java.io.File;
 import java.io.FileInputStream;

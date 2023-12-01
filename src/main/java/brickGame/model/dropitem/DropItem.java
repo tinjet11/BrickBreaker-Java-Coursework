@@ -1,10 +1,10 @@
-package brickGame.DroppableItem;
+package brickGame.model.dropitem;
 
 import javafx.scene.shape.Rectangle;
 
 import java.io.Serializable;
 
-import static brickGame.Block.*;
+import static brickGame.model.Block.*;
 
 public abstract class DropItem implements Serializable {
     public Rectangle element;

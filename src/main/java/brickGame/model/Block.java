@@ -1,4 +1,4 @@
-package brickGame;
+package brickGame.model;
 
 
 import javafx.scene.image.Image;
@@ -25,7 +25,7 @@ public class Block implements Serializable {
     private  final String IMAGE_PATH_CHOCO = "/images/choco.jpg";
     private  final String IMAGE_PATH_HEART = "/images/heart.jpg";
     private  final String IMAGE_PATH_STAR = "/images/star.jpg";
-    private  final String IMAGE_PATH_BOMB = "/images/penalty.jpeg";
+    private  final String IMAGE_PATH_PENALTY = "/images/penalty.jpeg";
     private  final String IMAGE_PATH_CONCRETE = "/images/brick-concrete.jpeg";
     private  final String IMAGE_PATH_DEFAULT = "/images/brick.jpg";
 
@@ -100,7 +100,7 @@ public class Block implements Serializable {
         BLOCK_STAR,
         BLOCK_HEART,
         BLOCK_CONCRETE,
-        BLOCK_BOMB,
+        BLOCK_PENALTY,
     }
 
     public Block(int row, int column, BLOCK_TYPE type) {
@@ -137,8 +137,8 @@ public class Block implements Serializable {
             case BLOCK_STAR:
                 imagePath = IMAGE_PATH_STAR;
                 break;
-            case BLOCK_BOMB:
-                imagePath = IMAGE_PATH_BOMB;
+            case BLOCK_PENALTY:
+                imagePath = IMAGE_PATH_PENALTY;
                 break;
             case BLOCK_CONCRETE:
                 imagePath = IMAGE_PATH_CONCRETE;

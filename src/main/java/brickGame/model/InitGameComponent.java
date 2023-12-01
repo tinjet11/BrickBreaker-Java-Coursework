@@ -1,7 +1,8 @@
-package brickGame;
+package brickGame.model;
 
-import brickGame.DroppableItem.Bonus;
-import brickGame.DroppableItem.Penalty;
+import brickGame.handler.GameLogicHandler;
+import brickGame.model.dropitem.Bonus;
+import brickGame.model.dropitem.Bomb;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -10,7 +11,7 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static brickGame.Block.BLOCK_HEIGHT;
+import static brickGame.model.Block.BLOCK_HEIGHT;
 
 public class InitGameComponent {
 
@@ -25,8 +26,8 @@ public class InitGameComponent {
         return instance;
     }
 
-    private  BallControl ballControl;
-    private  GameLogicHandler gameLogicHandler;
+    private BallControl ballControl;
+    private GameLogicHandler gameLogicHandler;
 
 
 
@@ -48,7 +49,7 @@ public class InitGameComponent {
     private ArrayList<Block> blocks = new ArrayList<>();
     private ArrayList<Bonus> chocos = new ArrayList<>();
 
-    private ArrayList<Penalty> bombs = new ArrayList<>();
+    private ArrayList<Bomb> bombs = new ArrayList<>();
 
     //set up the brick in the game according to the current level
     public void initBoard() {
@@ -73,7 +74,7 @@ public class InitGameComponent {
                 }
                 else if (r % 10 == 4) {
                     if (!isExistBombBlock) {
-                        type = Block.BLOCK_TYPE.BLOCK_BOMB;
+                        type = Block.BLOCK_TYPE.BLOCK_PENALTY;
                         setExistBombBlock(true);
                     } else {
                         type =Block.BLOCK_TYPE.BLOCK_NORMAL;
@@ -225,7 +226,7 @@ public class InitGameComponent {
         this.chocos = chocos;
     }
 
-    public ArrayList<Penalty> getBombs() {
+    public ArrayList<Bomb> getBombs() {
         return bombs;
     }
 

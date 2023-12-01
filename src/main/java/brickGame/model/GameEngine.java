@@ -1,6 +1,7 @@
-package brickGame;
+package brickGame.model;
 
 
+import brickGame.handler.Actionable;
 import javafx.application.Platform;
 
 import java.util.concurrent.ExecutorService;

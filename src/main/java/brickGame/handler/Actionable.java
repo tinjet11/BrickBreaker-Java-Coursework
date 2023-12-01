@@ -1,4 +1,4 @@
-package brickGame;
+package brickGame.handler;
 
 public interface Actionable {
     void onUpdate();

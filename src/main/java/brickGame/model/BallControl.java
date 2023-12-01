@@ -1,5 +1,6 @@
-package brickGame;
+package brickGame.model;
 
+import brickGame.handler.GameLogicHandler;
 import javafx.scene.shape.Circle;
 
 /**
@@ -152,7 +153,7 @@ public class BallControl {
 
         if (getyBall() >= initGameComponent.getyPaddle() - initGameComponent.getBALL_RADIUS()) {
             if (getxBall() >= initGameComponent.getxPaddle() && getxBall() <= initGameComponent.getxPaddle() + initGameComponent.getPADDLE_WIDTH()) {
-                gameLogicHandler.setHitTime(gameLogicHandler.getTime());
+                //gameLogicHandler.setHitTime(gameLogicHandler.getTime());
                 resetcollideFlags();
                 setCollideToPaddle(true);
                 setGoDownBall(false);

@@ -1,13 +1,12 @@
-package brickGame.DroppableItem;
+package brickGame.model.dropitem;
 
-import brickGame.DroppableItem.DropItem;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
-public class Penalty extends DropItem {
-    public Penalty(int row, int column) {
+public class Bomb extends DropItem {
+    public Bomb(int row, int column) {
         super(row, column);
     }
 

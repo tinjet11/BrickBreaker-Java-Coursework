@@ -1,4 +1,4 @@
-package brickGame.DroppableItem;
+package brickGame.model.dropitem;
 
 import javafx.application.Platform;
 import javafx.scene.image.Image;
@@ -92,4 +92,5 @@ public class Bonus extends DropItem {
             element.setFill(new ImagePattern(new Image(getClass().getResourceAsStream(url))));
         });
     }
+
 }

@@ -1,4 +1,6 @@
-package brickGame;
+package brickGame.serialization;
+
+import brickGame.model.Block;
 
 import java.io.Serializable;
 

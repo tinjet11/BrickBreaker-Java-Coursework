@@ -1,4 +1,4 @@
-package brickGame;
+package brickGame.model;
 
 import javafx.application.Platform;
 import javafx.scene.control.Label;
