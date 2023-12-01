@@ -1,8 +1,11 @@
 package brickGame;
 
-import brickGame.Controller.GameSceneController;
-import brickGame.Controller.MenuController;
-import brickGame.Controller.SettingsController;
+import brickGame.controller.GameSceneController;
+import brickGame.controller.MenuController;
+import brickGame.handler.GameLogicHandler;
+import brickGame.model.BallControl;
+import brickGame.model.GameStateManager;
+import brickGame.model.InitGameComponent;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -11,15 +14,13 @@ import javafx.stage.Stage;
 import java.io.*;
 
 public class Main extends Application {
-
     private  Stage primaryStage;
-
     private GameLogicHandler gameLogicHandler;
     private BallControl ballControl;
     private GameSceneController gameSceneController;
-    private  GameStateManager gameStateManager;
-
+    private GameStateManager gameStateManager;
     private InitGameComponent initGameComponent;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         gameLogicHandler = GameLogicHandler.getInstance();
