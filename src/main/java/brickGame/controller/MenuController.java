@@ -16,7 +16,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-
+/**
+ * The MenuController class is responsible for managing the main menu interactions and controlling the game's menu scenes.
+ * It handles actions such as starting or resuming the game, loading saved games, exiting the application, and opening the settings.
+ * Additionally, it displays result scenes upon winning or losing the game.
+ *
+ * @author Leong Tin Jet
+ * @version 1.0
+ */
 public class MenuController {
 
     private GameLogicHandler gameLogicHandler;
@@ -29,6 +36,8 @@ public class MenuController {
     private Stage primaryStage;
 
     private int highestScore;
+
+
     public MenuController(){
         gameLogicHandler = GameLogicHandler.getInstance();
         gameStateManager = GameStateManager.getInstance();
@@ -41,14 +50,18 @@ public class MenuController {
     @FXML
     private VBox resultBox;
 
-    @FXML
-    private Button loadButton;
-
+    /**
+     * Exits the application when the exit button is clicked.
+     */
     @FXML
     public void onExit() {
         System.exit(0);
     }
 
+    /**
+     * Handles the action when the start or resume button is clicked.
+     * Depending on the current game state, it starts a new game, resumes a paused game, or restarts the game after a game over or win.
+     */
     @FXML
     public void onStartOrResume() {
         gameState = gameStateManager.getGameState();
@@ -68,6 +81,11 @@ public class MenuController {
         }
     }
 
+    /**
+     * Handles the action when the load button is clicked.
+     * It checks for saved games and loads an existing game,
+     * if no saved game exists then prompts the user to start a new game.
+     */
     @FXML
     public void onLoad(){
         LoadSave loadSave = new LoadSave();
@@ -91,6 +109,9 @@ public class MenuController {
         }
     }
 
+    /**
+     * Handles the action when the settings button is clicked. It opens the settings scene.
+     */
     @FXML
     public void onOpenSettings() {
         try {
@@ -108,6 +129,13 @@ public class MenuController {
         }
     }
 
+    /**
+     * Displays the result scene based on the game outcome (win or lose) and updates the highest score.
+     *
+     * @param state The game outcome, either "Win" or "Lose".
+     * @param winMenuScene The scene to be displayed after winning or losing.
+     * @throws IOException If an I/O error occurs while loading the result scene.
+     */
     public void showMenuScene(String state, Scene winMenuScene) throws IOException {
 
         //destroy saveGame file if player lose or win

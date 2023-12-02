@@ -7,13 +7,24 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+
+/**
+ * The SettingsController class is responsible for managing the game settings UI,
+ * allowing users to customize parameters such as initial hearts and end levels.
+ * It provides methods for incrementing and decrementing heart and level values,
+ * as well as navigating back to the main menu.
+ * <p>
+ * This controller interacts with the GameLogicHandler and GameSceneController
+ * to update and retrieve game settings. It also handles the transition back to the main menu scene.
+ * </p>
+ * <p>
+ * The class utilizes JavaFX components and FXML for scene setup and UI interactions.
+ * </p>
+ *
+ * @author Leong Tin Jet
+ * @version 1.0
+ */
 public class SettingsController {
-
-    @FXML
-    private Slider heartNumberSlider;
-
-    @FXML
-    private ScrollBar endLevelScrollbar;
 
     @FXML
     private Label initialHeartLabel;
@@ -28,27 +39,28 @@ public class SettingsController {
     private int currentHeart;
     private int currentEndLevel;
 
-    @FXML
-    private CheckBox soundCheckBox;
-
     private GameLogicHandler gameLogicHandler;
-    private GameStateManager gameStateManager;
-
     private GameSceneController gameSceneController;
-
-    private GameStateManager.GameState gameState;
 
     private Scene menuScene;
 
     private Stage primaryStage;
+
+    /**
+     * Creates an instance of SettingsController with the specified menu scene.
+     *
+     * @param menuScene The Scene object representing the main menu scene.
+     */
     public SettingsController(Scene menuScene) {
         gameLogicHandler = GameLogicHandler.getInstance();
-        gameStateManager = GameStateManager.getInstance();
         gameSceneController = GameSceneController.getInstance();
         primaryStage = gameSceneController.getPrimaryStage();
         this.menuScene = menuScene;
     }
 
+    /**
+     * Initializes the settings UI with the current initial heart and end level values.
+     */
     @FXML
     public void initialize(){
         currentEndLevel = gameLogicHandler.getEndLevel();
@@ -56,6 +68,11 @@ public class SettingsController {
         initialHeartLabel.setText(String.valueOf(gameLogicHandler.getInitialHeart()));
         endLevelLabel.setText(String.valueOf(gameLogicHandler.getEndLevel()));
     }
+
+
+    /**
+     * Navigates back to the main menu scene when the back button is clicked.
+     */
     @FXML
     public void back() {
         try {
@@ -67,9 +84,10 @@ public class SettingsController {
         }
     }
 
-
-
-
+    /**
+     * Increments the initial heart value when the increment heart button is clicked.
+     * Only allows incrementing when the game is not currently running.
+     */
     @FXML
     private void incrementHeart() {
 
@@ -80,9 +98,12 @@ public class SettingsController {
                 gameLogicHandler.setInitialHeart(currentHeart);
             }
         }
-
     }
 
+    /**
+     * Decrements the initial heart value when the decrement heart button is clicked.
+     * Only allows decrementing when the game is not currently running.
+     */
     @FXML
     private void decrementHeart() {
         if (!gameLogicHandler.isGameRun()) {
@@ -94,7 +115,10 @@ public class SettingsController {
         }
     }
 
-
+    /**
+     * Increments the end level value when the increment level button is clicked.
+     * Only allows incrementing when the game is not currently running.
+     */
     @FXML
     private void incrementLevel() {
         if (!gameLogicHandler.isGameRun()) {
@@ -107,6 +131,10 @@ public class SettingsController {
 
     }
 
+    /**
+     * Decrements the end level value when the decrement level button is clicked.
+     * Only allows decrementing when the game is not currently running.
+     */
     @FXML
     private void decrementLevel() {
         if (!gameLogicHandler.isGameRun()) {
