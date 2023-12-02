@@ -7,73 +7,37 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.Random;
 
-//public class Bonus implements Serializable {
-//    public Rectangle choco;
-//
-//    private double x;
-//    private double y;
-//    private long timeCreated;
-//    private boolean taken = false;
-//
-//    public Bonus(int row, int column) {
-//        x = (column * (Block.getWidth())) + Block.getPaddingH() + (Block.getWidth() / 2) - 15;
-//        y = (row * (Block.getHeight())) + Block.getPaddingTop() + (Block.getHeight() / 2) - 15;
-//
-//        draw();
-//    }
-//
-//    private void draw() {
-//        Platform.runLater(()->{
-//            choco = new Rectangle();
-//            choco.setWidth(30);
-//            choco.setHeight(30);
-//            choco.setX(x);
-//            choco.setY(y);
-//
-//            String url;
-//            if (new Random().nextInt(20) % 2 == 0) {
-//                url = "/bonus1.png";
-//            } else {
-//                url = "/bonus2.png";
-//            }
-//
-//            choco.setFill(new ImagePattern(new Image(url)));
-//        });
-//
-//    }
-//
-//    public long getTimeCreated() {
-//        return timeCreated;
-//    }
-//
-//    public void setTimeCreated(long timeCreated) {
-//        this.timeCreated = timeCreated;
-//    }
-//
-//    public boolean isTaken() {
-//        return taken;
-//    }
-//
-//    public void setTaken(boolean taken) {
-//        this.taken = taken;
-//    }
-//
-//    public double getX(){
-//        return  x;
-//    }
-//    public void setY(double y){
-//        this.y = y;
-//    }
-//    public double getY(){
-//        return  y;
-//    }
-//}
-
+/**
+ * The Bonus class represents a specific type of drop item in the game, providing bonuses to the player.
+ * It extends the DropItem class and implements the draw method to display the visual representation
+ * of the bonus on the game screen.
+ * <p>
+ * Bonuses appear when Choco blocks are destroyed, and they will increase the score by 3 if player able to catch it
+ * </p>
+ * <p>
+ * This class uses JavaFX for creating the visual appearance of the bonus, with the bonus being represented
+ * as a rectangle filled with an image pattern. The image pattern is randomly selected from two possible
+ * bonus images.
+ * </p>
+ * <p>
+ * The Bonus class is designed to be instantiated and used within the game logic to provide dynamic and
+ * interactive gameplay elements.
+ * </p>
+ *
+ * @author Leong Tin Jet
+ * @version 1.0
+ */
 public class Bonus extends DropItem {
     public Bonus(int row, int column) {
         super(row, column);
     }
 
+    /**
+     * Overrides the draw method from the DropItem class and provide implementation to visually represent the bonus.
+     * The method creates a rectangle element filled with an image pattern, randomly selected
+     * from two possible bonus images. The draw operation is performed on the JavaFX application
+     * thread using Platform.runLater.
+     */
     @Override
     protected void draw() {
         Platform.runLater(() -> {
