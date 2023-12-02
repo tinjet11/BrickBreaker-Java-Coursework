@@ -7,6 +7,25 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 
+/**
+ * The LoadSave class provides functionality for loading and saving game states.
+ * It reads and writes the game state to a serialized file, allowing players to continue their progress later.
+ * The class includes methods for destroying the save file, checking its existence, and reading the saved data.
+ * <p>
+ * The saved game state includes information such as the level, score, heart count, remaining block count,
+ * ball and paddle positions, time, gold status, and collision states.
+ * </p>
+ * <p>
+ * The class uses an ArrayList of {@link BlockSerialize} objects to represent the state of each block in the game.
+ * </p>
+ * <p>
+ * This class is part of the game's serialization mechanism and implements methods for managing the save file.
+ * </p>
+ *
+ * @author [Your Name]
+ * @version 1.0
+ * @since [Date of creation]
+ */
 public class LoadSave {
 
     private final String SAVE_PATH_DIR = "save"; // Relative to the project directory
@@ -40,12 +59,21 @@ public class LoadSave {
     private double vX;
     private ArrayList<BlockSerialize> blocks = new ArrayList<BlockSerialize>();
 
+    /**
+     * Destroys the existing save game file. This method is called when the player win or lose the game.
+     */
     public void destroySaveGameFile(){
         File saveFile = new File(SAVE_PATH);
         if (saveFile.exists()) {
            saveFile.delete();
         }
     }
+
+    /**
+     * Checks if the save game file exists.
+     *
+     * @return True if the save file exists; otherwise, false.
+     */
     public boolean checkSaveGameFileExist() {
         File saveFile = new File(SAVE_PATH);
         if (saveFile.exists()) {
@@ -56,6 +84,10 @@ public class LoadSave {
 
     }
 
+    /**
+     * Reads the saved game state from the serialized file.
+     * If the file exists, it reads the data and updates the corresponding fields in the class.
+     */
     public void read() {
         File saveFile = new File(SAVE_PATH);
         if (saveFile.exists()) {
@@ -112,8 +144,6 @@ public class LoadSave {
             // Handle the case when the save file does not exist
             System.out.println("FIle didn't exist in LOAD save function");
         }
-
-
     }
 
     public boolean isExistHeartBlock() {
