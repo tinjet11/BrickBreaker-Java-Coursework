@@ -5,6 +5,8 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
+import static brickGame.Constants.IMAGE_PATH_BOMB;
+
 /**
  * The Bomb class represents a specific type of drop item in the game, providing Bomb to the player.
  * It extends the DropItem class and implements the draw method to display the visual representation
@@ -44,9 +46,7 @@ public class Bomb extends DropItem {
             element.setX(getX());
             element.setY(getY());
 
-            String url = "/images/bomb.png"; // Adjust the image path for penalty
-
-            element.setFill(new ImagePattern(new Image(getClass().getResourceAsStream(url))));
+            element.setFill(new ImagePattern(new Image(getClass().getResourceAsStream(IMAGE_PATH_BOMB))));
         });
     }
 }

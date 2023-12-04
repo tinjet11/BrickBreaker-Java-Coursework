@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import java.io.*;
 import java.util.ArrayList;
 
+import static brickGame.Constants.*;
+
 /**
  * The GameStateManager class manages the state of the game, including saving, loading, starting, and restarting the game.
  * It handles the game logic, user input, and interaction with other components.
@@ -31,15 +33,6 @@ public class GameStateManager {
         GAME_OVER,
         WIN,
     }
-    /**
-     * The directory path for saving game files.
-     */
-    private final String SAVE_PATH_DIR = "save"; // Relative to the project directory
-
-    /**
-     * The complete path for saving the game state file.
-     */
-    private final String SAVE_PATH = SAVE_PATH_DIR + "/save.mdds";
 
     /**
      * The current state of the game.
@@ -91,7 +84,7 @@ public class GameStateManager {
             if (gameLogicHandler.getLevel() == gameLogicHandler.getEndLevel()) {
                 gameSceneController.showWinScene();
             } else {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameScene.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(GAME_SCENE_FXML));
                 fxmlLoader.setControllerFactory(c -> gameSceneController);
 
                 Scene gameScene = new Scene(fxmlLoader.load());

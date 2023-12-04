@@ -15,6 +15,8 @@ import javafx.scene.paint.ImagePattern;
 
 import java.util.Iterator;
 
+import static brickGame.Constants.BALL_IMAGE_PATH;
+import static brickGame.Constants.GOLD_ROOT;
 import static brickGame.model.Block.BLOCK_HEIGHT;
 import static brickGame.model.Block.BLOCK_PADDING_TOP;
 
@@ -186,8 +188,8 @@ public class GameLogicHandler implements Actionable {
     private void handleGoldStatus() {
         if (shouldRemoveGold()) {
             Platform.runLater(() -> {
-                ballControl.getBall().setFill(new ImagePattern(new Image(getClass().getResourceAsStream("/images/ball.png"))));
-                gameSceneController.getGamePane().getStyleClass().remove("goldRoot");
+                ballControl.getBall().setFill(new ImagePattern(new Image(getClass().getResourceAsStream(BALL_IMAGE_PATH))));
+                gameSceneController.getGamePane().getStyleClass().remove(GOLD_ROOT);
                 setGoldStatus(false);
             });
         }

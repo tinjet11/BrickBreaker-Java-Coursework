@@ -7,6 +7,8 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.Random;
 
+import static brickGame.Constants.*;
+
 /**
  * The Bonus class represents a specific type of drop item in the game, providing bonuses to the player.
  * It extends the DropItem class and implements the draw method to display the visual representation
@@ -48,9 +50,9 @@ public class Bonus extends DropItem {
             element.setY(getY());
             String url;
             if (new Random().nextInt(20) % 2 == 0) {
-                url = "/images/bonus1.png";
+                url = IMAGE_PATH_BONUS_1;
             } else {
-                url = "/images/bonus2.png";
+                url = IMAGE_PATH_BONUS_2;
             }
 
             element.setFill(new ImagePattern(new Image(getClass().getResourceAsStream(url))));

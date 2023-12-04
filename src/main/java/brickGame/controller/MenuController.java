@@ -16,6 +16,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+import static brickGame.Constants.SETTINGS_SCENE_FXML;
+
 /**
  * The MenuController class is responsible for managing the main menu interactions and controlling the game's menu scenes.
  * It handles actions such as starting or resuming the game, loading saved games, exiting the application, and opening the settings.
@@ -115,7 +117,7 @@ public class MenuController {
     @FXML
     public void onOpenSettings() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/Settings.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(SETTINGS_SCENE_FXML));
             fxmlLoader.setControllerFactory(c -> {
                 return new SettingsController(primaryStage.getScene());
             });

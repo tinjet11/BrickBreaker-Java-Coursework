@@ -7,6 +7,8 @@ import javafx.scene.shape.Rectangle;
 
 import java.io.Serializable;
 
+import static brickGame.Constants.*;
+
 /**
  * The Block class represents a block in the game's playing area.
  * Blocks can have different types and visual representations.
@@ -36,12 +38,6 @@ public class Block implements Serializable {
     private Rectangle rect;
     private final int BALL_RADIUS = 10;
 
-    private  final String IMAGE_PATH_CHOCO = "/images/choco.jpg";
-    private  final String IMAGE_PATH_HEART = "/images/heart.jpg";
-    private  final String IMAGE_PATH_STAR = "/images/star.jpg";
-    private  final String IMAGE_PATH_PENALTY  = "/images/penalty.jpeg";
-    private  final String IMAGE_PATH_CONCRETE = "/images/brick-concrete.jpeg";
-    private  final String IMAGE_PATH_NORMAL = "/images/brick.jpg";
 
     /**
      * Enumeration representing different hit states during a collision check.
@@ -123,7 +119,7 @@ public class Block implements Serializable {
                 imagePath = IMAGE_PATH_CONCRETE;
                 break;
             default:
-                imagePath = IMAGE_PATH_NORMAL;
+                imagePath = IMAGE_PATH_NORMAL_BRICK;
         }
 
         Image image = new Image(getClass().getResourceAsStream(imagePath));

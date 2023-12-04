@@ -13,6 +13,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+import static brickGame.Constants.GOLD_ROOT;
+import static brickGame.Constants.MENU_SCENE_FXML;
+
 
 /**
  * The GameSceneController class is providing method for setting the label value,
@@ -77,7 +80,7 @@ public class GameSceneController {
     private Scene loadMenuScene(){
         Scene menuScene = null;
         try{
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Menu.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(MENU_SCENE_FXML));
             fxmlLoader.setControllerFactory(c -> {
                 return menuController = new MenuController();
             });
@@ -157,7 +160,7 @@ public class GameSceneController {
 
             // if the GoldStatus is true, add goldRoot to style.css
             if (gameLogicHandler.isGoldStatus()) {
-                getGamePane().getStyleClass().add("goldRoot");
+                getGamePane().getStyleClass().add(GOLD_ROOT);
             }
         }
 

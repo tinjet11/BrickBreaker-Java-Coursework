@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
+import static brickGame.Constants.SAVE_PATH;
+
 
 /**
  * The LoadSave class provides functionality for loading and saving game states.
@@ -27,11 +29,6 @@ import java.util.ArrayList;
  * @since [Date of creation]
  */
 public class LoadSave {
-
-    private final String SAVE_PATH_DIR = "save"; // Relative to the project directory
-
-    // Construct the complete path using the directory and filename
-    private final String SAVE_PATH = SAVE_PATH_DIR + "/save.mdds";
     private boolean isExistHeartBlock;
     private boolean isGoldStatus;
     private boolean goDownBall;

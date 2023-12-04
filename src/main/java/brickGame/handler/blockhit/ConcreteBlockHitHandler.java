@@ -8,6 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.util.Duration;
 
+import static brickGame.Constants.IMAGE_PATH_NORMAL_BRICK;
+
 public class ConcreteBlockHitHandler implements BlockHitHandler {
     @Override
     public void handleBlockHit(Block block, Block.HIT_STATE hitCode, GameLogicHandler gameLogicHandler) {
@@ -15,16 +17,14 @@ public class ConcreteBlockHitHandler implements BlockHitHandler {
             block.setDestroyed(true);
             block.setType(Block.BLOCK_TYPE.BLOCK_NORMAL);
 
-            Image image = new Image(getClass().getResourceAsStream("/images/brick.jpg"));
+            Image image = new Image(getClass().getResourceAsStream(IMAGE_PATH_NORMAL_BRICK));
             ImagePattern imagePattern = new ImagePattern(image);
 
             block.getRect().setFill(imagePattern);
-            System.out.println("Block replaced with normal block");
 
-            PauseTransition pause = new PauseTransition(Duration.millis(100));
+            PauseTransition pause = new PauseTransition(Duration.millis(200));
             pause.setOnFinished(event -> {
                 block.setDestroyed(false);
-                System.out.println("isDestroyed set to false");
             });
             pause.play();
         });

@@ -7,12 +7,22 @@ import brickGame.model.BallControl;
 import brickGame.model.GameStateManager;
 import brickGame.model.InitGameComponent;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import java.io.*;
 
+
+/**
+ * The main class that serves as the entry point for the Brick Breaker Game.
+ * It extends the JavaFX Application class and initializes the game components,
+ * such as the game logic handler, ball control, game scene controller, and game state manager.
+ * It also handles the initialization of the menu scene.
+ * @author Leong Tin Jet
+ * @version 1.0
+ */
 public class Main extends Application {
     private  Stage primaryStage;
     private GameLogicHandler gameLogicHandler;
@@ -21,6 +31,13 @@ public class Main extends Application {
     private GameStateManager gameStateManager;
     private InitGameComponent initGameComponent;
 
+    /**
+     * The entry point of the JavaFX application. Initializes the game components and
+     * sets up the menu scene as the initial scene.
+     *
+     * @param primaryStage The primary stage for the application.
+     * @throws Exception If an exception occurs during application startup.
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         gameLogicHandler = GameLogicHandler.getInstance();
@@ -51,13 +68,16 @@ public class Main extends Application {
 
         initGameComponent.setBallControl(ballControl);
         initGameComponent.setGameLogicHandler(gameLogicHandler);
-        System.out.println("All set");
         this.primaryStage = primaryStage;
-        initializeMenuScene();
+        Platform.runLater(this::initializeMenuScene);
     }
 
+    /**
+     * Initializes the menu scene by loading the corresponding FXML file.
+     * Displays the menu scene with the option to load a game.
+     */
     private void initializeMenuScene() {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fxml/Menu.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(Constants.MENU_SCENE_FXML));
         Scene menuScene = null;
         fxmlLoader.setControllerFactory(c -> {
             return new MenuController();

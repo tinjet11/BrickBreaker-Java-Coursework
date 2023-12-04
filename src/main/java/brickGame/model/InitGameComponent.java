@@ -11,6 +11,7 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static brickGame.Constants.*;
 import static brickGame.model.Block.BLOCK_HEIGHT;
 
 /**
@@ -65,9 +66,6 @@ public class InitGameComponent {
     private boolean isExistHeartBlock = false;
     private boolean isExistBombBlock = false;
 
-    private final String PADDLE_IMAGE_PATH = "/images/paddle.jpg";
-    private final String GOLD_BALL_IMAGE_PATH = "/images/goldball.png";
-    private final String BALL_IMAGE_PATH = "/images/ball.png";
 
     private ArrayList<Block> blocks = new ArrayList<>();
     private ArrayList<Bonus> chocos = new ArrayList<>();

@@ -2,6 +2,9 @@ package brickGame.serialization;
 
 import java.io.*;
 
+import static brickGame.Constants.HIGHEST_SCORE_SAVE_PATH;
+import static brickGame.Constants.SAVE_PATH_DIR;
+
 /**
  * The HighestScore class provides functionality for tracking and persisting the highest score achieved in the game.
  * It allows setting and retrieving the highest score, which is stored in a serialized file.
@@ -22,8 +25,6 @@ import java.io.*;
 
 public class HighestScore {
     public int highestScore;
-    private   final String SAVE_PATH_DIR = "save";
-    private final String SAVE_PATH = SAVE_PATH_DIR + "/highestScore.mdds";
 
     /**
      * Sets the highest game score if the provided score is greater than the current highest score.
@@ -36,7 +37,7 @@ public class HighestScore {
         if(score > getHighestGameScore()){
             new Thread(() -> {
                 new File(SAVE_PATH_DIR).mkdirs();
-                File file = new File(SAVE_PATH);
+                File file = new File(HIGHEST_SCORE_SAVE_PATH);
                 ObjectOutputStream outputStream = null;
 
                 try {
@@ -67,12 +68,12 @@ public class HighestScore {
      * @return The current highest game score.
      */
     public int getHighestGameScore() {
-        File saveFile = new File(SAVE_PATH);
+        File saveFile = new File(HIGHEST_SCORE_SAVE_PATH);
 
         if (saveFile.exists()) {
             // Proceed with reading the save file
             try {
-                ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(new File(SAVE_PATH)));
+                ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(new File(HIGHEST_SCORE_SAVE_PATH)));
                 highestScore = inputStream.readInt();
             } catch (IOException e) {
                 e.printStackTrace();
