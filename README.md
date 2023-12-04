@@ -11,11 +11,6 @@ implement mvc pattern in the code, successfully separate the ui code with the ma
 
 
 
-Compilation Instructions: 
-Provide a clear, step-by-step guide on how to compile the
-code to produce the application. Include any dependencies or special settings
-required.
-
 Implemented and Working Properly: 
 List the features that have been successfully
 implemented and are functioning as expected. Provide a brief description of each.
@@ -57,6 +52,13 @@ resolve them.
 
 
 
+Compilation Instructions:
+### Compile
+1. git clone this repository and run the following command using maven:
+   `mvn clean javafx:run`
+
+2. git clone this repository and add javafx library in your ide manually
+
 
 # Refactoring Work Summary:
 - use lambda expression
@@ -78,6 +80,9 @@ resolve them.
 - easier for maintainence
 
 #### Put the file into meaningful package
+
+#### Create a constants class to put all the constants
+- easier to manage and update constant values
 
 
 ## New Files:
