@@ -10,7 +10,7 @@ public interface BlockHitHandler {
     default void onHitAction(Block block, GameLogicHandler gameLogicHandler) {
         gameLogicHandler.setScore(gameLogicHandler.getScore() + 1);
         new ScoreAnimation(gameLogicHandler.getGameSceneController().getGamePane())
-                .show(block.getX(), block.getY(), 1);
+                .showScoreAnimation(block.getX(), block.getY(), 1);
         block.getRect().setVisible(false);
         block.setDestroyed(true);
         gameLogicHandler.setRemainingBlockCount(gameLogicHandler.getRemainingBlockCount() -1 );

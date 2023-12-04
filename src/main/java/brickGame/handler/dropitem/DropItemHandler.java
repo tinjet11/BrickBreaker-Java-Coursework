@@ -35,7 +35,7 @@ public DropItem dropItem;
         dropItem.setTaken(true);
         dropItem.element.setVisible(false);
         gameLogicHandler.setScore(gameLogicHandler.getScore() + 3);
-        new ScoreAnimation(gameSceneController.getGamePane()).show(dropItem.getX(), dropItem.getY(), 3);
+        new ScoreAnimation(gameSceneController.getGamePane()).showScoreAnimation(dropItem.getX(), dropItem.getY(), 3);
     }
 
     public void moveDropItem() {
