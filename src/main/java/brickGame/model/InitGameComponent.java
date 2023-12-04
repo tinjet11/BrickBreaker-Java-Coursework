@@ -16,7 +16,7 @@ import static brickGame.model.Block.BLOCK_HEIGHT;
 
 /**
  * The InitGameComponent class represents a singleton instance responsible for initializing various game components
- * such as the paddle, ball, blocks, bonuses, and bombs. It also sets up the initial configuration of the game board
+ * such as the paddle, ball, blocks. It also sets up the initial configuration of the game board
  * based on the current level. This class follows the Singleton pattern to ensure that only one instance exists
  * throughout the application.
  * <p>

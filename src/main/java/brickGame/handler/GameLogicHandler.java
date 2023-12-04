@@ -20,13 +20,20 @@ import static brickGame.Constants.GOLD_ROOT;
 import static brickGame.model.Block.BLOCK_HEIGHT;
 import static brickGame.model.Block.BLOCK_PADDING_TOP;
 
-
+/**
+ * Handles the game logic, including collision detection, scoring, and game state management.
+ */
 public class GameLogicHandler implements Actionable {
     private static GameLogicHandler instance;
 
     private GameLogicHandler() {
     }
 
+    /**
+     * Gets the singleton instance of the GameLogicHandler.
+     *
+     * @return The singleton instance of the GameLogicHandler.
+     */
     public static GameLogicHandler getInstance() {
         if (instance == null) {
             instance = new GameLogicHandler();
@@ -35,11 +42,6 @@ public class GameLogicHandler implements Actionable {
     }
 
     private BallControl ballControl;
-
-    public GameSceneController getGameSceneController() {
-        return gameSceneController;
-    }
-
     private GameSceneController gameSceneController;
     private InitGameComponent initGameComponent;
     private GameStateManager gameStateManager;
@@ -49,7 +51,6 @@ public class GameLogicHandler implements Actionable {
 
     private int score = 0;
     private long time = 0;
-    //private long hitTime = 0;
     private long goldTime = 0;
     private boolean isGameRun = false;
     private int endLevel = 21;
@@ -59,7 +60,9 @@ public class GameLogicHandler implements Actionable {
 
     private GameEngine engine;
 
-
+    /**
+     * Handle the collisions and triggers UI updates.
+     */
     @Override
     public void onUpdate() {
         Platform.runLater(this::updateUI);
@@ -69,6 +72,9 @@ public class GameLogicHandler implements Actionable {
         }
     }
 
+    /**
+     * Updates the UI elements such as score labels, paddle position, and ball position.
+     */
     private void updateUI() {
         gameSceneController.setScoreLabel("Score: " + getScore());
         gameSceneController.setHeartLabel("Heart : " + getHeart());
@@ -80,11 +86,19 @@ public class GameLogicHandler implements Actionable {
         ballControl.getBall().setCenterY(ballControl.getyBall());
     }
 
+    /**
+     * Checks if the ball is within the game bounds.
+     *
+     * @return True if the ball is within the game bounds, false otherwise.
+     */
     private boolean isBallWithinGameBounds() {
         return ballControl.getyBall() >= BLOCK_PADDING_TOP &&
                 ballControl.getyBall() <= (BLOCK_HEIGHT * (getLevel() + 1)) + BLOCK_PADDING_TOP;
     }
 
+    /**
+     * Handles collisions between the ball and the game blocks.
+     */
     private void handleBlockCollisions() {
         Iterator<Block> iterator = initGameComponent.getBlocks().iterator();
         while (iterator.hasNext()) {
@@ -101,7 +115,12 @@ public class GameLogicHandler implements Actionable {
             }
         }
     }
-
+    /**
+     * Handles the specific hit of the ball on a game block.
+     *
+     * @param block   The block that was hit.
+     * @param hitCode The specific hit state.
+     */
     private void handleBlockHit(Block block, Block.HIT_STATE hitCode) {
         ballControl.resetcollideFlags();
 
@@ -115,7 +134,11 @@ public class GameLogicHandler implements Actionable {
         handleCollisionDirection(hitCode);
     }
 
-
+    /**
+     * Update the flag of collision of ball with block based on the hit state.
+     *
+     * @param hitCode The specific hit state.
+     */
     private void handleCollisionDirection(Block.HIT_STATE hitCode) {
         if (hitCode == Block.HIT_STATE.HIT_RIGHT) {
             ballControl.setCollideToRightBlock(true);
@@ -127,15 +150,22 @@ public class GameLogicHandler implements Actionable {
             ballControl.setCollideToTopBlock(true);
         }
     }
-
+    /**
+     * Stops the game engine.
+     */
     public void stopEngine() {
         engine.stop();
     }
-
+    /**
+     * Starts the game engine.
+     */
     public void startEngine() {
         engine.start();
     }
 
+    /**
+     * Sets up the game engine with specific configurations.
+     */
     public void setUpEngine() {
         engine = new GameEngine();
         engine.setOnAction(this);
@@ -143,12 +173,14 @@ public class GameLogicHandler implements Actionable {
         startEngine();
     }
 
-
     @Override
-    public void onInit() {
-
+    public void onTime(long newTime) {
+        setTime(newTime);
     }
 
+    /**
+     * Deducts a heart from the player and updates the UI.
+     */
     public void deductHeart() {
         heart = heart - 1;
         new ScoreAnimation(gameSceneController.getGamePane()).showScoreAnimation(initGameComponent.getSCENE_WIDTH() / 2, initGameComponent.getSCENE_HEIGHT() / 2, -1);
@@ -161,16 +193,19 @@ public class GameLogicHandler implements Actionable {
         }
     }
 
+    /**
+     * Checks the count of destroyed blocks and triggers level progression if necessary.
+     */
     private void checkDestroyedCount() {
-        //System.out.println(remainingBlockCount);
         if (remainingBlockCount == 0 && level != endLevel) {
-            System.out.println("Level Up!");
             gameStateManager.nextLevel();
         }
     }
 
 
-
+    /**
+     * Handles the physics update, including block destruction, gold status, and drop items.
+     */
     @Override
     public void onPhysicsUpdate() {
         if (level != endLevel && isGameRun) {
@@ -184,7 +219,9 @@ public class GameLogicHandler implements Actionable {
         handleChocos();
         handlePenalties();
     }
-
+    /**
+     * Handles the removal of gold status based on time.
+     */
     private void handleGoldStatus() {
         if (shouldRemoveGold()) {
             Platform.runLater(() -> {
@@ -195,10 +232,18 @@ public class GameLogicHandler implements Actionable {
         }
     }
 
+    /**
+     * Determines whether gold status should be removed based on time.
+     * If exceed 5 second from the initialization of gold ball, return true
+     * @return True if gold status should be removed, false otherwise.
+     */
     private boolean shouldRemoveGold() {
         return time - goldTime > 5000 && isGoldStatus;
     }
 
+    /**
+     * Handles choco (bonus) drop items, including removal, scoring, and animation.
+     */
     private void handleChocos() {
         Iterator<Bonus> iterator = initGameComponent.getChocos().iterator();
         while (iterator.hasNext()) {
@@ -219,7 +264,9 @@ public class GameLogicHandler implements Actionable {
             }
         }
     }
-
+    /**
+     * Handles bomb (penalty) drop items, including removal, and penalty execution.
+     */
     private void handlePenalties() {
         Iterator<Bomb> iterator = initGameComponent.getBombs().iterator();
         while (iterator.hasNext()) {
@@ -244,6 +291,9 @@ public class GameLogicHandler implements Actionable {
     public void setGameSceneController(GameSceneController gameSceneController) {
         this.gameSceneController = gameSceneController;
     }
+    public GameSceneController getGameSceneController() {
+        return gameSceneController;
+    }
 
     public void setBallControl(BallControl ballControl) {
         this.ballControl = ballControl;
@@ -257,10 +307,6 @@ public class GameLogicHandler implements Actionable {
         this.initGameComponent = initGameComponent;
     }
 
-    @Override
-    public void onTime(long newTime) {
-        setTime(newTime);
-    }
 
     public int getHeart() {
         return heart;
@@ -293,10 +339,6 @@ public class GameLogicHandler implements Actionable {
     public void setTime(long time) {
         this.time = time;
     }
-
-//    public void setHitTime(long hitTime) {
-//        this.hitTime = hitTime;
-//    }
 
     public long getGoldTime() {
         return goldTime;

@@ -56,13 +56,6 @@ public class GameEngine {
     private long time = 0;
 
     /**
-     * Initializes the game engine, invoking the onInit method of the Actionable interface.
-     */
-    private void initialize() {
-        onAction.onInit();
-    }
-
-    /**
      * Runs the game update loop, invoking the onUpdate method of the Actionable interface.
      */
     private void update() {
@@ -126,7 +119,6 @@ public class GameEngine {
      */
     public void start() {
         time = 0;
-        initialize();
         update();
         physicsCalculation();
         timeStart();

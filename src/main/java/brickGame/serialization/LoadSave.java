@@ -24,9 +24,8 @@ import static brickGame.Constants.SAVE_PATH;
  * This class is part of the game's serialization mechanism and implements methods for managing the save file.
  * </p>
  *
- * @author [Your Name]
+ * @author Leong Tin Jet
  * @version 1.0
- * @since [Date of creation]
  */
 public class LoadSave {
     private boolean isExistHeartBlock;

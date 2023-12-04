@@ -1,7 +1,9 @@
 package brickGame;
 
+/**
+ * Class containing constants for file paths and image paths used in the brick game application.
+ */
 public class Constants {
-    // GameState constants
     /**
      * The directory path for saving game files.
      */
