@@ -11,28 +11,19 @@ import javafx.scene.Scene;
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * The GameStateManager class manages the state of the game, including saving, loading, starting, and restarting the game.
+ * It handles the game logic, user input, and interaction with other components.
+ * <p>
+ * This class follows the singleton pattern, allowing only one instance to exist throughout the application.
+ * @author Leong Tin Jet
+ * @version 1.0
+ */
 public class GameStateManager {
 
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
-
-    public void setInitGameComponent(InitGameComponent initGameComponent) {
-        this.initGameComponent = initGameComponent;
-    }
-
-    public boolean isGameFirstOpen() {
-        return gameFirstOpen;
-    }
-
-    public void setGameFirstOpen(boolean gameFirstOpen) {
-        this.gameFirstOpen = gameFirstOpen;
-    }
-
+    /**
+     * Enumeration representing the possible states of the game.
+     */
     public enum GameState {
         ON_START,
         IN_PROGRESS,
@@ -40,47 +31,48 @@ public class GameStateManager {
         GAME_OVER,
         WIN,
     }
-
+    /**
+     * The directory path for saving game files.
+     */
     private final String SAVE_PATH_DIR = "save"; // Relative to the project directory
 
-    // Construct the complete path using the directory and filename
+    /**
+     * The complete path for saving the game state file.
+     */
     private final String SAVE_PATH = SAVE_PATH_DIR + "/save.mdds";
+
+    /**
+     * The current state of the game.
+     */
     private GameState gameState = GameState.ON_START;
 
-    public boolean isLoadFromSave() {
-        return loadFromSave;
-    }
-
-    public void setLoadFromSave(boolean loadFromSave) {
-        this.loadFromSave = loadFromSave;
-    }
-
+    /**
+     * Flag indicating whether the game is loaded from a saved state.
+     */
     private boolean loadFromSave = false;
 
+    /**
+     * Flag indicating whether it's the first time the game is opened.
+     */
     private boolean gameFirstOpen = true;
-
     private BallControl ballControl;
     private GameLogicHandler gameLogicHandler;
     private GameSceneController gameSceneController;
     private InitGameComponent initGameComponent;
 
-    public void setGameSceneController(GameSceneController gameSceneController) {
-        this.gameSceneController = gameSceneController;
-    }
-
-    public void setBallControl(BallControl ballControl) {
-        this.ballControl = ballControl;
-    }
-
-    public void setGameLogicHandler(GameLogicHandler gameLogicHandler) {
-        this.gameLogicHandler = gameLogicHandler;
-    }
-
     private static GameStateManager instance;
 
+    /**
+     * Private constructor to enforce singleton pattern.
+     */
     private GameStateManager() {
     }
 
+    /**
+     * Retrieves the singleton instance of the GameStateManager.
+     *
+     * @return The singleton instance of the GameStateManager.
+     */
     public static GameStateManager getInstance() {
         if (instance == null) {
             instance = new GameStateManager();
@@ -88,6 +80,10 @@ public class GameStateManager {
         return instance;
     }
 
+    /**
+     * Starts the game by setting up the game scene, initializing the engine, and showing the game scene.
+     * If the level is equal to the end level, it shows the win scene.
+     */
     public void startGame() {
         gameLogicHandler.setGameRun(true);
         try {
@@ -95,10 +91,10 @@ public class GameStateManager {
             if (gameLogicHandler.getLevel() == gameLogicHandler.getEndLevel()) {
                 gameSceneController.showWinScene();
             } else {
-                FXMLLoader fxmlLoader1 = new FXMLLoader(getClass().getResource("/fxml/GameScene.fxml"));
-                fxmlLoader1.setControllerFactory(c -> gameSceneController);
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/GameScene.fxml"));
+                fxmlLoader.setControllerFactory(c -> gameSceneController);
 
-                Scene gameScene = new Scene(fxmlLoader1.load());
+                Scene gameScene = new Scene(fxmlLoader.load());
                 gameSceneController.showGameScene(gameScene);
                 gameLogicHandler.setUpEngine();
 
@@ -108,29 +104,29 @@ public class GameStateManager {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Error loading GameScene.fxml: " + e.getMessage());
         }
     }
 
+    /**
+     * Flag to indicate is nextLevel running to prevent it being executed multiple time in a short period of time
+     */
     private boolean nextLevelInProgress = false;
 
+    /**
+     * Moves to the next level of the game, handling the logic and resetting necessary components.
+     */
     public void nextLevel() {
         gameLogicHandler.setGameRun(false);
         // Check if nextLevel is already in progress, if yes, return
         if (nextLevelInProgress) {
             return;
         }
-        System.out.println("level: " + gameLogicHandler.getLevel());
 
         // Set the flag to indicate that nextLevel is in progress
-        //   new Thread(() -> {
         try {
-            //  Thread.sleep(1);
             Platform.runLater(() -> {
-                System.out.println("inside try");
 
                 gameLogicHandler.stopEngine();
-                System.out.println("engine stopped");
 
                 ballControl.setvX(1.000);
                 ballControl.setvY(1.000);
@@ -142,7 +138,6 @@ public class GameStateManager {
                 initGameComponent.setExistHeartBlock(false);
                 initGameComponent.setExistBombBlock(false);
 
-                //gameLogicHandler.setHitTime(0);
                 gameLogicHandler.setTime(0);
                 gameLogicHandler.setGoldTime(0);
 
@@ -154,26 +149,23 @@ public class GameStateManager {
 
                 if (gameLogicHandler.getLevel() < gameLogicHandler.getEndLevel()) {
                     gameLogicHandler.addLevel();
-                    System.out.println("level added: current level: " + gameLogicHandler.getLevel());
                 }
-                // gameLogicHandler.setGoldStatus(true);
-                System.out.println("before start game");
                 startGame();
-                System.out.println("after start game");
             });
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.printf("%s", "nextLevel function in Main.java:");
         } finally {
             // Reset the flag to indicate that nextLevel is completed
             nextLevelInProgress = false;
-            //gameLogicHandler.setGameRun(true);
-            System.out.println("nextlevel run completed");
         }
-        // }).start();
+
 
     }
 
+
+    /**
+     * Saves the current state of the game to a file.
+     */
     public void saveGame() {
         new Thread(() -> {
             new File(SAVE_PATH_DIR).mkdirs();
@@ -220,31 +212,26 @@ public class GameStateManager {
                     blockSerializables.add(new BlockSerialize(block.getRow(), block.getColumn(), block.getType()));
                 }
 
-                System.out.println(blockSerializables.size());
-
                 outputStream.writeObject(blockSerializables);
-
-                // new Score(this).showMessage("Game Saved", 300, 300);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                System.out.printf("%s", "savegame (FNTE) function in Main.java:");
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.printf("%s", "savegame (IOE) function in Main.java:");
             } finally {
                 try {
                     outputStream.flush();
                     outputStream.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    System.out.printf("%s", "savegame (IOE2) function in Main.java:");
                 }
             }
         }).start();
-
     }
 
+    /**
+     * Loads the game state from a saved file and initializes the game components accordingly.
+     */
     public void loadGame() {
 
         LoadSave loadSave = new LoadSave();
@@ -296,7 +283,9 @@ public class GameStateManager {
         }
 
     }
-
+    /**
+     * Restarts the game by resetting the level, score, and other relevant components.
+     */
     public void restartGame() {
 
         try {
@@ -315,7 +304,6 @@ public class GameStateManager {
 
             initGameComponent.setExistHeartBlock(false);
             initGameComponent.setExistBombBlock(false);
-            //gameLogicHandler.setHitTime(0);
             gameLogicHandler.setTime(0);
             gameLogicHandler.setGoldTime(0);
 
@@ -327,9 +315,46 @@ public class GameStateManager {
             startGame();
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.printf("%s", "restart  function in Main.java:");
         }
     }
 
+    public GameState getGameState() {
+        return gameState;
+    }
 
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+    public boolean isGameFirstOpen() {
+        return gameFirstOpen;
+    }
+
+    public void setGameFirstOpen(boolean gameFirstOpen) {
+        this.gameFirstOpen = gameFirstOpen;
+    }
+
+    public boolean isLoadFromSave() {
+        return loadFromSave;
+    }
+
+    public void setLoadFromSave(boolean loadFromSave) {
+        this.loadFromSave = loadFromSave;
+    }
+
+    public void setGameSceneController(GameSceneController gameSceneController) {
+        this.gameSceneController = gameSceneController;
+    }
+
+    public void setInitGameComponent(InitGameComponent initGameComponent) {
+        this.initGameComponent = initGameComponent;
+    }
+
+    public void setBallControl(BallControl ballControl) {
+        this.ballControl = ballControl;
+    }
+
+    public void setGameLogicHandler(GameLogicHandler gameLogicHandler) {
+        this.gameLogicHandler = gameLogicHandler;
+    }
 }

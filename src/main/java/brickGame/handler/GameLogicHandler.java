@@ -149,7 +149,7 @@ public class GameLogicHandler implements Actionable {
 
     public void deductHeart() {
         heart = heart - 1;
-        new ScoreAnimation(gameSceneController.getGamePane()).show(initGameComponent.getSCENE_WIDTH() / 2, initGameComponent.getSCENE_HEIGHT() / 2, -1);
+        new ScoreAnimation(gameSceneController.getGamePane()).showScoreAnimation(initGameComponent.getSCENE_WIDTH() / 2, initGameComponent.getSCENE_HEIGHT() / 2, -1);
 
         System.out.println("heart: " + heart);
 

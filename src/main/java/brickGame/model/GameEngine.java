@@ -7,18 +7,43 @@ import javafx.application.Platform;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+
+/**
+ * The GameEngine class represents the core engine of the Brick Breaker game. It manages the game loop,
+ * updating game components, handling physics calculations, and tracking game time.
+ * <p>
+ * The engine uses an ExecutorService with three threads to concurrently execute initialization, update,
+ * physics calculations, and time tracking tasks. The game loop runs until the threads are interrupted,
+ * and the engine provides hooks for the game logic to perform specific actions during initialization,
+ * update, physics update, and time tracking.
+ * </p>
+ * <p>
+ * The game loop is run on the JavaFX application thread using Platform.runLater to ensure that UI updates
+ * are performed safely within the JavaFX UI thread.
+ * </p>
+ * <p>
+ * The GameEngine class implements the singleton pattern, ensuring that only one instance of the game engine
+ * exists during the game's lifecycle. The start and stop methods are provided to initiate and terminate the
+ * game engine, respectively.
+ * </p>
+ *
+ * @author Leong Tin Jet
+ * @version 1.0
+ */
 public class GameEngine {
     private ExecutorService executorService = Executors.newFixedThreadPool(3);
     private Actionable onAction;
     private int fps = 15;
-    private Thread updateThread;
-    private Thread physicsThread;
-    private Thread timeThread;
 
     public boolean isStopped = true;
 
+    /**
+     * Sets the Actionable interface to be used for game logic callbacks during the game loop.
+     *
+     * @param onAction The Actionable interface implementation providing game logic callbacks.
+     */
     public void setOnAction(Actionable onAction) {
-        this.onAction =onAction;
+        this.onAction = onAction;
     }
 
     /**
@@ -30,10 +55,16 @@ public class GameEngine {
 
     private long time = 0;
 
-        private void initialize() {
+    /**
+     * Initializes the game engine, invoking the onInit method of the Actionable interface.
+     */
+    private void initialize() {
         onAction.onInit();
     }
 
+    /**
+     * Runs the game update loop, invoking the onUpdate method of the Actionable interface.
+     */
     private void update() {
         executorService.execute(() -> {
             while (!Thread.currentThread().isInterrupted()) {
@@ -51,6 +82,9 @@ public class GameEngine {
         });
     }
 
+    /**
+     * Runs the physics calculation loop, invoking the onPhysicsUpdate method of the Actionable interface.
+     */
     private void physicsCalculation() {
         executorService.execute(() -> {
             while (!Thread.currentThread().isInterrupted()) {
@@ -68,6 +102,9 @@ public class GameEngine {
         });
     }
 
+    /**
+     * Runs the game time tracking loop, invoking the onTime method of the Actionable interface.
+     */
     private void timeStart() {
         executorService.execute(() -> {
             try {
@@ -84,6 +121,9 @@ public class GameEngine {
         });
     }
 
+    /**
+     * Initiates the game engine, starting the initialization, update, physics calculation, and time tracking loops.
+     */
     public void start() {
         time = 0;
         initialize();
@@ -93,6 +133,9 @@ public class GameEngine {
         isStopped = false;
     }
 
+    /**
+     * Stops the game engine, interrupting all running threads associated with the engine.
+     */
     public void stop() {
         if (!isStopped) {
             isStopped = true;
