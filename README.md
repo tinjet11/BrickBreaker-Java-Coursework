@@ -1,19 +1,18 @@
-# COMP2042_CW_hcytl1
-# Name - Leong Tin Jet
+## Brick Breaker Game Refactoring
+## COMP2042_CW_hcytl1
+## Name - Leong Tin Jet
 
+---
 
+## Compilation Instructions:
+#### git clone this repository and run the following command using maven:
+`mvn clean javafx:run`
 
-change the logic of destory block count to remaining block count,cause the previos logic will have error when
-it compare destroyblockcount == block.size, if after pause the game , the block.size is 4, and the destroyblockcount is 
-also 4, it will go to nextlevel, which is not what we want
+#### git clone this repository and add javafx library in your IDE manually
 
-implement mvc pattern in the code, successfully separate the ui code with the main.java using fxml and controller
+---
 
-
-
-Implemented and Working Properly: 
-List the features that have been successfully
-implemented and are functioning as expected. Provide a brief description of each.
+### Features that Implemented and Working Properly:
 - `Menu Scene` added with `load game`,`start game`, `open settings` and `exit` function, also reused and act as the `Pause`, `Win` and `Lose` Scene
 - All time `highest score` can be `record` and will `update` when user win/lose with score higher than the previous highest score
 - Add a` pause button` to the game scene, user can `pause` and will open up menu scene, and can `resume` back by clicking resume button in menu scene
@@ -23,66 +22,85 @@ implemented and are functioning as expected. Provide a brief description of each
 - Added 3 `additional level`, previously playable level was until 17 only, now until 20.
 - improve the UI by adding a nice purple color with shadow and gradient
 
-Implemented but Not Working Properly: 
-
-Features Not Implemented: 
+### Features that Implemented but Not Working Properly:
 - background game music and block hit sound effect, I have created a sound manager and successfully can play, pause, mute the background music,
   but after that I notice a significant growth of thread usage in the program, and the game will crash after few level.
-  it took me 3 day to figure out is the problem of game sound, so I remove it and after that the game run smoothly
+  it took me 3 day to figure out is the problem of game sound, so I remove it and after that the game run smoothly (Didn't have time to implement the above features again, because I decide to focus more on report writing and code refactoring)
 
+### Features Not Implemented:
 - adjusting music volume in settings page, due to the above problem mention, I decide to give up the background game music so there is no need for this features
-- creating JUnit tests, I don't know how am I going to create Junit tests for game.
 
 
 
-New Java Classes: 
-Enumerate any new Java classes that you introduced for the
-assignment. Include a brief description of each class's purpose and its location in the
-code.
+---
 
-Modified Java Classes: 
-List the Java classes you modified from the provided code
-base. Describe the changes you made and explain why these modifications were
-necessary.
+## Refactoring Work Summary:
 
-Unexpected Problems: 
-Communicate any unexpected challenges or issues you
-encountered during the assignment. Describe how you addressed or attempted to
-resolve them.
-
-
-
-Compilation Instructions:
-### Compile
-1. git clone this repository and run the following command using maven:
-   `mvn clean javafx:run`
-
-2. git clone this repository and add javafx library in your ide manually
-
-
-# Refactoring Work Summary:
+### General 
 - use lambda expression
-- set multiple field to final and static (to share among classes)
+- fixing typo 
+- separate the code into multiple classes
+- delete unused code and imports
 
-#### Change variable name for readability and more understandable
+### Renaming variable for readability and more understandable
 - change break to paddle in InitGameComponent
 - change rect to paddle in InitGameComponent
 - fixing some typo among the code base
-#### Use enum to replace static int constants
+
+### Use enum to replace static int constants
 - HIT_CODE in Block.java
 - BLOCK_TYPE in Block.java
 - GameState (newly added) in GameStateManager
-#### Apply Singleton framework to several file
+
+### Apply `MVC pattern` in the refactoring process
+- create `controller`, `model` and `fxml`(view) in the project
+- separate the game logic from view 
+- centralized the scene control in the controller class
+
+### Apply `Singleton framework` to several file
 - encapsulate the variable which is static in my early development
 - make them private and create getter and setter method
-#### Combine code that repeatedly call in one method
+
+### Apply `template method` in the refactoring process
+- pull the duplicate code into a superclass
+- let the subclass override some methods cope with its own functionality
 - prevent code repetition
-- easier for maintainence
+- Example, `DropItemHandler`(superclass), `BonusDropHandler` and `BombDropHandler` (subclasses) inside package `brickgame.handler.dropitem`
 
-#### Put the file into meaningful package
+### Apply `strategy method` in the refactoring process
+- The `BlockHitHandler` interface represents the strategy for handling block hits. It defines a family of algorithms, encapsulates each algorithm, and makes them interchangeable.
+- Other class which implement `BlockHitHandler` like `ChocoBlockHitHandler`,`StarBlockHitHandler` and other class is a concrete strategy that implements the BlockHitHandler interface.
+  It provides a specific implementation for handling various block hits.
+- example: inside package `brickgame.handler.blockhit`
 
-#### Create a constants class to put all the constants
+### Apply `factory method` in the refactoring process
+- inside package `brickgame.factory`
+#### BlockHitHandlerFactoryProvider
+-   Description: Centralized factory for creating block hit handlers.
+-   Responsibility: Maps different block types to their corresponding handler factories.
+-   Implementation: Uses a map to associate each block type with a specific factory. 
+
+#### BlockHitHandlerFactory:
+- Description: Interface for creating instances of BlockHitHandler.
+- Responsibility: Provides a method for creating a specific type of BlockHitHandler.
+- Implementation: Implemented by various concrete factories for different block types. 
+
+#### Concrete BlockHitHandler Factories:
+- Description: Factories for creating specific BlockHitHandler instances.
+- Responsibility: Each factory creates a BlockHitHandler for a particular block type.
+- Implementation: Concrete factories include ChocoBlockHitHandlerFactory, PenaltyBlockHitHandlerFactory, etc.
+
+### Combine code that repeatedly call in one method
+- easier for maintenance
+- prevent code repetition
+
+### Put the file into meaningful package
+- create package like `controller`,`handler`,`factory`,`model`,`serialization`,`fxml`,`images` and more sub packages
+
+### Create a constants class to put all the constants
 - easier to manage and update constant values
+
+---
 
 
 ## New Files:
@@ -143,6 +161,19 @@ Compilation Instructions:
 - all methods and fields is related to initialization of game component
 - all methods and fields moved from `Main.java`
 
+### Ball.java
+- Make this class follows the Singleton pattern, ensuring that only one instance of InitGameComponent exists.
+- encapsulate all the variable into private
+- provide getter and setter method
+
+
+### Paddle.java
+- Make this class follows the Singleton pattern, ensuring that only one instance of InitGameComponent exists.
+- put the function of moving paddle in this class
+- encapsulate all the variable into private
+- provide getter and setter method
+
+
 ### GameStateManager.java DONE
 - Make this class follows the Singleton pattern, ensuring that only one instance of GameStateManager exists.
 - encapsulate all the variable into private
@@ -174,6 +205,7 @@ Compilation Instructions:
   switch statement, offering a more scalable and maintainable solution.
 
 ### BlockHitHandler.java
+- applying strategy method
 - an interface which define the common method like that used by all the class that implements it
 
 ### ChocoBlockHandler.java
@@ -208,30 +240,30 @@ Compilation Instructions:
 - update UI to change the appearance and type of block to normal block.
 
 ### BlockHitHandlerFactoryProvider.java
-Purpose: This class provides a centralized point for obtaining specific BlockHitHandlerFactory instances based on the type of the block.
+- This class provides a centralized point for obtaining specific BlockHitHandlerFactory instances based on the type of the block.
 
 ### BlockHitHandlerFactory.java
-Purpose: serves as a blueprint for various concrete factories (e.g., ChocoBlockHitHandlerFactory, PenaltyBlockHitHandlerFactory, etc.), 
+- serves as a blueprint for various concrete factories (e.g., ChocoBlockHitHandlerFactory, PenaltyBlockHitHandlerFactory, etc.), 
 ensuring consistency in creating block hit handlers throughout your Brick Breaker game. Each factory implementing
 this interface will provide its own logic for creating the corresponding BlockHitHandler instances.
 
 ### ChocoBlockHitHandlerFactory.java
-Purpose: Factory class responsible for creating instances of ChocoBlockHitHandler.
+- Factory class responsible for creating instances of ChocoBlockHitHandler.
 
 ### PenaltyBlockHitHandlerFactory.java
-Purpose: Factory class responsible for creating instances of PenaltyBlockHitHandler.
+- Factory class responsible for creating instances of PenaltyBlockHitHandler.
 
 ### HeartBlockHitHandlerFactory.java
-Purpose: Factory class responsible for creating instances of HeartBlockHitHandler.
+- Factory class responsible for creating instances of HeartBlockHitHandler.
 
 ### StarBlockHitHandlerFactory.java
-Purpose: Factory class responsible for creating instances of StarBlockHitHandler.
+- Factory class responsible for creating instances of StarBlockHitHandler.
 
 ### NormalBlockHitHandlerFactory
-Purpose: Factory class responsible for creating instances of NormalBlockHitHandler.
+- Factory class responsible for creating instances of NormalBlockHitHandler.
 
 ### ConcreteBlockHitHandlerFactory.java
-Purpose: Factory class responsible for creating instances of ConcreteBlockHitHandler.
+- Factory class responsible for creating instances of ConcreteBlockHitHandler.
 
 ### DropItemHandler.java
 - handle the behavior of drop items in the game.
@@ -269,6 +301,12 @@ Purpose: Factory class responsible for creating instances of ConcreteBlockHitHan
 - overrides the `draw() `method to provide a visual representation for the `penalty` item.
 - The `draw()` method uses JavaFX's `Platform.runLater` to ensure UI updates are performed on the JavaFX application thread.
 
+
+### Constants.java
+- included file path and image path
+- easier for managing string constants
+
+---
 
 
 ## Existing Files:
@@ -313,7 +351,7 @@ Purpose: Factory class responsible for creating instances of ConcreteBlockHitHan
 
 ### Main.java DONE
 - Extends javafx.application.Application and overrides the start method, which acts as the entry point for JavaFX applications.
-- Activates and configures the necessary singleton classes, including `GameLogicHandler`, `BallControl`, `GameSceneController`, `GameStateManager`, and `InitGameComponent`.
+- Activates and configures the necessary singleton classes, including `GameLogicHandler`, `BallControl`, `GameSceneController`, `GameStateManager`, `Ball`, `Paddle` and `InitGameComponent`
 - Establishes connections and dependencies between these components to facilitate smooth communication during the game.
 - Introduces a method, initializeMenuScene(), responsible for loading the initial menu scene from the "Menu.fxml" file using JavaFX's FXMLLoader.
 - Customizes the menu scene, for example, making the "Load" button visible only when the game is first opened.
@@ -327,26 +365,13 @@ Purpose: Factory class responsible for creating instances of ConcreteBlockHitHan
 - Removed `showWin()` and `showGameOver()` methods.
 - Changed the `show()` method, utilized the `showMessage()` method to prevent any code duplication.
 
-## Additional Information:
-
-- Added a menu with a start button and an image.
-- Implemented pause and resume buttons.
-- Changed the logic of destroy block count to remaining block count to avoid issues after pausing and resuming the game.
-- Implemented the MVC pattern, successfully separating the UI code from `Main.java` using FXML and controllers.
-- Fixed a bug where the ball would get stuck at the bottom wall and not go up, causing continuous heart count decrease.
-- Found a solution to the issue of not being able to have parameters for controller classes when implementing the MVC pattern. Referenced [link](https://www.reddit.com/r/javahelp/comments/4pnbuk/javafx_constructor_parameters_for_controller/) for the solution.
-- Can record the highest score, show in lose and win scene
-- add a new penalty block and penalty object, when the block is hit, the object will drop , if didn't catch it deduct 10 points.
-- add a new block call concrete block, in the first hit with concrete block, it will turn into normal block and need to hit it again to break it.
-- improve the UI by adding a nice purple color with shadow and gradient
-- added some description about the game droppable object like bonus and penalty in the settings page.
-
+---
 
 ## Unexpected Problems:
 
 1. **Constructor Parameter for Controller:**
     - **Issue:** Difficulty passing parameters to controller classes.
-    - **Solution:** Found a solution by referencing external sources, enabling the passing of the primary stage and Main class instance to other controller classes.
+    - **Solution:** Found a solution by referencing [external sources](https://www.reddit.com/r/javahelp/comments/4pnbuk/javafx_constructor_parameters_for_controller/), enabling the passing of the primary stage and Main class instance to other controller classes.
 
 2. **Ball Getting Stuck at Bottom Wall:**
     - **Issue:** Occasionally, the ball would get stuck at the bottom wall.
@@ -365,7 +390,6 @@ Purpose: Factory class responsible for creating instances of ConcreteBlockHitHan
                  The thread as i see in activity monitor will also increase by 100++ for each level, at the end the program crash                
     - **Solution:** Found that this is a issue after i added the game sound, fix it by commented out the code related to game sound manager
                     Right now the thread is remains at 40 and the program run smoothly
-    - **Future** Will need to implement the game sound logic properly
 
 6. **Gold root cannot be removed after pause:**
     - **Issue:** The goldRoot is added multiple times,but when remove only remove one goldRoot
