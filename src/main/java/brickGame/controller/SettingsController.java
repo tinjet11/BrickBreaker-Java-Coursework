@@ -34,7 +34,7 @@ public class SettingsController {
     private int maxHeart = 10;
     private int minHeart = 3;
 
-    private int maxLevel = 18;
+    private int maxLevel = 21;
     private int minLevel = 10;
     private int currentHeart;
     private int currentEndLevel;
