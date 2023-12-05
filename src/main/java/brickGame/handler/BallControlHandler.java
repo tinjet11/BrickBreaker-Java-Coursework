@@ -1,7 +1,11 @@
-package brickGame.model;
+package brickGame.handler;
 
-import brickGame.handler.GameLogicHandler;
-import javafx.scene.shape.Circle;
+import brickGame.model.Ball;
+import brickGame.model.InitGameComponent;
+import brickGame.model.Paddle;
+
+import static brickGame.Constants.SCENE_HEIGHT;
+import static brickGame.Constants.SCENE_WIDTH;
 
 /**
  * The BallControl class manages the movement and physics of the ball in the game.
@@ -13,12 +17,12 @@ import javafx.scene.shape.Circle;
  *
  * @author Leong Tin Jet
  */
-public class BallControl {
+public class BallControlHandler {
 
     /**
      * Private constructor to enforce the singleton pattern.
      */
-    private BallControl() {
+    private BallControlHandler() {
     }
 
     /**
@@ -26,9 +30,9 @@ public class BallControl {
      *
      * @return The singleton instance of BallControl.
      */
-    public static BallControl getInstance() {
+    public static BallControlHandler getInstance() {
         if (instance == null) {
-            instance = new BallControl();
+            instance = new BallControlHandler();
         }
         return instance;
     }
@@ -36,7 +40,7 @@ public class BallControl {
     /**
      * The singleton instance of the BallControl class.
      */
-    private static BallControl instance;
+    private static BallControlHandler instance;
 
     /**
      * The GameLogicHandler associated with the BallControl instance.
@@ -48,22 +52,13 @@ public class BallControl {
      */
     private InitGameComponent initGameComponent;
 
+    private Paddle paddle;
+    private Ball ball;
 
 
     /**
      * The graphical representation of the ball in the game scene.
      */
-    private Circle ball;
-
-    /**
-     * The x-coordinate of the ball's center.
-     */
-    private double xBall;
-
-    /**
-     * The y-coordinate of the ball's center.
-     */
-    private double yBall;
 
     /**
      * Flag indicating whether the ball is currently moving downward.
@@ -151,14 +146,14 @@ public class BallControl {
         controlBallMovement();
         checkCollisionWithVerticalWall();
 
-        if (getyBall() >= initGameComponent.getyPaddle() - initGameComponent.getBALL_RADIUS()) {
-            if (getxBall() >= initGameComponent.getxPaddle() && getxBall() <= initGameComponent.getxPaddle() + initGameComponent.getPADDLE_WIDTH()) {
+        if (ball.getyBall() >= paddle.getyPaddle() - initGameComponent.getBALL_RADIUS()) {
+            if (ball.getxBall() >= paddle.getxPaddle() && ball.getxBall() <= paddle.getxPaddle() + paddle.getPADDLE_WIDTH()) {
                 //gameLogicHandler.setHitTime(gameLogicHandler.getTime());
                 resetcollideFlags();
                 setCollideToPaddle(true);
                 setGoDownBall(false);
 
-                double relation = (getxBall() - initGameComponent.getCenterPaddleX()) / (initGameComponent.getPADDLE_WIDTH() / 2);
+                double relation = (ball.getxBall() - paddle.getCenterPaddleX()) / (paddle.getPADDLE_WIDTH() / 2);
 
                 if (Math.abs(relation) <= 0.3) {
                     setvX(Math.abs(relation));
@@ -168,7 +163,7 @@ public class BallControl {
                     setvX((Math.abs(relation) * 2) + (gameLogicHandler.getLevel() / 3.500));
                 }
 
-                if (getxBall() - initGameComponent.getCenterPaddleX() > 0) {
+                if (ball.getxBall() - paddle.getCenterPaddleX() > 0) {
                     setCollideToPaddleAndMoveToRight(true);
                 } else {
                     setCollideToPaddleAndMoveToRight(false);
@@ -186,15 +181,15 @@ public class BallControl {
      */
     private void controlBallMovement() {
         if (isGoDownBall()) {
-            setyBall(getyBall() + getvY());
+            ball.setyBall(ball.getyBall() + getvY());
         } else {
-            setyBall(getyBall() - getvY());
+            ball.setyBall(ball.getyBall() - getvY());
         }
 
         if (isGoRightBall()) {
-            setxBall(getxBall() + getvX());
+            ball.setxBall(ball.getxBall() + getvX());
         } else {
-            setxBall(getxBall() - getvX());
+            ball.setxBall(ball.getxBall() - getvX());
         }
     }
 
@@ -207,13 +202,13 @@ public class BallControl {
     private void checkCollisionWithVerticalWall() {
 
         //collide with top wall
-        if (getyBall() <= 0) {
+        if (ball.getyBall() <= 0) {
             resetcollideFlags();
             setGoDownBall(true);
         }
 
         //collide with bottom wall
-        if (getyBall() >= initGameComponent.getSCENE_HEIGHT()) {
+        if (ball.getyBall() >=SCENE_HEIGHT) {
             setGoDownBall(false);
             resetcollideFlags();
             if (!gameLogicHandler.isGoldStatus()) {
@@ -229,12 +224,12 @@ public class BallControl {
      * If a collision is detected with the left wall, appropriate flags are reset and updated as well.
      */
     private void checkCollisionWithHorizontalWall() {
-        if (getxBall() >= initGameComponent.getSCENE_WIDTH()) {
+        if (ball.getxBall() >= SCENE_WIDTH) {
             resetcollideFlags();
             setCollideToRightWall(true);
         }
 
-        if (getxBall() <= 0) {
+        if (ball.getxBall() <= 0) {
             resetcollideFlags();
             setCollideToLeftWall(true);
         }
@@ -308,60 +303,6 @@ public class BallControl {
     }
 
 
-    /**
-     * Gets the Circle object representing the ball.
-     *
-     * @return The Circle object representing the ball.
-     */
-    public Circle getBall() {
-        return ball;
-    }
-
-    /**
-     * Sets the Circle object representing the ball.
-     *
-     * @param ball The Circle object to set as the ball.
-     */
-    public void setBall(Circle ball) {
-        this.ball = ball;
-    }
-
-
-    /**
-     * Gets the x-coordinate of the ball's center.
-     *
-     * @return The x-coordinate of the ball's center.
-     */
-    public double getxBall() {
-        return xBall;
-    }
-
-    /**
-     * Sets the x-coordinate of the ball's center.
-     *
-     * @param xBall The new x-coordinate of the ball's center.
-     */
-    public void setxBall(double xBall) {
-        this.xBall = xBall;
-    }
-
-    /**
-     * Gets the y-coordinate of the ball's center.
-     *
-     * @return The y-coordinate of the ball's center.
-     */
-    public double getyBall() {
-        return yBall;
-    }
-
-    /**
-     * Sets the y-coordinate of the ball's center.
-     *
-     * @param yBall The new y-coordinate of the ball's center.
-     */
-    public void setyBall(double yBall) {
-        this.yBall = yBall;
-    }
 
     /**
      * Checks if the ball is currently moving downward.
@@ -561,7 +502,13 @@ public class BallControl {
      * @param vX The new velocity of the ball along the horizontal axis.
      */
     public void setvX(double vX) {
+//        if(vX <= 5){
+//            this.vX = vX;
+//        }else{
+//            this.vX= 5;
+//        }
         this.vX = vX;
+        System.out.println(vX);
     }
 
     /**
@@ -599,5 +546,14 @@ public class BallControl {
     public void setInitGameComponent(InitGameComponent initGameComponent) {
         this.initGameComponent = initGameComponent;
     }
+
+    public void setPaddle(Paddle paddle) {
+        this.paddle = paddle;
+    }
+
+    public void setBall(Ball ball) {
+        this.ball = ball;
+    }
+
 
 }

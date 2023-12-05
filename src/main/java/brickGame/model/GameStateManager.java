@@ -1,5 +1,6 @@
 package brickGame.model;
 
+import brickGame.handler.BallControlHandler;
 import brickGame.serialization.BlockSerialize;
 import brickGame.serialization.LoadSave;
 import brickGame.controller.GameSceneController;
@@ -48,10 +49,14 @@ public class GameStateManager {
      * Flag indicating whether it's the first time the game is opened.
      */
     private boolean gameFirstOpen = true;
-    private BallControl ballControl;
+    private BallControlHandler ballControlHandler;
     private GameLogicHandler gameLogicHandler;
     private GameSceneController gameSceneController;
     private InitGameComponent initGameComponent;
+
+    private Paddle paddle;
+    private Ball ball;
+
 
     private static GameStateManager instance;
 
@@ -121,11 +126,11 @@ public class GameStateManager {
 
                 gameLogicHandler.stopEngine();
 
-                ballControl.setvX(1.000);
-                ballControl.setvY(1.000);
+                ballControlHandler.setvX(1.000);
+                ballControlHandler.setvY(1.000);
 
-                ballControl.resetcollideFlags();
-                ballControl.setGoDownBall(true);
+                ballControlHandler.resetcollideFlags();
+                ballControlHandler.setGoDownBall(true);
                 gameLogicHandler.setGoldStatus(false);
 
                 initGameComponent.setExistHeartBlock(false);
@@ -175,27 +180,27 @@ public class GameStateManager {
                 outputStream.writeInt(gameLogicHandler.getHeart());
                 outputStream.writeInt(gameLogicHandler.getRemainingBlockCount());
 
-                outputStream.writeDouble(ballControl.getxBall());
-                outputStream.writeDouble(ballControl.getyBall());
-                outputStream.writeDouble(initGameComponent.getxPaddle());
-                outputStream.writeDouble(initGameComponent.getyPaddle());
-                outputStream.writeDouble(initGameComponent.getCenterPaddleX());
+                outputStream.writeDouble(ball.getxBall());
+                outputStream.writeDouble(ball.getyBall());
+                outputStream.writeDouble(paddle.getxPaddle());
+                outputStream.writeDouble(paddle.getyPaddle());
+                outputStream.writeDouble(paddle.getCenterPaddleX());
                 outputStream.writeLong(gameLogicHandler.getTime());
                 outputStream.writeLong(gameLogicHandler.getGoldTime());
-                outputStream.writeDouble(ballControl.getvX());
+                outputStream.writeDouble(ballControlHandler.getvX());
 
                 outputStream.writeBoolean(initGameComponent.isExistHeartBlock());
                 outputStream.writeBoolean(gameLogicHandler.isGoldStatus());
-                outputStream.writeBoolean(ballControl.isGoDownBall());
-                outputStream.writeBoolean(ballControl.isGoRightBall());
-                outputStream.writeBoolean(ballControl.isCollideToPaddle());
-                outputStream.writeBoolean(ballControl.isCollideToPaddleAndMoveToRight());
-                outputStream.writeBoolean(ballControl.isCollideToRightWall());
-                outputStream.writeBoolean(ballControl.isCollideToLeftWall());
-                outputStream.writeBoolean(ballControl.isCollideToRightBlock());
-                outputStream.writeBoolean(ballControl.isCollideToBottomBlock());
-                outputStream.writeBoolean(ballControl.isCollideToLeftBlock());
-                outputStream.writeBoolean(ballControl.isCollideToTopBlock());
+                outputStream.writeBoolean(ballControlHandler.isGoDownBall());
+                outputStream.writeBoolean(ballControlHandler.isGoRightBall());
+                outputStream.writeBoolean(ballControlHandler.isCollideToPaddle());
+                outputStream.writeBoolean(ballControlHandler.isCollideToPaddleAndMoveToRight());
+                outputStream.writeBoolean(ballControlHandler.isCollideToRightWall());
+                outputStream.writeBoolean(ballControlHandler.isCollideToLeftWall());
+                outputStream.writeBoolean(ballControlHandler.isCollideToRightBlock());
+                outputStream.writeBoolean(ballControlHandler.isCollideToBottomBlock());
+                outputStream.writeBoolean(ballControlHandler.isCollideToLeftBlock());
+                outputStream.writeBoolean(ballControlHandler.isCollideToTopBlock());
 
                 ArrayList<BlockSerialize> blockSerializables = new ArrayList<>();
                 for (Block block : initGameComponent.getBlocks()) {
@@ -232,31 +237,31 @@ public class GameStateManager {
 
         initGameComponent.setExistHeartBlock(loadSave.isExistHeartBlock());
         gameLogicHandler.setGoldStatus(loadSave.isGoldStatus());
-        ballControl.setGoDownBall(loadSave.isGoDownBall());
-        ballControl.setGoRightBall(loadSave.isGoRightBall());
-        ballControl.setCollideToPaddle(loadSave.isCollideToPaddle());
-        ballControl.setCollideToPaddleAndMoveToRight(loadSave.isCollideTopPaddleAndMoveToRight());
-        ballControl.setCollideToRightWall(loadSave.isCollideToRightWall());
-        ballControl.setCollideToLeftWall(loadSave.isCollideToLeftWall());
-        ballControl.setCollideToRightBlock(loadSave.isCollideToRightBlock());
-        ballControl.setCollideToBottomBlock(loadSave.isCollideToBottomBlock());
-        ballControl.setCollideToLeftBlock(loadSave.isCollideToLeftBlock());
-        ballControl.setCollideToTopBlock(loadSave.isCollideToTopBlock());
+        ballControlHandler.setGoDownBall(loadSave.isGoDownBall());
+        ballControlHandler.setGoRightBall(loadSave.isGoRightBall());
+        ballControlHandler.setCollideToPaddle(loadSave.isCollideToPaddle());
+        ballControlHandler.setCollideToPaddleAndMoveToRight(loadSave.isCollideTopPaddleAndMoveToRight());
+        ballControlHandler.setCollideToRightWall(loadSave.isCollideToRightWall());
+        ballControlHandler.setCollideToLeftWall(loadSave.isCollideToLeftWall());
+        ballControlHandler.setCollideToRightBlock(loadSave.isCollideToRightBlock());
+        ballControlHandler.setCollideToBottomBlock(loadSave.isCollideToBottomBlock());
+        ballControlHandler.setCollideToLeftBlock(loadSave.isCollideToLeftBlock());
+        ballControlHandler.setCollideToTopBlock(loadSave.isCollideToTopBlock());
         gameLogicHandler.setLevel(loadSave.getLevel());
         gameLogicHandler.setScore(loadSave.getScore());
         gameLogicHandler.setHeart(loadSave.getHeart());
         gameLogicHandler.setRemainingBlockCount(loadSave.getRemainingBlockCount());
 
-        ballControl.setxBall(loadSave.getxBall());
-        ballControl.setyBall(loadSave.getyBall());
+        ball.setxBall(loadSave.getxBall());
+        ball.setyBall(loadSave.getyBall());
 
-        initGameComponent.setxPaddle(loadSave.getxPaddle());
-        initGameComponent.setyPaddle(loadSave.getyPaddle());
-        initGameComponent.setCenterPaddleX(loadSave.getCenterPaddleX());
+        paddle.setxPaddle(loadSave.getxPaddle());
+        paddle.setyPaddle(loadSave.getyPaddle());
+        paddle.setCenterPaddleX(loadSave.getCenterPaddleX());
 
         gameLogicHandler.setTime(loadSave.getTime());
         gameLogicHandler.setGoldTime(loadSave.getGoldTime());
-        ballControl.setvX(loadSave.getvX());
+        ballControlHandler.setvX(loadSave.getvX());
 
         initGameComponent.getBlocks().clear();
         initGameComponent.getChocos().clear();
@@ -287,11 +292,11 @@ public class GameStateManager {
             gameLogicHandler.setHeart(gameLogicHandler.getInitialHeart());
             gameLogicHandler.setScore(0);
 
-            ballControl.setvX(1.000);
+            ballControlHandler.setvX(1.000);
             gameLogicHandler.setRemainingBlockCount(0);
 
-            ballControl.resetcollideFlags();
-            ballControl.setGoDownBall(true);
+            ballControlHandler.resetcollideFlags();
+            ballControlHandler.setGoDownBall(true);
 
             gameLogicHandler.setGoldStatus(false);
 
@@ -343,11 +348,19 @@ public class GameStateManager {
         this.initGameComponent = initGameComponent;
     }
 
-    public void setBallControl(BallControl ballControl) {
-        this.ballControl = ballControl;
+    public void setBallControl(BallControlHandler ballControlHandler) {
+        this.ballControlHandler = ballControlHandler;
     }
 
     public void setGameLogicHandler(GameLogicHandler gameLogicHandler) {
         this.gameLogicHandler = gameLogicHandler;
     }
+
+    public void setPaddle(Paddle paddle) {
+        this.paddle = paddle;
+    }
+    public void setBall(Ball ball) {
+        this.ball = ball;
+    }
+
 }

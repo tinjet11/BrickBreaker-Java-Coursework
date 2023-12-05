@@ -2,10 +2,9 @@ package brickGame;
 
 import brickGame.controller.GameSceneController;
 import brickGame.controller.MenuController;
+import brickGame.handler.BallControlHandler;
 import brickGame.handler.GameLogicHandler;
-import brickGame.model.BallControl;
-import brickGame.model.GameStateManager;
-import brickGame.model.InitGameComponent;
+import brickGame.model.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -26,10 +25,13 @@ import java.io.*;
 public class Main extends Application {
     private  Stage primaryStage;
     private GameLogicHandler gameLogicHandler;
-    private BallControl ballControl;
+    private BallControlHandler ballControlHandler;
     private GameSceneController gameSceneController;
     private GameStateManager gameStateManager;
     private InitGameComponent initGameComponent;
+
+    private Paddle paddle;
+    private Ball ball;
 
     /**
      * The entry point of the JavaFX application. Initializes the game components and
@@ -41,32 +43,42 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         gameLogicHandler = GameLogicHandler.getInstance();
-        ballControl = BallControl.getInstance();
+        ballControlHandler = BallControlHandler.getInstance();
         gameSceneController = GameSceneController.getInstance();
         gameStateManager = GameStateManager.getInstance();
         initGameComponent = InitGameComponent.getInstance();
+        paddle = Paddle.getInstance();
+        ball = Ball.getInstance();
 
 
-        gameLogicHandler.setBallControl(ballControl);
+        gameLogicHandler.setBallControl(ballControlHandler);
         gameLogicHandler.setGameSceneController(gameSceneController);
         gameLogicHandler.setGameStateManager(gameStateManager);
         gameLogicHandler.setInitGameComponent(initGameComponent);
+        gameLogicHandler.setPaddle(paddle);
+        gameLogicHandler.setBall(ball);
 
-        ballControl.setGameLogicHandler(gameLogicHandler);
-        ballControl.setInitGameComponent(initGameComponent);
+        ballControlHandler.setGameLogicHandler(gameLogicHandler);
+        ballControlHandler.setInitGameComponent(initGameComponent);
+        ballControlHandler.setPaddle(paddle);
+        ballControlHandler.setBall(ball);
 
-        gameSceneController.setBallControl(ballControl);
+        gameSceneController.setBallControl(ballControlHandler);
         gameSceneController.setGameLogicHandler(gameLogicHandler);
         gameSceneController.setGameStateManager(gameStateManager);
         gameSceneController.setInitGameComponent(initGameComponent);
+        gameSceneController.setPaddle(paddle);
+        gameSceneController.setBall(ball);
         gameSceneController.setPrimaryStage(primaryStage);
 
-        gameStateManager.setBallControl(ballControl);
+        gameStateManager.setBallControl(ballControlHandler);
         gameStateManager.setGameLogicHandler(gameLogicHandler);
         gameStateManager.setGameSceneController(gameSceneController);
         gameStateManager.setInitGameComponent(initGameComponent);
+        gameStateManager.setBall(ball);
+        gameStateManager.setPaddle(paddle);
 
-        initGameComponent.setBallControl(ballControl);
+        initGameComponent.setBallControl(ballControlHandler);
         initGameComponent.setGameLogicHandler(gameLogicHandler);
         this.primaryStage = primaryStage;
         Platform.runLater(this::initializeMenuScene);

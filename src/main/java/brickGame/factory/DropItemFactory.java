@@ -31,6 +31,7 @@ public class DropItemFactory {
     }
 
     /**
+     * Factory Methods
      * Creates a choco bonus item at the specified position and time.
      * The created item is added to the game scene and the list of choco bonuses in the game component.
      *
@@ -46,6 +47,7 @@ public class DropItemFactory {
     }
 
     /**
+     * Factory Methods
      * Creates a bomb penalty item at the specified position and time.
      * The created item is added to the game scene and the list of bomb penalties in the game component.
      *

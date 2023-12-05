@@ -15,8 +15,7 @@ import javafx.scene.paint.ImagePattern;
 
 import java.util.Iterator;
 
-import static brickGame.Constants.BALL_IMAGE_PATH;
-import static brickGame.Constants.GOLD_ROOT;
+import static brickGame.Constants.*;
 import static brickGame.model.Block.BLOCK_HEIGHT;
 import static brickGame.model.Block.BLOCK_PADDING_TOP;
 
@@ -41,10 +40,20 @@ public class GameLogicHandler implements Actionable {
         return instance;
     }
 
-    private BallControl ballControl;
+    private BallControlHandler ballControlHandler;
     private GameSceneController gameSceneController;
     private InitGameComponent initGameComponent;
     private GameStateManager gameStateManager;
+
+    public void setPaddle(Paddle paddle) {
+        this.paddle = paddle;
+    }
+    private Ball ball;
+
+    public void setBall(Ball ball) {
+        this.ball = ball;
+    }
+    private Paddle paddle;
 
     private int heart = 3;
     private int initialHeart = 3;
@@ -79,11 +88,11 @@ public class GameLogicHandler implements Actionable {
         gameSceneController.setScoreLabel("Score: " + getScore());
         gameSceneController.setHeartLabel("Heart : " + getHeart());
 
-        initGameComponent.getPaddle().setX(initGameComponent.getxPaddle());
-        initGameComponent.getPaddle().setY(initGameComponent.getyPaddle());
+        paddle.getPaddle().setX(paddle.getxPaddle());
+        paddle.getPaddle().setY(paddle.getyPaddle());
 
-        ballControl.getBall().setCenterX(ballControl.getxBall());
-        ballControl.getBall().setCenterY(ballControl.getyBall());
+        ball.getBall().setCenterX(ball.getxBall());
+        ball.getBall().setCenterY(ball.getyBall());
     }
 
     /**
@@ -92,8 +101,8 @@ public class GameLogicHandler implements Actionable {
      * @return True if the ball is within the game bounds, false otherwise.
      */
     private boolean isBallWithinGameBounds() {
-        return ballControl.getyBall() >= BLOCK_PADDING_TOP &&
-                ballControl.getyBall() <= (BLOCK_HEIGHT * (getLevel() + 1)) + BLOCK_PADDING_TOP;
+        return ball.getyBall() >= BLOCK_PADDING_TOP &&
+                ball.getyBall() <= (BLOCK_HEIGHT * (getLevel() + 1)) + BLOCK_PADDING_TOP;
     }
 
     /**
@@ -104,7 +113,7 @@ public class GameLogicHandler implements Actionable {
         while (iterator.hasNext()) {
             Block block = iterator.next();
             try {
-                Block.HIT_STATE hitCode = block.checkHitToBlock(ballControl.getxBall(), ballControl.getyBall());
+                Block.HIT_STATE hitCode = block.checkHitToBlock(ball.getxBall(), ball.getyBall());
                 if (hitCode != Block.HIT_STATE.NO_HIT) {
                     handleBlockHit(block, hitCode);
                 }
@@ -122,12 +131,12 @@ public class GameLogicHandler implements Actionable {
      * @param hitCode The specific hit state.
      */
     private void handleBlockHit(Block block, Block.HIT_STATE hitCode) {
-        ballControl.resetcollideFlags();
+        ballControlHandler.resetcollideFlags();
 
         BlockHitHandlerFactory factory = BlockHitHandlerFactoryProvider.getFactory(block.getType());
 
         if (factory != null) {
-            BlockHitHandler handler = factory.createHandler(gameSceneController, initGameComponent, ballControl);
+            BlockHitHandler handler = factory.createHandler(gameSceneController, initGameComponent, ballControlHandler);
             handler.handleBlockHit(block, hitCode, this);
         }
 
@@ -141,13 +150,13 @@ public class GameLogicHandler implements Actionable {
      */
     private void handleCollisionDirection(Block.HIT_STATE hitCode) {
         if (hitCode == Block.HIT_STATE.HIT_RIGHT) {
-            ballControl.setCollideToRightBlock(true);
+            ballControlHandler.setCollideToRightBlock(true);
         } else if (hitCode == Block.HIT_STATE.HIT_BOTTOM) {
-            ballControl.setCollideToBottomBlock(true);
+            ballControlHandler.setCollideToBottomBlock(true);
         } else if (hitCode == Block.HIT_STATE.HIT_LEFT) {
-            ballControl.setCollideToLeftBlock(true);
+            ballControlHandler.setCollideToLeftBlock(true);
         } else if (hitCode == Block.HIT_STATE.HIT_TOP) {
-            ballControl.setCollideToTopBlock(true);
+            ballControlHandler.setCollideToTopBlock(true);
         }
     }
     /**
@@ -183,7 +192,7 @@ public class GameLogicHandler implements Actionable {
      */
     public void deductHeart() {
         heart = heart - 1;
-        new ScoreAnimation(gameSceneController.getGamePane()).showScoreAnimation(initGameComponent.getSCENE_WIDTH() / 2, initGameComponent.getSCENE_HEIGHT() / 2, -1);
+        new ScoreAnimation(gameSceneController.getGamePane()).showScoreAnimation(SCENE_WIDTH / 2, SCENE_HEIGHT / 2, -1);
 
         System.out.println("heart: " + heart);
 
@@ -214,7 +223,7 @@ public class GameLogicHandler implements Actionable {
 
         handleGoldStatus();
 
-        Platform.runLater(() -> ballControl.setPhysicsToBall());
+        Platform.runLater(() -> ballControlHandler.setPhysicsToBall());
 
         handleChocos();
         handlePenalties();
@@ -225,7 +234,7 @@ public class GameLogicHandler implements Actionable {
     private void handleGoldStatus() {
         if (shouldRemoveGold()) {
             Platform.runLater(() -> {
-                ballControl.getBall().setFill(new ImagePattern(new Image(getClass().getResourceAsStream(BALL_IMAGE_PATH))));
+                ball.getBall().setFill(new ImagePattern(new Image(getClass().getResourceAsStream(BALL_IMAGE_PATH))));
                 gameSceneController.getGamePane().getStyleClass().remove(GOLD_ROOT);
                 setGoldStatus(false);
             });
@@ -295,8 +304,8 @@ public class GameLogicHandler implements Actionable {
         return gameSceneController;
     }
 
-    public void setBallControl(BallControl ballControl) {
-        this.ballControl = ballControl;
+    public void setBallControl(BallControlHandler ballControlHandler) {
+        this.ballControlHandler = ballControlHandler;
     }
 
     public void setGameStateManager(GameStateManager gameStateManager) {

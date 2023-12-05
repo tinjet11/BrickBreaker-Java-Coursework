@@ -1,11 +1,14 @@
 package brickGame.handler.dropitem;
 
 import brickGame.controller.GameSceneController;
+import brickGame.model.Paddle;
 import brickGame.model.dropitem.DropItem;
 import brickGame.handler.GameLogicHandler;
 import brickGame.model.InitGameComponent;
 import brickGame.model.ScoreAnimation;
 import javafx.application.Platform;
+
+import static brickGame.Constants.SCENE_HEIGHT;
 
 /**
  * Handler class for managing drop items in a brick game.
@@ -15,6 +18,7 @@ public class DropItemHandler {
     public InitGameComponent initGameComponent;
     public GameSceneController gameSceneController;
     public GameLogicHandler gameLogicHandler;
+    public Paddle paddle;
 
     public DropItem dropItem;
 
@@ -31,6 +35,7 @@ public class DropItemHandler {
         this.gameSceneController = gameSceneController;
         this.gameLogicHandler = gameLogicHandler;
         this.dropItem = dropItem;
+        this.paddle = Paddle.getInstance();
     }
 
     /**
@@ -39,7 +44,7 @@ public class DropItemHandler {
      * @return true if the drop item should be removed, false otherwise.
      */
     public boolean shouldRemove() {
-        return dropItem.getY() > initGameComponent.getSCENE_HEIGHT() || dropItem.isTaken();
+        return dropItem.getY() > SCENE_HEIGHT || dropItem.isTaken();
     }
 
     /**
@@ -48,10 +53,10 @@ public class DropItemHandler {
      * @return true if the drop item is taken by the paddle, false otherwise.
      */
     public boolean isTaken() {
-        return dropItem.getY() >= initGameComponent.getyPaddle() &&
-                dropItem.getY() <= initGameComponent.getyPaddle() + initGameComponent.getPADDLE_HEIGHT() &&
-                dropItem.getX() >= initGameComponent.getxPaddle() &&
-                dropItem.getX() <= initGameComponent.getxPaddle() + initGameComponent.getPADDLE_WIDTH();
+        return dropItem.getY() >= paddle.getyPaddle() &&
+                dropItem.getY() <= paddle.getyPaddle() + paddle.getPADDLE_HEIGHT() &&
+                dropItem.getX() >= paddle.getxPaddle() &&
+                dropItem.getX() <= paddle.getxPaddle() + paddle.getPADDLE_WIDTH();
     }
 
     /**

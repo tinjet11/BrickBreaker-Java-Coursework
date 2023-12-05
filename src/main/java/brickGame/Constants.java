@@ -35,4 +35,7 @@ public class Constants {
     // Gold root name
     public static  final String GOLD_ROOT = "goldRoot";
 
+    public static final int SCENE_WIDTH = 500;
+    public static final int SCENE_HEIGHT = 750;
+
 }

@@ -1,5 +1,6 @@
 package brickGame.model;
 
+import brickGame.handler.BallControlHandler;
 import brickGame.handler.GameLogicHandler;
 import brickGame.model.dropitem.Bonus;
 import brickGame.model.dropitem.Bomb;
@@ -51,17 +52,9 @@ public class InitGameComponent {
         return instance;
     }
 
-    private BallControl ballControl;
+    private BallControlHandler ballControlHandler;
     private GameLogicHandler gameLogicHandler;
-    private Rectangle paddle;
-    private double xPaddle = 0.0f;
-    private double centerPaddleX;
-    private double yPaddle = 690.0f;
-    private final int PADDLE_WIDTH = 130;
-    private final int PADDLE_HEIGHT = 10;
-    private final int HALF_PADDLE_WIDTH = getPADDLE_WIDTH() / 2;
-    private final int SCENE_WIDTH = 500;
-    private final int SCENE_HEIGHT = 750;
+
     private final int BALL_RADIUS = 10;
     private boolean isExistHeartBlock = false;
     private boolean isExistBombBlock = false;
@@ -121,27 +114,29 @@ public class InitGameComponent {
         Random random = new Random();
 
         // Randomly set the x-coordinate within the width of the game scene
-        double xBall = Math.max(getBALL_RADIUS(), Math.min(random.nextInt(getSCENE_WIDTH() - getBALL_RADIUS()) + 1, getSCENE_WIDTH() - getBALL_RADIUS()));
+        double xBall = Math.max(getBALL_RADIUS(), Math.min(random.nextInt(SCENE_WIDTH - getBALL_RADIUS()) + 1, SCENE_WIDTH - getBALL_RADIUS()));
 
         // Ensure that the ball starts above the screen's bottom edge
         int minYBall = ((gameLogicHandler.getLevel() + 1) * BLOCK_HEIGHT) + 2 * getBALL_RADIUS();
 
         // Randomly set the y-coordinate within the valid range
-        double yBall = Math.max(minYBall, Math.min(random.nextInt(getSCENE_HEIGHT() - minYBall) + minYBall, getSCENE_HEIGHT() - minYBall));
+        double yBall = Math.max(minYBall, Math.min(random.nextInt(SCENE_HEIGHT - minYBall) + minYBall, SCENE_HEIGHT- minYBall));
 
         // Create the ball object with the specified radius and image pattern
-        Circle ball = new Circle();
-        ball.setRadius(getBALL_RADIUS());
+        Circle newBall = new Circle();
+        newBall.setRadius(getBALL_RADIUS());
        if(gameLogicHandler.isGoldStatus()){
-           ball.setFill(new ImagePattern(new Image(getClass().getResourceAsStream(GOLD_BALL_IMAGE_PATH))));
+           newBall.setFill(new ImagePattern(new Image(getClass().getResourceAsStream(GOLD_BALL_IMAGE_PATH))));
         }else{
-           ball.setFill(new ImagePattern(new Image(getClass().getResourceAsStream(BALL_IMAGE_PATH))));
+           newBall.setFill(new ImagePattern(new Image(getClass().getResourceAsStream(BALL_IMAGE_PATH))));
        }
 
+        Ball ball = Ball.getInstance();
+
         // Set the ball's properties in the BallControl instance
-        ballControl.setxBall(xBall);
-        ballControl.setyBall(yBall);
-        ballControl.setBall(ball);
+        ball.setxBall(xBall);
+        ball.setyBall(yBall);
+        ball.setBall(newBall);
     }
 
     // the paddle
@@ -149,76 +144,26 @@ public class InitGameComponent {
      * set up the UI and position of  paddle in the game
      */
     public void initPaddle() {
-        setPaddle(new Rectangle());
-        getPaddle().setWidth(getPADDLE_WIDTH());
-        getPaddle().setHeight(getPADDLE_HEIGHT());
-        getPaddle().setX(getxPaddle());
-        getPaddle().setY(getyPaddle());
+        Paddle paddle = Paddle.getInstance();
+        paddle.setPaddle(new Rectangle());
+        paddle.getPaddle().setWidth(paddle.getPADDLE_WIDTH());
+        paddle.getPaddle().setHeight(paddle.getPADDLE_HEIGHT());
+        paddle.getPaddle().setX(paddle.getxPaddle());
+        paddle.getPaddle().setY(paddle.getyPaddle());
 
         ImagePattern pattern = new ImagePattern(new Image(getClass().getResourceAsStream(PADDLE_IMAGE_PATH)));
 
-        getPaddle().setFill(pattern);
+        paddle.getPaddle().setFill(pattern);
     }
 
-    public void setBallControl(BallControl ballControl) {
-        this.ballControl = ballControl;
+    public void setBallControl(BallControlHandler ballControlHandler) {
+        this.ballControlHandler = ballControlHandler;
     }
 
     public void setGameLogicHandler(GameLogicHandler gameLogicHandler) {
         this.gameLogicHandler = gameLogicHandler;
     }
 
-    public Rectangle getPaddle() {
-        return paddle;
-    }
-
-    public void setPaddle(Rectangle paddle) {
-        this.paddle = paddle;
-    }
-
-    public double getxPaddle() {
-        return xPaddle;
-    }
-
-    public void setxPaddle(double xPaddle) {
-        this.xPaddle = xPaddle;
-    }
-
-    public double getCenterPaddleX() {
-        return centerPaddleX;
-    }
-
-    public void setCenterPaddleX(double centerPaddleX) {
-        this.centerPaddleX = centerPaddleX;
-    }
-
-    public double getyPaddle() {
-        return yPaddle;
-    }
-
-    public void setyPaddle(double yPaddle) {
-        this.yPaddle = yPaddle;
-    }
-
-    public int getPADDLE_WIDTH() {
-        return PADDLE_WIDTH;
-    }
-
-    public int getPADDLE_HEIGHT() {
-        return PADDLE_HEIGHT;
-    }
-
-    public int getHALF_PADDLE_WIDTH() {
-        return HALF_PADDLE_WIDTH;
-    }
-
-    public int getSCENE_WIDTH() {
-        return SCENE_WIDTH;
-    }
-
-    public int getSCENE_HEIGHT() {
-        return SCENE_HEIGHT;
-    }
 
     public int getBALL_RADIUS() {
         return BALL_RADIUS;

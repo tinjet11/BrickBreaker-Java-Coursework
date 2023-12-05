@@ -1,5 +1,6 @@
 package brickGame.controller;
 
+import brickGame.handler.BallControlHandler;
 import brickGame.handler.GameLogicHandler;
 import brickGame.model.*;
 import javafx.event.ActionEvent;
@@ -13,8 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-import static brickGame.Constants.GOLD_ROOT;
-import static brickGame.Constants.MENU_SCENE_FXML;
+import static brickGame.Constants.*;
 
 
 /**
@@ -42,10 +42,14 @@ public class GameSceneController {
     private MenuController menuController;
 
 
-    private BallControl ballControl;
+    private BallControlHandler ballControlHandler;
     private GameLogicHandler gameLogicHandler;
     private GameStateManager gameStateManager;
     private InitGameComponent initGameComponent;
+
+    private Paddle paddle;
+
+    private Ball ball;
 
     /**
      * Singleton instance of the GameSceneController.
@@ -167,7 +171,7 @@ public class GameSceneController {
         gameStateManager.setGameFirstOpen(false);
 
         //add ball and paddle to gamePane
-        gamePane.getChildren().addAll(initGameComponent.getPaddle(), ballControl.getBall());
+        gamePane.getChildren().addAll(paddle.getPaddle(), ball.getBall());
 
         // add blocks to the gamePane
         for (Block block : initGameComponent.getBlocks()) {
@@ -195,10 +199,10 @@ public class GameSceneController {
     private void handleKeyPressed(KeyEvent event) {
         switch (event.getCode()) {
             case LEFT:
-                move(LEFT);
+                paddle.move(LEFT);
                 break;
             case RIGHT:
-                move(RIGHT);
+                paddle.move(RIGHT);
                 break;
         }
     }
@@ -211,37 +215,37 @@ public class GameSceneController {
      *                  Use constants LEFT (1) or RIGHT (2) from the class.
      *                  If LEFT, the paddle moves to the left; if RIGHT, the paddle moves to the right.
      */
-    private void move(final int direction) {
-        //Move the paddle
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int sleepTime = 4;
-                for (int i = 0; i < 30; i++) {
-                    if (initGameComponent.getxPaddle() == (initGameComponent.getSCENE_WIDTH() - initGameComponent.getPADDLE_WIDTH()) && direction == RIGHT) {
-                        return;
-                    }
-                    if (initGameComponent.getxPaddle() == 0 && direction == LEFT) {
-                        return;
-                    }
-                    if (direction == RIGHT) {
-                        initGameComponent.setxPaddle(initGameComponent.getxPaddle() + 1);
-                    } else {
-                        initGameComponent.setxPaddle(initGameComponent.getxPaddle() - 1);
-                    }
-                    initGameComponent.setCenterPaddleX(initGameComponent.getxPaddle() + initGameComponent.getHALF_PADDLE_WIDTH());
-                    try {
-                        Thread.sleep(sleepTime);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (i >= 20) {
-                        sleepTime = i;
-                    }
-                }
-            }
-        }).start();
-    }
+//    private void move(final int direction) {
+//        //Move the paddle
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                int sleepTime = 4;
+//                for (int i = 0; i < 30; i++) {
+//                    if (paddle.getxPaddle() == (SCENE_WIDTH - paddle.getPADDLE_WIDTH()) && direction == RIGHT) {
+//                        return;
+//                    }
+//                    if (paddle.getxPaddle() == 0 && direction == LEFT) {
+//                        return;
+//                    }
+//                    if (direction == RIGHT) {
+//                        paddle.setxPaddle(paddle.getxPaddle() + 1);
+//                    } else {
+//                        paddle.setxPaddle(paddle.getxPaddle() - 1);
+//                    }
+//                    paddle.setCenterPaddleX(paddle.getxPaddle() + paddle.getHALF_PADDLE_WIDTH());
+//                    try {
+//                        Thread.sleep(sleepTime);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    if (i >= 20) {
+//                        sleepTime = i;
+//                    }
+//                }
+//            }
+//        }).start();
+//    }
 
     /**
      * Handles the action when the pause button is clicked.
@@ -331,10 +335,10 @@ public class GameSceneController {
     /**
      * Sets the ball control.
      *
-     * @param ballControl The BallControl to set.
+     * @param ballControlHandler The BallControl to set.
      */
-    public void setBallControl(BallControl ballControl) {
-        this.ballControl = ballControl;
+    public void setBallControl(BallControlHandler ballControlHandler) {
+        this.ballControlHandler = ballControlHandler;
     }
 
     /**
@@ -356,4 +360,11 @@ public class GameSceneController {
     }
 
 
+    public void setPaddle(Paddle paddle) {
+        this.paddle = paddle;
+    }
+
+    public void setBall(Ball ball) {
+        this.ball = ball;
+    }
 }

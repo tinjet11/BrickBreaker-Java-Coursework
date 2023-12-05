@@ -1,6 +1,7 @@
 package brickGame.handler.blockhit;
 
-import brickGame.model.BallControl;
+import brickGame.model.Ball;
+import brickGame.handler.BallControlHandler;
 import brickGame.model.Block;
 import brickGame.controller.GameSceneController;
 import brickGame.handler.GameLogicHandler;
@@ -17,17 +18,20 @@ import static brickGame.Constants.GOLD_ROOT;
  */
 public class StarBlockHitHandler implements BlockHitHandler {
     private final GameSceneController gameSceneController;
-    private final BallControl ballControl;
+    private final BallControlHandler ballControlHandler;
+
+    private final Ball ball;
 
     /**
      * Constructs a StarBlockHitHandler with the specified GameSceneController and BallControl.
      *
      * @param gameSceneController The GameSceneController associated with the game.
-     * @param ballControl         The BallControl instance responsible for ball movement.
+     * @param ballControlHandler         The BallControl instance responsible for ball movement.
      */
-    public StarBlockHitHandler(GameSceneController gameSceneController, BallControl ballControl) {
+    public StarBlockHitHandler(GameSceneController gameSceneController, BallControlHandler ballControlHandler) {
         this.gameSceneController = gameSceneController;
-        this.ballControl = ballControl;
+        this.ballControlHandler = ballControlHandler;
+        this.ball = Ball.getInstance();
     }
 
     /**
@@ -47,7 +51,7 @@ public class StarBlockHitHandler implements BlockHitHandler {
         // Change the ball and game pane to gold if not in gold status
         if (!gameLogicHandler.isGoldStatus()) {
             Platform.runLater(() -> {
-                ballControl.getBall().setFill(new ImagePattern(new Image(getClass().getResourceAsStream(GOLD_BALL_IMAGE_PATH))));
+                ball.getBall().setFill(new ImagePattern(new Image(getClass().getResourceAsStream(GOLD_BALL_IMAGE_PATH))));
                 gameSceneController.getGamePane().getStyleClass().add(GOLD_ROOT);
             });
         }
