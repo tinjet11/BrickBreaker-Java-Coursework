@@ -41,8 +41,6 @@ public class GameSceneController {
     private final int RIGHT = 2;
     private MenuController menuController;
 
-
-    private BallControlHandler ballControlHandler;
     private GameLogicHandler gameLogicHandler;
     private GameStateManager gameStateManager;
     private InitGameComponent initGameComponent;
@@ -215,37 +213,6 @@ public class GameSceneController {
      *                  Use constants LEFT (1) or RIGHT (2) from the class.
      *                  If LEFT, the paddle moves to the left; if RIGHT, the paddle moves to the right.
      */
-//    private void move(final int direction) {
-//        //Move the paddle
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                int sleepTime = 4;
-//                for (int i = 0; i < 30; i++) {
-//                    if (paddle.getxPaddle() == (SCENE_WIDTH - paddle.getPADDLE_WIDTH()) && direction == RIGHT) {
-//                        return;
-//                    }
-//                    if (paddle.getxPaddle() == 0 && direction == LEFT) {
-//                        return;
-//                    }
-//                    if (direction == RIGHT) {
-//                        paddle.setxPaddle(paddle.getxPaddle() + 1);
-//                    } else {
-//                        paddle.setxPaddle(paddle.getxPaddle() - 1);
-//                    }
-//                    paddle.setCenterPaddleX(paddle.getxPaddle() + paddle.getHALF_PADDLE_WIDTH());
-//                    try {
-//                        Thread.sleep(sleepTime);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    if (i >= 20) {
-//                        sleepTime = i;
-//                    }
-//                }
-//            }
-//        }).start();
-//    }
 
     /**
      * Handles the action when the pause button is clicked.
@@ -330,15 +297,6 @@ public class GameSceneController {
      */
     public void setInitGameComponent(InitGameComponent initGameComponent) {
         this.initGameComponent = initGameComponent;
-    }
-
-    /**
-     * Sets the ball control.
-     *
-     * @param ballControlHandler The BallControl to set.
-     */
-    public void setBallControl(BallControlHandler ballControlHandler) {
-        this.ballControlHandler = ballControlHandler;
     }
 
     /**
