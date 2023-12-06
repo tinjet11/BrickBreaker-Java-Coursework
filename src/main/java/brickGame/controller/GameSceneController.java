@@ -1,5 +1,6 @@
 package brickGame.controller;
 
+import brickGame.Mediator;
 import brickGame.handler.BallControlHandler;
 import brickGame.handler.GameLogicHandler;
 import brickGame.model.*;
@@ -26,6 +27,13 @@ import static brickGame.Constants.*;
  * @version 1.0
  */
 public class GameSceneController {
+
+    private Mediator mediator;
+
+
+    public void setMediator(Mediator mediator) {
+        this.mediator = mediator;
+    }
     @FXML
     private AnchorPane gamePane;
     @FXML
@@ -40,14 +48,6 @@ public class GameSceneController {
     private final int LEFT = 1;
     private final int RIGHT = 2;
     private MenuController menuController;
-
-    private GameLogicHandler gameLogicHandler;
-    private GameStateManager gameStateManager;
-    private InitGameComponent initGameComponent;
-
-    private Paddle paddle;
-
-    private Ball ball;
 
     /**
      * Singleton instance of the GameSceneController.
@@ -99,8 +99,8 @@ public class GameSceneController {
      */
     public void showLoseScene() {
         try {
-            gameLogicHandler.setGameRun(false);
-            gameStateManager.setGameState(GameStateManager.GameState.GAME_OVER);
+            mediator.getGameLogicHandler().setGameRun(false);
+            mediator.getGameStateManager().setGameState(GameStateManager.GameState.GAME_OVER);
             Scene loseMenuScene = loadMenuScene();
             menuController.showMenuScene("Lose", loseMenuScene);
         } catch (Exception e) {
@@ -114,8 +114,8 @@ public class GameSceneController {
      */
     public void showWinScene() {
         try {
-            gameStateManager.setGameState(GameStateManager.GameState.WIN);
-            gameLogicHandler.setGameRun(false);
+            mediator.getGameStateManager().setGameState(GameStateManager.GameState.WIN);
+            mediator.getGameLogicHandler().setGameRun(false);
             Scene winMenuScene = loadMenuScene();
             menuController.showMenuScene("Win", winMenuScene);
         } catch (Exception e) {
@@ -141,38 +141,38 @@ public class GameSceneController {
         heartLabel = (Label) gameScene.lookup("#heartLabel");
         levelLabel = (Label) gameScene.lookup("#levelLabel");
 
-        setLevelLabel("Level: " + gameLogicHandler.getLevel());
+        setLevelLabel("Level: " + mediator.getGameLogicHandler().getLevel());
 
         //if is not load from save
-        if (!gameStateManager.isLoadFromSave()) {
+        if (!mediator.getGameStateManager().isLoadFromSave()) {
             //init game component like block,ball and paddle
-            initGameComponent.initBall();
-            initGameComponent.initPaddle();
-            initGameComponent.initBoard();
-            gameLogicHandler.setRemainingBlockCount(initGameComponent.getBlocks().size());
+            mediator.getInitGameComponent().initBall();
+            mediator.getInitGameComponent().initPaddle();
+            mediator.getInitGameComponent().initBoard();
+            mediator.getGameLogicHandler().setRemainingBlockCount(mediator.getInitGameComponent().getBlocks().size());
             new ScoreAnimation(getGamePane()).showMessage("Level Up :)", 300, 300);
         } else {
 
             //if the game first open,call initBall and initPaddle method
             //because ball and paddle isn't loadFromSave
-            if (gameStateManager.isGameFirstOpen()) {
-                initGameComponent.initBall();
-                initGameComponent.initPaddle();
+            if (mediator.getGameStateManager().isGameFirstOpen()) {
+                mediator.getInitGameComponent().initBall();
+                mediator.getInitGameComponent().initPaddle();
             }
 
             // if the GoldStatus is true, add goldRoot to style.css
-            if (gameLogicHandler.isGoldStatus()) {
+            if (mediator.getGameLogicHandler().isGoldStatus()) {
                 getGamePane().getStyleClass().add(GOLD_ROOT);
             }
         }
 
-        gameStateManager.setGameFirstOpen(false);
+        mediator.getGameStateManager().setGameFirstOpen(false);
 
         //add ball and paddle to gamePane
-        gamePane.getChildren().addAll(paddle.getPaddle(), ball.getBall());
+        gamePane.getChildren().addAll(mediator.getPaddleInstance().getPaddle(), mediator.getBallInstance().getBall());
 
         // add blocks to the gamePane
-        for (Block block : initGameComponent.getBlocks()) {
+        for (Block block : mediator.getInitGameComponent().getBlocks()) {
             gamePane.getChildren().add(block.getRect());
         }
 
@@ -197,10 +197,10 @@ public class GameSceneController {
     private void handleKeyPressed(KeyEvent event) {
         switch (event.getCode()) {
             case LEFT:
-                paddle.move(LEFT);
+                mediator.getPaddleInstance().move(LEFT);
                 break;
             case RIGHT:
-                paddle.move(RIGHT);
+                mediator.getPaddleInstance().move(RIGHT);
                 break;
         }
     }
@@ -223,8 +223,8 @@ public class GameSceneController {
      */
     @FXML
     private void handlePauseButton(ActionEvent event) {
-        gameStateManager.saveGame();
-        gameStateManager.setGameState(GameStateManager.GameState.PAUSED);
+        mediator.getGameStateManager().saveGame();
+        mediator.getGameStateManager().setGameState(GameStateManager.GameState.PAUSED);
 
         Scene menuScene = loadMenuScene();
 
@@ -290,39 +290,4 @@ public class GameSceneController {
         return primaryStage;
     }
 
-    /**
-     * Sets the initialization game component.
-     *
-     * @param initGameComponent The InitGameComponent to set.
-     */
-    public void setInitGameComponent(InitGameComponent initGameComponent) {
-        this.initGameComponent = initGameComponent;
-    }
-
-    /**
-     * Sets the game logic handler.
-     *
-     * @param gameLogicHandler The GameLogicHandler to set.
-     */
-    public void setGameLogicHandler(GameLogicHandler gameLogicHandler) {
-        this.gameLogicHandler = gameLogicHandler;
-    }
-
-    /**
-     * Sets the game state manager.
-     *
-     * @param gameStateManager The GameStateManager to set.
-     */
-    public void setGameStateManager(GameStateManager gameStateManager) {
-        this.gameStateManager = gameStateManager;
-    }
-
-
-    public void setPaddle(Paddle paddle) {
-        this.paddle = paddle;
-    }
-
-    public void setBall(Ball ball) {
-        this.ball = ball;
-    }
 }

@@ -28,10 +28,7 @@ import static brickGame.Constants.SETTINGS_SCENE_FXML;
  */
 public class MenuController {
 
-    private GameLogicHandler gameLogicHandler;
-    private GameStateManager gameStateManager;
-
-    private GameSceneController gameSceneController;
+    Mediator mediator;
 
     private GameStateManager.GameState gameState;
 
@@ -41,11 +38,9 @@ public class MenuController {
 
 
     public MenuController(){
-        gameLogicHandler = GameLogicHandler.getInstance();
-        gameStateManager = GameStateManager.getInstance();
-        gameSceneController = GameSceneController.getInstance();
+        mediator = Mediator.getInstance();
 
-        primaryStage = gameSceneController.getPrimaryStage();
+        primaryStage = mediator.getGameSceneController().getPrimaryStage();
 
     }
 
@@ -66,20 +61,20 @@ public class MenuController {
      */
     @FXML
     public void onStartOrResume() {
-        gameState = gameStateManager.getGameState();
+        gameState = mediator.getGameStateManager().getGameState();
         if (gameState == GameStateManager.GameState.ON_START) {
-            gameLogicHandler.setHeart(gameLogicHandler.getInitialHeart());
-                gameStateManager.startGame();
+            mediator.getGameLogicHandler().setHeart(mediator.getGameLogicHandler().getInitialHeart());
+                mediator.getGameStateManager().startGame();
                 System.out.println("clicked");
-                gameStateManager.setGameState(GameStateManager.GameState.IN_PROGRESS);
+                mediator.getGameStateManager().setGameState(GameStateManager.GameState.IN_PROGRESS);
               //  loadButton.setVisible(false);
         } else if (gameState == GameStateManager.GameState.PAUSED) {
-            gameStateManager.loadGame();
-            gameStateManager.setGameState(GameStateManager.GameState.IN_PROGRESS);
+            mediator.getGameStateManager().loadGame();
+            mediator.getGameStateManager().setGameState(GameStateManager.GameState.IN_PROGRESS);
         } else if (gameState == GameStateManager.GameState.GAME_OVER || gameState == GameStateManager.GameState.WIN) {
-            gameStateManager.restartGame();
+            mediator.getGameStateManager().restartGame();
             resultBox.setVisible(false);
-            gameStateManager.setGameState(GameStateManager.GameState.IN_PROGRESS);
+            mediator.getGameStateManager().setGameState(GameStateManager.GameState.IN_PROGRESS);
         }
     }
 
@@ -93,8 +88,8 @@ public class MenuController {
         LoadSave loadSave = new LoadSave();
         //previous saved file exists
         if( loadSave.checkSaveGameFileExist()){
-            gameStateManager.loadGame();
-            gameStateManager.setGameState(GameStateManager.GameState.IN_PROGRESS);
+            mediator.getGameStateManager().loadGame();
+            mediator.getGameStateManager().setGameState(GameStateManager.GameState.IN_PROGRESS);
         }else{
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation");
@@ -105,7 +100,7 @@ public class MenuController {
                 if (response == ButtonType.OK) {
                     // User clicked OK
                     // Perform actions for starting a new game
-                    gameStateManager.startGame();
+                    mediator.getGameStateManager().startGame();
                 }
             });
         }
@@ -146,19 +141,19 @@ public class MenuController {
 
         HighestScore highScore = new HighestScore();
         highestScore = highScore.getHighestGameScore();
-        highScore.setHighestGameScore(gameLogicHandler.getScore());
+        highScore.setHighestGameScore(mediator.getGameLogicHandler().getScore());
 
         VBox resultBox = (VBox) winMenuScene.lookup("#resultBox");
         resultBox.setVisible(true);
 
         Label scorePlaceholder = (Label) winMenuScene.lookup("#scoreLabel");
         Label highestScorePlaceholder = (Label) winMenuScene.lookup("#highestScoreLabel");
-        scorePlaceholder.setText(scorePlaceholder.getText() + String.valueOf(gameLogicHandler.getScore()));
+        scorePlaceholder.setText(scorePlaceholder.getText() + String.valueOf(mediator.getGameLogicHandler().getScore()));
 
-        if(highestScore > gameLogicHandler.getScore()){
+        if(highestScore > mediator.getGameLogicHandler().getScore()){
             highestScorePlaceholder.setText(highestScorePlaceholder.getText() + String.valueOf(highestScore));
         }else{
-            highestScorePlaceholder.setText("Your new all time highest score is: " + String.valueOf(gameLogicHandler.getScore()));
+            highestScorePlaceholder.setText("Your new all time highest score is: " + String.valueOf(mediator.getGameLogicHandler().getScore()));
         }
 
         if (state == "Lose") {

@@ -1,10 +1,8 @@
 package brickGame.model;
 
-import brickGame.handler.BallControlHandler;
+import brickGame.Mediator;
 import brickGame.serialization.BlockSerialize;
 import brickGame.serialization.LoadSave;
-import brickGame.controller.GameSceneController;
-import brickGame.handler.GameLogicHandler;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -49,15 +47,14 @@ public class GameStateManager {
      * Flag indicating whether it's the first time the game is opened.
      */
     private boolean gameFirstOpen = true;
-    private BallControlHandler ballControlHandler;
-    private GameLogicHandler gameLogicHandler;
-    private GameSceneController gameSceneController;
-    private InitGameComponent initGameComponent;
-
-    private Paddle paddle;
-    private Ball ball;
+    
+    private Mediator mediator;
 
 
+    public void setMediator(Mediator mediator) {
+        this.mediator = mediator;
+    }
+    
     private static GameStateManager instance;
 
     /**
@@ -83,18 +80,18 @@ public class GameStateManager {
      * If the level is equal to the end level, it shows the win scene.
      */
     public void startGame() {
-        gameLogicHandler.setGameRun(true);
+        mediator.getGameLogicHandler().setGameRun(true);
         try {
             //if level equal to endLevel
-            if (gameLogicHandler.getLevel() == gameLogicHandler.getEndLevel()) {
-                gameSceneController.showWinScene();
+            if (mediator.getGameLogicHandler().getLevel() == mediator.getGameLogicHandler().getEndLevel()) {
+                mediator.getGameSceneController().showWinScene();
             } else {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(GAME_SCENE_FXML));
-                fxmlLoader.setControllerFactory(c -> gameSceneController);
+                fxmlLoader.setControllerFactory(c -> mediator.getGameSceneController());
 
                 Scene gameScene = new Scene(fxmlLoader.load());
-                gameSceneController.showGameScene(gameScene);
-                gameLogicHandler.setUpEngine();
+                mediator.getGameSceneController().showGameScene(gameScene);
+                mediator.getGameLogicHandler().setUpEngine();
 
                 if (isLoadFromSave()) {
                     setLoadFromSave(false);
@@ -114,7 +111,7 @@ public class GameStateManager {
      * Moves to the next level of the game, handling the logic and resetting necessary components.
      */
     public void nextLevel() {
-        gameLogicHandler.setGameRun(false);
+        mediator.getGameLogicHandler().setGameRun(false);
         // Check if nextLevel is already in progress, if yes, return
         if (nextLevelInProgress) {
             return;
@@ -124,29 +121,29 @@ public class GameStateManager {
         try {
             Platform.runLater(() -> {
 
-                gameLogicHandler.stopEngine();
+                mediator.getGameLogicHandler().stopEngine();
 
-                ballControlHandler.setvX(1.000);
-                ballControlHandler.setvY(1.000);
+                mediator.getBallControlHandler().setvX(1.000);
+                mediator.getBallControlHandler().setvY(1.000);
 
-                ballControlHandler.resetcollideFlags();
-                ballControlHandler.setGoDownBall(true);
-                gameLogicHandler.setGoldStatus(false);
+                mediator.getBallControlHandler().resetcollideFlags();
+                mediator.getBallControlHandler().setGoDownBall(true);
+                mediator.getGameLogicHandler().setGoldStatus(false);
 
-                initGameComponent.setExistHeartBlock(false);
-                initGameComponent.setExistBombBlock(false);
+                mediator.getInitGameComponent().setExistHeartBlock(false);
+                mediator.getInitGameComponent().setExistBombBlock(false);
 
-                gameLogicHandler.setTime(0);
-                gameLogicHandler.setGoldTime(0);
+                mediator.getGameLogicHandler().setTime(0);
+                mediator.getGameLogicHandler().setGoldTime(0);
 
-                initGameComponent.getBlocks().clear();
-                initGameComponent.getChocos().clear();
-                initGameComponent.getBombs().clear();
+                mediator.getInitGameComponent().getBlocks().clear();
+                mediator.getInitGameComponent().getChocos().clear();
+                mediator.getInitGameComponent().getBombs().clear();
 
-                gameLogicHandler.setRemainingBlockCount(0);
+                mediator.getGameLogicHandler().setRemainingBlockCount(0);
 
-                if (gameLogicHandler.getLevel() < gameLogicHandler.getEndLevel()) {
-                    gameLogicHandler.addLevel();
+                if (mediator.getGameLogicHandler().getLevel() < mediator.getGameLogicHandler().getEndLevel()) {
+                    mediator.getGameLogicHandler().addLevel();
                 }
                 startGame();
             });
@@ -170,40 +167,40 @@ public class GameStateManager {
             File file = new File(SAVE_PATH);
             ObjectOutputStream outputStream = null;
 
-            gameLogicHandler.stopEngine();
+            mediator.getGameLogicHandler().stopEngine();
 
             try {
                 outputStream = new ObjectOutputStream(new FileOutputStream(file));
 
-                outputStream.writeInt(gameLogicHandler.getLevel());
-                outputStream.writeInt(gameLogicHandler.getScore());
-                outputStream.writeInt(gameLogicHandler.getHeart());
-                outputStream.writeInt(gameLogicHandler.getRemainingBlockCount());
+                outputStream.writeInt(mediator.getGameLogicHandler().getLevel());
+                outputStream.writeInt(mediator.getGameLogicHandler().getScore());
+                outputStream.writeInt(mediator.getGameLogicHandler().getHeart());
+                outputStream.writeInt(mediator.getGameLogicHandler().getRemainingBlockCount());
 
-                outputStream.writeDouble(ball.getxBall());
-                outputStream.writeDouble(ball.getyBall());
-                outputStream.writeDouble(paddle.getxPaddle());
-                outputStream.writeDouble(paddle.getyPaddle());
-                outputStream.writeDouble(paddle.getCenterPaddleX());
-                outputStream.writeLong(gameLogicHandler.getTime());
-                outputStream.writeLong(gameLogicHandler.getGoldTime());
-                outputStream.writeDouble(ballControlHandler.getvX());
+                outputStream.writeDouble(mediator.getBallInstance().getxBall());
+                outputStream.writeDouble(mediator.getBallInstance().getyBall());
+                outputStream.writeDouble(mediator.getPaddleInstance().getxPaddle());
+                outputStream.writeDouble(mediator.getPaddleInstance().getyPaddle());
+                outputStream.writeDouble(mediator.getPaddleInstance().getCenterPaddleX());
+                outputStream.writeLong(mediator.getGameLogicHandler().getTime());
+                outputStream.writeLong(mediator.getGameLogicHandler().getGoldTime());
+                outputStream.writeDouble(mediator.getBallControlHandler().getvX());
 
-                outputStream.writeBoolean(initGameComponent.isExistHeartBlock());
-                outputStream.writeBoolean(gameLogicHandler.isGoldStatus());
-                outputStream.writeBoolean(ballControlHandler.isGoDownBall());
-                outputStream.writeBoolean(ballControlHandler.isGoRightBall());
-                outputStream.writeBoolean(ballControlHandler.isCollideToPaddle());
-                outputStream.writeBoolean(ballControlHandler.isCollideToPaddleAndMoveToRight());
-                outputStream.writeBoolean(ballControlHandler.isCollideToRightWall());
-                outputStream.writeBoolean(ballControlHandler.isCollideToLeftWall());
-                outputStream.writeBoolean(ballControlHandler.isCollideToRightBlock());
-                outputStream.writeBoolean(ballControlHandler.isCollideToBottomBlock());
-                outputStream.writeBoolean(ballControlHandler.isCollideToLeftBlock());
-                outputStream.writeBoolean(ballControlHandler.isCollideToTopBlock());
+                outputStream.writeBoolean(mediator.getInitGameComponent().isExistHeartBlock());
+                outputStream.writeBoolean(mediator.getGameLogicHandler().isGoldStatus());
+                outputStream.writeBoolean(mediator.getBallControlHandler().isGoDownBall());
+                outputStream.writeBoolean(mediator.getBallControlHandler().isGoRightBall());
+                outputStream.writeBoolean(mediator.getBallControlHandler().isCollideToPaddle());
+                outputStream.writeBoolean(mediator.getBallControlHandler().isCollideToPaddleAndMoveToRight());
+                outputStream.writeBoolean(mediator.getBallControlHandler().isCollideToRightWall());
+                outputStream.writeBoolean(mediator.getBallControlHandler().isCollideToLeftWall());
+                outputStream.writeBoolean(mediator.getBallControlHandler().isCollideToRightBlock());
+                outputStream.writeBoolean(mediator.getBallControlHandler().isCollideToBottomBlock());
+                outputStream.writeBoolean(mediator.getBallControlHandler().isCollideToLeftBlock());
+                outputStream.writeBoolean(mediator.getBallControlHandler().isCollideToTopBlock());
 
                 ArrayList<BlockSerialize> blockSerializables = new ArrayList<>();
-                for (Block block : initGameComponent.getBlocks()) {
+                for (Block block : mediator.getInitGameComponent().getBlocks()) {
                     if (block.isDestroyed()) {
                         continue;
                     }
@@ -235,41 +232,41 @@ public class GameStateManager {
         LoadSave loadSave = new LoadSave();
         loadSave.read();
 
-        initGameComponent.setExistHeartBlock(loadSave.isExistHeartBlock());
-        gameLogicHandler.setGoldStatus(loadSave.isGoldStatus());
-        ballControlHandler.setGoDownBall(loadSave.isGoDownBall());
-        ballControlHandler.setGoRightBall(loadSave.isGoRightBall());
-        ballControlHandler.setCollideToPaddle(loadSave.isCollideToPaddle());
-        ballControlHandler.setCollideToPaddleAndMoveToRight(loadSave.isCollideTopPaddleAndMoveToRight());
-        ballControlHandler.setCollideToRightWall(loadSave.isCollideToRightWall());
-        ballControlHandler.setCollideToLeftWall(loadSave.isCollideToLeftWall());
-        ballControlHandler.setCollideToRightBlock(loadSave.isCollideToRightBlock());
-        ballControlHandler.setCollideToBottomBlock(loadSave.isCollideToBottomBlock());
-        ballControlHandler.setCollideToLeftBlock(loadSave.isCollideToLeftBlock());
-        ballControlHandler.setCollideToTopBlock(loadSave.isCollideToTopBlock());
-        gameLogicHandler.setLevel(loadSave.getLevel());
-        gameLogicHandler.setScore(loadSave.getScore());
-        gameLogicHandler.setHeart(loadSave.getHeart());
-        gameLogicHandler.setRemainingBlockCount(loadSave.getRemainingBlockCount());
+        mediator.getInitGameComponent().setExistHeartBlock(loadSave.isExistHeartBlock());
+        mediator.getGameLogicHandler().setGoldStatus(loadSave.isGoldStatus());
+        mediator.getBallControlHandler().setGoDownBall(loadSave.isGoDownBall());
+        mediator.getBallControlHandler().setGoRightBall(loadSave.isGoRightBall());
+        mediator.getBallControlHandler().setCollideToPaddle(loadSave.isCollideToPaddle());
+        mediator.getBallControlHandler().setCollideToPaddleAndMoveToRight(loadSave.isCollideTopPaddleAndMoveToRight());
+        mediator.getBallControlHandler().setCollideToRightWall(loadSave.isCollideToRightWall());
+        mediator.getBallControlHandler().setCollideToLeftWall(loadSave.isCollideToLeftWall());
+        mediator.getBallControlHandler().setCollideToRightBlock(loadSave.isCollideToRightBlock());
+        mediator.getBallControlHandler().setCollideToBottomBlock(loadSave.isCollideToBottomBlock());
+        mediator.getBallControlHandler().setCollideToLeftBlock(loadSave.isCollideToLeftBlock());
+        mediator.getBallControlHandler().setCollideToTopBlock(loadSave.isCollideToTopBlock());
+        mediator.getGameLogicHandler().setLevel(loadSave.getLevel());
+        mediator.getGameLogicHandler().setScore(loadSave.getScore());
+        mediator.getGameLogicHandler().setHeart(loadSave.getHeart());
+        mediator.getGameLogicHandler().setRemainingBlockCount(loadSave.getRemainingBlockCount());
 
-        ball.setxBall(loadSave.getxBall());
-        ball.setyBall(loadSave.getyBall());
+        mediator.getBallInstance().setxBall(loadSave.getxBall());
+        mediator.getBallInstance().setyBall(loadSave.getyBall());
 
-        paddle.setxPaddle(loadSave.getxPaddle());
-        paddle.setyPaddle(loadSave.getyPaddle());
-        paddle.setCenterPaddleX(loadSave.getCenterPaddleX());
+        mediator.getPaddleInstance().setxPaddle(loadSave.getxPaddle());
+        mediator.getPaddleInstance().setyPaddle(loadSave.getyPaddle());
+        mediator.getPaddleInstance().setCenterPaddleX(loadSave.getCenterPaddleX());
 
-        gameLogicHandler.setTime(loadSave.getTime());
-        gameLogicHandler.setGoldTime(loadSave.getGoldTime());
-        ballControlHandler.setvX(loadSave.getvX());
+        mediator.getGameLogicHandler().setTime(loadSave.getTime());
+        mediator.getGameLogicHandler().setGoldTime(loadSave.getGoldTime());
+        mediator.getBallControlHandler().setvX(loadSave.getvX());
 
-        initGameComponent.getBlocks().clear();
-        initGameComponent.getChocos().clear();
-        initGameComponent.getBombs().clear();
+        mediator.getInitGameComponent().getBlocks().clear();
+        mediator.getInitGameComponent().getChocos().clear();
+        mediator.getInitGameComponent().getBombs().clear();
 
 
         for (BlockSerialize ser : loadSave.getBlocks()) {
-            initGameComponent.getBlocks().add(new Block(ser.row, ser.j, ser.type));
+            mediator.getInitGameComponent().getBlocks().add(new Block(ser.row, ser.j, ser.type));
         }
 
 
@@ -288,27 +285,27 @@ public class GameStateManager {
 
         try {
 
-            gameLogicHandler.setLevel(1);
-            gameLogicHandler.setHeart(gameLogicHandler.getInitialHeart());
-            gameLogicHandler.setScore(0);
+            mediator.getGameLogicHandler().setLevel(1);
+            mediator.getGameLogicHandler().setHeart(mediator.getGameLogicHandler().getInitialHeart());
+            mediator.getGameLogicHandler().setScore(0);
 
-            ballControlHandler.setvX(1.000);
-            gameLogicHandler.setRemainingBlockCount(0);
+            mediator.getBallControlHandler().setvX(1.000);
+            mediator.getGameLogicHandler().setRemainingBlockCount(0);
 
-            ballControlHandler.resetcollideFlags();
-            ballControlHandler.setGoDownBall(true);
+            mediator.getBallControlHandler().resetcollideFlags();
+            mediator.getBallControlHandler().setGoDownBall(true);
 
-            gameLogicHandler.setGoldStatus(false);
+            mediator.getGameLogicHandler().setGoldStatus(false);
 
-            initGameComponent.setExistHeartBlock(false);
-            initGameComponent.setExistBombBlock(false);
-            gameLogicHandler.setTime(0);
-            gameLogicHandler.setGoldTime(0);
+            mediator.getInitGameComponent().setExistHeartBlock(false);
+            mediator.getInitGameComponent().setExistBombBlock(false);
+            mediator.getGameLogicHandler().setTime(0);
+            mediator.getGameLogicHandler().setGoldTime(0);
 
 
-            initGameComponent.getBlocks().clear();
-            initGameComponent.getChocos().clear();
-            initGameComponent.getBombs().clear();
+            mediator.getInitGameComponent().getBlocks().clear();
+            mediator.getInitGameComponent().getChocos().clear();
+            mediator.getInitGameComponent().getBombs().clear();
 
             startGame();
         } catch (Exception e) {
@@ -338,29 +335,6 @@ public class GameStateManager {
 
     public void setLoadFromSave(boolean loadFromSave) {
         this.loadFromSave = loadFromSave;
-    }
-
-    public void setGameSceneController(GameSceneController gameSceneController) {
-        this.gameSceneController = gameSceneController;
-    }
-
-    public void setInitGameComponent(InitGameComponent initGameComponent) {
-        this.initGameComponent = initGameComponent;
-    }
-
-    public void setBallControl(BallControlHandler ballControlHandler) {
-        this.ballControlHandler = ballControlHandler;
-    }
-
-    public void setGameLogicHandler(GameLogicHandler gameLogicHandler) {
-        this.gameLogicHandler = gameLogicHandler;
-    }
-
-    public void setPaddle(Paddle paddle) {
-        this.paddle = paddle;
-    }
-    public void setBall(Ball ball) {
-        this.ball = ball;
     }
 
 }

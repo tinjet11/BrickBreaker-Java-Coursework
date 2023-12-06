@@ -1,7 +1,6 @@
 package brickGame.handler;
 
-import brickGame.model.Ball;
-import brickGame.model.InitGameComponent;
+import brickGame.Mediator;
 import brickGame.model.Paddle;
 
 import static brickGame.Constants.SCENE_HEIGHT;
@@ -18,7 +17,12 @@ import static brickGame.Constants.SCENE_WIDTH;
  * @author Leong Tin Jet
  */
 public class BallControlHandler {
+    private Mediator mediator;
 
+
+    public void setMediator(Mediator mediator) {
+        this.mediator = mediator;
+    }
     /**
      * Private constructor to enforce the singleton pattern.
      */
@@ -42,18 +46,6 @@ public class BallControlHandler {
      */
     private static BallControlHandler instance;
 
-    /**
-     * The GameLogicHandler associated with the BallControl instance.
-     */
-    private GameLogicHandler gameLogicHandler;
-
-    private Paddle paddle;
-    private Ball ball;
-
-
-    /**
-     * The graphical representation of the ball in the game scene.
-     */
 
     /**
      * Flag indicating whether the ball is currently moving downward.
@@ -141,24 +133,24 @@ public class BallControlHandler {
         controlBallMovement();
         checkCollisionWithVerticalWall();
 
-        if (ball.getyBall() >= paddle.getyPaddle() - ball.getBALL_RADIUS()) {
-            if (ball.getxBall() >= paddle.getxPaddle() && ball.getxBall() <= paddle.getxPaddle() + paddle.getPADDLE_WIDTH()) {
+        if (mediator.getBallInstance().getyBall() >= mediator.getPaddleInstance().getyPaddle() - mediator.getBallInstance().getBALL_RADIUS()) {
+            if (mediator.getBallInstance().getxBall() >= mediator.getPaddleInstance().getxPaddle() && mediator.getBallInstance().getxBall() <= mediator.getPaddleInstance().getxPaddle() + mediator.getPaddleInstance().getPADDLE_WIDTH()) {
                 //gameLogicHandler.setHitTime(gameLogicHandler.getTime());
                 resetcollideFlags();
                 setCollideToPaddle(true);
                 setGoDownBall(false);
 
-                double relation = (ball.getxBall() - paddle.getCenterPaddleX()) / (paddle.getPADDLE_WIDTH() / 2);
+                double relation = (mediator.getBallInstance().getxBall() - mediator.getPaddleInstance().getCenterPaddleX()) / (mediator.getPaddleInstance().getPADDLE_WIDTH() / 2);
 
                 if (Math.abs(relation) <= 0.3) {
                     setvX(Math.abs(relation));
                 } else if (Math.abs(relation) > 0.3 && Math.abs(relation) <= 0.7) {
-                    setvX((Math.abs(relation) * 1.5) + (gameLogicHandler.getLevel() / 3.500));
+                    setvX((Math.abs(relation) * 1.5) + (mediator.getGameLogicHandler().getLevel() / 3.500));
                 } else {
-                    setvX((Math.abs(relation) * 2) + (gameLogicHandler.getLevel() / 3.500));
+                    setvX((Math.abs(relation) * 2) + (mediator.getGameLogicHandler().getLevel() / 3.500));
                 }
 
-                if (ball.getxBall() - paddle.getCenterPaddleX() > 0) {
+                if (mediator.getBallInstance().getxBall() - mediator.getPaddleInstance().getCenterPaddleX() > 0) {
                     setCollideToPaddleAndMoveToRight(true);
                 } else {
                     setCollideToPaddleAndMoveToRight(false);
@@ -176,15 +168,15 @@ public class BallControlHandler {
      */
     private void controlBallMovement() {
         if (isGoDownBall()) {
-            ball.setyBall(ball.getyBall() + getvY());
+            mediator.getBallInstance().setyBall(mediator.getBallInstance().getyBall() + getvY());
         } else {
-            ball.setyBall(ball.getyBall() - getvY());
+            mediator.getBallInstance().setyBall(mediator.getBallInstance().getyBall() - getvY());
         }
 
         if (isGoRightBall()) {
-            ball.setxBall(ball.getxBall() + getvX());
+            mediator.getBallInstance().setxBall(mediator.getBallInstance().getxBall() + getvX());
         } else {
-            ball.setxBall(ball.getxBall() - getvX());
+            mediator.getBallInstance().setxBall(mediator.getBallInstance().getxBall() - getvX());
         }
     }
 
@@ -197,17 +189,17 @@ public class BallControlHandler {
     private void checkCollisionWithVerticalWall() {
 
         //collide with top wall
-        if (ball.getyBall() <= 0) {
+        if (mediator.getBallInstance().getyBall() <= 0) {
             resetcollideFlags();
             setGoDownBall(true);
         }
 
         //collide with bottom wall
-        if (ball.getyBall() >=SCENE_HEIGHT) {
+        if (mediator.getBallInstance().getyBall() >=SCENE_HEIGHT) {
             setGoDownBall(false);
             resetcollideFlags();
-            if (!gameLogicHandler.isGoldStatus()) {
-                gameLogicHandler.deductHeart();
+            if (!mediator.getGameLogicHandler().isGoldStatus()) {
+                mediator.getGameLogicHandler().deductHeart();
             }
         }
 
@@ -219,12 +211,12 @@ public class BallControlHandler {
      * If a collision is detected with the left wall, appropriate flags are reset and updated as well.
      */
     private void checkCollisionWithHorizontalWall() {
-        if (ball.getxBall() >= SCENE_WIDTH) {
+        if (mediator.getBallInstance().getxBall() >= SCENE_WIDTH) {
             resetcollideFlags();
             setCollideToRightWall(true);
         }
 
-        if (ball.getxBall() <= 0) {
+        if (mediator.getBallInstance().getxBall() <= 0) {
             resetcollideFlags();
             setCollideToLeftWall(true);
         }
@@ -524,22 +516,7 @@ public class BallControlHandler {
         this.vY = vY;
     }
 
-    /**
-     * Sets the GameLogicHandler for the BallControl instance.
-     *
-     * @param gameLogicHandler The GameLogicHandler instance to set.
-     */
-    public void setGameLogicHandler(GameLogicHandler gameLogicHandler) {
-        this.gameLogicHandler = gameLogicHandler;
-    }
 
-    public void setPaddle(Paddle paddle) {
-        this.paddle = paddle;
-    }
-
-    public void setBall(Ball ball) {
-        this.ball = ball;
-    }
 
 
 }

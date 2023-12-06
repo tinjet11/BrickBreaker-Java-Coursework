@@ -1,5 +1,6 @@
 package brickGame.model;
 
+import brickGame.Mediator;
 import brickGame.handler.BallControlHandler;
 import brickGame.handler.GameLogicHandler;
 import brickGame.model.dropitem.Bonus;
@@ -52,8 +53,7 @@ public class InitGameComponent {
         return instance;
     }
 
-    private GameLogicHandler gameLogicHandler;
-
+    private Mediator mediator;
 
     private boolean isExistHeartBlock = false;
     private boolean isExistBombBlock = false;
@@ -68,7 +68,7 @@ public class InitGameComponent {
      */
     public void initBoard() {
         for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < gameLogicHandler.getLevel() + 1; j++) {
+            for (int j = 0; j < mediator.getGameLogicHandler().getLevel() + 1; j++) {
                 int r = new Random().nextInt(500);
                 if (r % 5 == 0) {
                     continue;
@@ -94,11 +94,11 @@ public class InitGameComponent {
                         type = Block.BLOCK_TYPE.BLOCK_NORMAL;
                     }
                 }
-                else if (gameLogicHandler.getLevel() >= 10) {
+                else if (mediator.getGameLogicHandler().getLevel() >= 10) {
                     type = Block.BLOCK_TYPE.BLOCK_CONCRETE;
                 }
                 else {
-                  type = Block.BLOCK_TYPE.BLOCK_NORMAL;
+                    type = Block.BLOCK_TYPE.BLOCK_NORMAL;
                 }
                 getBlocks().add(new Block(j, i, type));
             }
@@ -117,7 +117,7 @@ public class InitGameComponent {
         double xBall = Math.max(ball.getBALL_RADIUS(), Math.min(random.nextInt(SCENE_WIDTH - ball.getBALL_RADIUS()) + 1, SCENE_WIDTH - ball.getBALL_RADIUS()));
 
         // Ensure that the ball starts above the screen's bottom edge
-        int minYBall = ((gameLogicHandler.getLevel() + 1) * BLOCK_HEIGHT) + 2 * ball.getBALL_RADIUS();
+        int minYBall = ((mediator.getGameLogicHandler().getLevel() + 1) * BLOCK_HEIGHT) + 2 * ball.getBALL_RADIUS();
 
         // Randomly set the y-coordinate within the valid range
         double yBall = Math.max(minYBall, Math.min(random.nextInt(SCENE_HEIGHT - minYBall) + minYBall, SCENE_HEIGHT- minYBall));
@@ -125,11 +125,11 @@ public class InitGameComponent {
         // Create the ball object with the specified radius and image pattern
         Circle newBall = new Circle();
         newBall.setRadius(ball.getBALL_RADIUS());
-       if(gameLogicHandler.isGoldStatus()){
-           newBall.setFill(new ImagePattern(new Image(getClass().getResourceAsStream(GOLD_BALL_IMAGE_PATH))));
+        if(mediator.getGameLogicHandler().isGoldStatus()){
+            newBall.setFill(new ImagePattern(new Image(getClass().getResourceAsStream(GOLD_BALL_IMAGE_PATH))));
         }else{
-           newBall.setFill(new ImagePattern(new Image(getClass().getResourceAsStream(BALL_IMAGE_PATH))));
-       }
+            newBall.setFill(new ImagePattern(new Image(getClass().getResourceAsStream(BALL_IMAGE_PATH))));
+        }
 
         // Set the ball's properties in the Ball instance
         ball.setxBall(xBall);
@@ -154,13 +154,6 @@ public class InitGameComponent {
         paddle.getPaddle().setFill(pattern);
     }
 
-    public void setGameLogicHandler(GameLogicHandler gameLogicHandler) {
-        this.gameLogicHandler = gameLogicHandler;
-    }
-
-
-
-
     public boolean isExistHeartBlock() {
         return isExistHeartBlock;
     }
@@ -183,5 +176,10 @@ public class InitGameComponent {
 
     public void setExistBombBlock(boolean existBombBlock) {
         isExistBombBlock = existBombBlock;
+    }
+
+
+    public void setMediator(Mediator mediator) {
+        this.mediator = mediator;
     }
 }

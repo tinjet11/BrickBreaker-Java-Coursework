@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.media.Media;
 import javafx.stage.Stage;
 import java.io.*;
 
@@ -30,8 +31,10 @@ public class Main extends Application {
     private GameStateManager gameStateManager;
     private InitGameComponent initGameComponent;
 
-    private Paddle paddle;
-    private Ball ball;
+
+    private Mediator mediator;
+
+
 
     /**
      * The entry point of the JavaFX application. Initializes the game components and
@@ -42,41 +45,20 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
+        mediator = Mediator.getInstance();
         gameLogicHandler = GameLogicHandler.getInstance();
         ballControlHandler = BallControlHandler.getInstance();
         gameSceneController = GameSceneController.getInstance();
         gameStateManager = GameStateManager.getInstance();
         initGameComponent = InitGameComponent.getInstance();
-        paddle = Paddle.getInstance();
-        ball = Ball.getInstance();
 
+        gameLogicHandler.setMediator(mediator);
+        ballControlHandler.setMediator(mediator);
+        gameSceneController.setMediator(mediator);
+        gameStateManager.setMediator(mediator);
+        initGameComponent.setMediator(mediator);
 
-        gameLogicHandler.setBallControl(ballControlHandler);
-        gameLogicHandler.setGameSceneController(gameSceneController);
-        gameLogicHandler.setGameStateManager(gameStateManager);
-        gameLogicHandler.setInitGameComponent(initGameComponent);
-        gameLogicHandler.setPaddle(paddle);
-        gameLogicHandler.setBall(ball);
-
-        ballControlHandler.setGameLogicHandler(gameLogicHandler);
-        ballControlHandler.setPaddle(paddle);
-        ballControlHandler.setBall(ball);
-
-        gameSceneController.setGameLogicHandler(gameLogicHandler);
-        gameSceneController.setGameStateManager(gameStateManager);
-        gameSceneController.setInitGameComponent(initGameComponent);
-        gameSceneController.setPaddle(paddle);
-        gameSceneController.setBall(ball);
         gameSceneController.setPrimaryStage(primaryStage);
-
-        gameStateManager.setBallControl(ballControlHandler);
-        gameStateManager.setGameLogicHandler(gameLogicHandler);
-        gameStateManager.setGameSceneController(gameSceneController);
-        gameStateManager.setInitGameComponent(initGameComponent);
-        gameStateManager.setBall(ball);
-        gameStateManager.setPaddle(paddle);
-
-        initGameComponent.setGameLogicHandler(gameLogicHandler);
 
         this.primaryStage = primaryStage;
         Platform.runLater(this::initializeMenuScene);

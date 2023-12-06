@@ -1,5 +1,6 @@
 package brickGame.handler.blockhit;
 
+import brickGame.Mediator;
 import brickGame.model.Block;
 import brickGame.handler.GameLogicHandler;
 import brickGame.model.ScoreAnimation;
@@ -27,8 +28,9 @@ public interface BlockHitHandler {
      * @param gameLogicHandler  The GameLogicHandler responsible for managing game logic.
      */
     default void onHitAction(Block block, GameLogicHandler gameLogicHandler) {
+        Mediator mediator = Mediator.getInstance();
         gameLogicHandler.setScore(gameLogicHandler.getScore() + 1);
-        new ScoreAnimation(gameLogicHandler.getGameSceneController().getGamePane())
+        new ScoreAnimation(mediator.getGameSceneController().getGamePane())
                 .showScoreAnimation(block.getX(), block.getY(), 1);
         block.getRect().setVisible(false);
         block.setDestroyed(true);

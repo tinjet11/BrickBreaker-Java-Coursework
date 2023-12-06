@@ -1,6 +1,7 @@
 package brickGame.handler;
 
-import brickGame.controller.GameSceneController;
+import brickGame.Mediator;
+
 import brickGame.model.*;
 import brickGame.model.dropitem.Bonus;
 import brickGame.model.dropitem.Bomb;
@@ -40,20 +41,12 @@ public class GameLogicHandler implements Actionable {
         return instance;
     }
 
-    private BallControlHandler ballControlHandler;
-    private GameSceneController gameSceneController;
-    private InitGameComponent initGameComponent;
-    private GameStateManager gameStateManager;
+    private Mediator mediator;
 
-    public void setPaddle(Paddle paddle) {
-        this.paddle = paddle;
-    }
-    private Ball ball;
 
-    public void setBall(Ball ball) {
-        this.ball = ball;
+    public void setMediator(Mediator mediator) {
+        this.mediator = mediator;
     }
-    private Paddle paddle;
 
     private int heart = 3;
     private int initialHeart = 3;
@@ -85,14 +78,14 @@ public class GameLogicHandler implements Actionable {
      * Updates the UI elements such as score labels, paddle position, and ball position.
      */
     private void updateUI() {
-        gameSceneController.setScoreLabel("Score: " + getScore());
-        gameSceneController.setHeartLabel("Heart : " + getHeart());
+        mediator.getGameSceneController().setScoreLabel("Score: " + getScore());
+        mediator.getGameSceneController().setHeartLabel("Heart : " + getHeart());
 
-        paddle.getPaddle().setX(paddle.getxPaddle());
-        paddle.getPaddle().setY(paddle.getyPaddle());
+        mediator.getPaddleInstance().getPaddle().setX(mediator.getPaddleInstance().getxPaddle());
+        mediator.getPaddleInstance().getPaddle().setY(mediator.getPaddleInstance().getyPaddle());
 
-        ball.getBall().setCenterX(ball.getxBall());
-        ball.getBall().setCenterY(ball.getyBall());
+        mediator.getBallInstance().getBall().setCenterX(mediator.getBallInstance().getxBall());
+        mediator.getBallInstance().getBall().setCenterY(mediator.getBallInstance().getyBall());
     }
 
     /**
@@ -101,19 +94,19 @@ public class GameLogicHandler implements Actionable {
      * @return True if the ball is within the game bounds, false otherwise.
      */
     private boolean isBallWithinGameBounds() {
-        return ball.getyBall() >= BLOCK_PADDING_TOP &&
-                ball.getyBall() <= (BLOCK_HEIGHT * (getLevel() + 1)) + BLOCK_PADDING_TOP;
+        return mediator.getBallInstance().getyBall() >= BLOCK_PADDING_TOP &&
+                mediator.getBallInstance().getyBall() <= (BLOCK_HEIGHT * (getLevel() + 1)) + BLOCK_PADDING_TOP;
     }
 
     /**
      * Handles collisions between the ball and the game blocks.
      */
     private void handleBlockCollisions() {
-        Iterator<Block> iterator = initGameComponent.getBlocks().iterator();
+        Iterator<Block> iterator = mediator.getInitGameComponent().getBlocks().iterator();
         while (iterator.hasNext()) {
             Block block = iterator.next();
             try {
-                Block.HIT_STATE hitCode = block.checkHitToBlock(ball.getxBall(), ball.getyBall());
+                Block.HIT_STATE hitCode = block.checkHitToBlock(mediator.getBallInstance().getxBall(), mediator.getBallInstance().getyBall());
                 if (hitCode != Block.HIT_STATE.NO_HIT) {
                     handleBlockHit(block, hitCode);
                 }
@@ -131,13 +124,13 @@ public class GameLogicHandler implements Actionable {
      * @param hitCode The specific hit state.
      */
     private void handleBlockHit(Block block, Block.HIT_STATE hitCode) {
-        ballControlHandler.resetcollideFlags();
+        mediator.getBallControlHandler().resetcollideFlags();
 
         BlockHitHandlerFactory factory = BlockHitHandlerFactoryProvider.getFactory(block.getType());
 
         if (factory != null) {
-            BlockHitHandler handler = factory.createHandler(gameSceneController, initGameComponent, ballControlHandler);
-            handler.handleBlockHit(block, hitCode, this);
+            BlockHitHandler handler = factory.createHandler(mediator.getGameSceneController(), mediator.getInitGameComponent(), mediator.getBallControlHandler());
+            handler.handleBlockHit(block, hitCode, mediator.getGameLogicHandler());
         }
 
         handleCollisionDirection(hitCode);
@@ -150,13 +143,13 @@ public class GameLogicHandler implements Actionable {
      */
     private void handleCollisionDirection(Block.HIT_STATE hitCode) {
         if (hitCode == Block.HIT_STATE.HIT_RIGHT) {
-            ballControlHandler.setCollideToRightBlock(true);
+            mediator.getBallControlHandler().setCollideToRightBlock(true);
         } else if (hitCode == Block.HIT_STATE.HIT_BOTTOM) {
-            ballControlHandler.setCollideToBottomBlock(true);
+            mediator.getBallControlHandler().setCollideToBottomBlock(true);
         } else if (hitCode == Block.HIT_STATE.HIT_LEFT) {
-            ballControlHandler.setCollideToLeftBlock(true);
+            mediator.getBallControlHandler().setCollideToLeftBlock(true);
         } else if (hitCode == Block.HIT_STATE.HIT_TOP) {
-            ballControlHandler.setCollideToTopBlock(true);
+            mediator.getBallControlHandler().setCollideToTopBlock(true);
         }
     }
     /**
@@ -192,12 +185,12 @@ public class GameLogicHandler implements Actionable {
      */
     public void deductHeart() {
         heart = heart - 1;
-        new ScoreAnimation(gameSceneController.getGamePane()).showScoreAnimation(SCENE_WIDTH / 2, SCENE_HEIGHT / 2, -1);
+        new ScoreAnimation(mediator.getGameSceneController().getGamePane()).showScoreAnimation(SCENE_WIDTH / 2, SCENE_HEIGHT / 2, -1);
 
         System.out.println("heart: " + heart);
 
         if (heart <= 0) {
-            gameSceneController.showLoseScene();
+            mediator.getGameSceneController().showLoseScene();
             stopEngine();
         }
     }
@@ -207,7 +200,7 @@ public class GameLogicHandler implements Actionable {
      */
     private void checkDestroyedCount() {
         if (remainingBlockCount == 0 && level != endLevel) {
-            gameStateManager.nextLevel();
+            mediator.getGameStateManager().nextLevel();
         }
     }
 
@@ -223,7 +216,7 @@ public class GameLogicHandler implements Actionable {
 
         handleGoldStatus();
 
-        Platform.runLater(() -> ballControlHandler.setPhysicsToBall());
+        Platform.runLater(() -> mediator.getBallControlHandler().setPhysicsToBall());
 
         handleChocos();
         handlePenalties();
@@ -234,8 +227,8 @@ public class GameLogicHandler implements Actionable {
     private void handleGoldStatus() {
         if (shouldRemoveGold()) {
             Platform.runLater(() -> {
-                ball.getBall().setFill(new ImagePattern(new Image(getClass().getResourceAsStream(BALL_IMAGE_PATH))));
-                gameSceneController.getGamePane().getStyleClass().remove(GOLD_ROOT);
+                mediator.getBallInstance().getBall().setFill(new ImagePattern(new Image(getClass().getResourceAsStream(BALL_IMAGE_PATH))));
+                mediator.getGameSceneController().getGamePane().getStyleClass().remove(GOLD_ROOT);
                 setGoldStatus(false);
             });
         }
@@ -254,11 +247,11 @@ public class GameLogicHandler implements Actionable {
      * Handles choco (bonus) drop items, including removal, scoring, and animation.
      */
     private void handleChocos() {
-        Iterator<Bonus> iterator = initGameComponent.getChocos().iterator();
+        Iterator<Bonus> iterator = mediator.getInitGameComponent().getChocos().iterator();
         while (iterator.hasNext()) {
             Bonus choco = iterator.next();
 
-            BonusDropHandler bonusDropHandler = new BonusDropHandler(initGameComponent, gameSceneController, this, choco);
+            BonusDropHandler bonusDropHandler = new BonusDropHandler(mediator.getInitGameComponent(), mediator.getGameSceneController(), this, choco);
 
             if (bonusDropHandler.shouldRemove()) {
                 iterator.remove();
@@ -277,10 +270,10 @@ public class GameLogicHandler implements Actionable {
      * Handles bomb (penalty) drop items, including removal, and penalty execution.
      */
     private void handlePenalties() {
-        Iterator<Bomb> iterator = initGameComponent.getBombs().iterator();
+        Iterator<Bomb> iterator = mediator.getInitGameComponent().getBombs().iterator();
         while (iterator.hasNext()) {
             Bomb bomb = iterator.next();
-            BombDropHandler bombDropHandler = new BombDropHandler(initGameComponent, gameSceneController, this, bomb);
+            BombDropHandler bombDropHandler = new BombDropHandler(mediator.getInitGameComponent(), mediator.getGameSceneController(), this, bomb);
 
             if (bombDropHandler.shouldRemove()) {
                 bombDropHandler.executePenalty();
@@ -296,26 +289,6 @@ public class GameLogicHandler implements Actionable {
             }
         }
     }
-
-    public void setGameSceneController(GameSceneController gameSceneController) {
-        this.gameSceneController = gameSceneController;
-    }
-    public GameSceneController getGameSceneController() {
-        return gameSceneController;
-    }
-
-    public void setBallControl(BallControlHandler ballControlHandler) {
-        this.ballControlHandler = ballControlHandler;
-    }
-
-    public void setGameStateManager(GameStateManager gameStateManager) {
-        this.gameStateManager = gameStateManager;
-    }
-
-    public void setInitGameComponent(InitGameComponent initGameComponent) {
-        this.initGameComponent = initGameComponent;
-    }
-
 
     public int getHeart() {
         return heart;
