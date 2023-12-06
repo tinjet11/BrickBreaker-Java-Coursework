@@ -59,11 +59,9 @@ public class Main extends Application {
         gameLogicHandler.setBall(ball);
 
         ballControlHandler.setGameLogicHandler(gameLogicHandler);
-        ballControlHandler.setInitGameComponent(initGameComponent);
         ballControlHandler.setPaddle(paddle);
         ballControlHandler.setBall(ball);
 
-        gameSceneController.setBallControl(ballControlHandler);
         gameSceneController.setGameLogicHandler(gameLogicHandler);
         gameSceneController.setGameStateManager(gameStateManager);
         gameSceneController.setInitGameComponent(initGameComponent);
@@ -78,8 +76,8 @@ public class Main extends Application {
         gameStateManager.setBall(ball);
         gameStateManager.setPaddle(paddle);
 
-        initGameComponent.setBallControl(ballControlHandler);
         initGameComponent.setGameLogicHandler(gameLogicHandler);
+
         this.primaryStage = primaryStage;
         Platform.runLater(this::initializeMenuScene);
     }

@@ -28,6 +28,11 @@ public class Ball {
      */
     private double yBall;
 
+    /**
+     * The radius of ball
+     */
+    private final int BALL_RADIUS = 10;
+
 
     /**
      * Gets the Circle object representing the ball.
@@ -82,6 +87,11 @@ public class Ball {
      */
     public void setyBall(double yBall) {
         this.yBall = yBall;
+    }
+
+
+    public int getBALL_RADIUS() {
+        return BALL_RADIUS;
     }
 
 }

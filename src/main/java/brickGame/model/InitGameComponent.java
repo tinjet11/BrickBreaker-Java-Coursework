@@ -52,10 +52,9 @@ public class InitGameComponent {
         return instance;
     }
 
-    private BallControlHandler ballControlHandler;
     private GameLogicHandler gameLogicHandler;
 
-    private final int BALL_RADIUS = 10;
+
     private boolean isExistHeartBlock = false;
     private boolean isExistBombBlock = false;
 
@@ -111,29 +110,28 @@ public class InitGameComponent {
      * if isGoldStatus, set ball fill to goldBall, else set to normal
      */
     public void initBall() {
+        Ball ball = Ball.getInstance();
         Random random = new Random();
 
         // Randomly set the x-coordinate within the width of the game scene
-        double xBall = Math.max(getBALL_RADIUS(), Math.min(random.nextInt(SCENE_WIDTH - getBALL_RADIUS()) + 1, SCENE_WIDTH - getBALL_RADIUS()));
+        double xBall = Math.max(ball.getBALL_RADIUS(), Math.min(random.nextInt(SCENE_WIDTH - ball.getBALL_RADIUS()) + 1, SCENE_WIDTH - ball.getBALL_RADIUS()));
 
         // Ensure that the ball starts above the screen's bottom edge
-        int minYBall = ((gameLogicHandler.getLevel() + 1) * BLOCK_HEIGHT) + 2 * getBALL_RADIUS();
+        int minYBall = ((gameLogicHandler.getLevel() + 1) * BLOCK_HEIGHT) + 2 * ball.getBALL_RADIUS();
 
         // Randomly set the y-coordinate within the valid range
         double yBall = Math.max(minYBall, Math.min(random.nextInt(SCENE_HEIGHT - minYBall) + minYBall, SCENE_HEIGHT- minYBall));
 
         // Create the ball object with the specified radius and image pattern
         Circle newBall = new Circle();
-        newBall.setRadius(getBALL_RADIUS());
+        newBall.setRadius(ball.getBALL_RADIUS());
        if(gameLogicHandler.isGoldStatus()){
            newBall.setFill(new ImagePattern(new Image(getClass().getResourceAsStream(GOLD_BALL_IMAGE_PATH))));
         }else{
            newBall.setFill(new ImagePattern(new Image(getClass().getResourceAsStream(BALL_IMAGE_PATH))));
        }
 
-        Ball ball = Ball.getInstance();
-
-        // Set the ball's properties in the BallControl instance
+        // Set the ball's properties in the Ball instance
         ball.setxBall(xBall);
         ball.setyBall(yBall);
         ball.setBall(newBall);
@@ -156,18 +154,12 @@ public class InitGameComponent {
         paddle.getPaddle().setFill(pattern);
     }
 
-    public void setBallControl(BallControlHandler ballControlHandler) {
-        this.ballControlHandler = ballControlHandler;
-    }
-
     public void setGameLogicHandler(GameLogicHandler gameLogicHandler) {
         this.gameLogicHandler = gameLogicHandler;
     }
 
 
-    public int getBALL_RADIUS() {
-        return BALL_RADIUS;
-    }
+
 
     public boolean isExistHeartBlock() {
         return isExistHeartBlock;

@@ -47,11 +47,6 @@ public class BallControlHandler {
      */
     private GameLogicHandler gameLogicHandler;
 
-    /**
-     * The InitGameComponent associated with the BallControl instance.
-     */
-    private InitGameComponent initGameComponent;
-
     private Paddle paddle;
     private Ball ball;
 
@@ -146,7 +141,7 @@ public class BallControlHandler {
         controlBallMovement();
         checkCollisionWithVerticalWall();
 
-        if (ball.getyBall() >= paddle.getyPaddle() - initGameComponent.getBALL_RADIUS()) {
+        if (ball.getyBall() >= paddle.getyPaddle() - ball.getBALL_RADIUS()) {
             if (ball.getxBall() >= paddle.getxPaddle() && ball.getxBall() <= paddle.getxPaddle() + paddle.getPADDLE_WIDTH()) {
                 //gameLogicHandler.setHitTime(gameLogicHandler.getTime());
                 resetcollideFlags();
@@ -536,15 +531,6 @@ public class BallControlHandler {
      */
     public void setGameLogicHandler(GameLogicHandler gameLogicHandler) {
         this.gameLogicHandler = gameLogicHandler;
-    }
-
-    /**
-     * Sets the InitGameComponent for the BallControl instance.
-     *
-     * @param initGameComponent The InitGameComponent instance to set.
-     */
-    public void setInitGameComponent(InitGameComponent initGameComponent) {
-        this.initGameComponent = initGameComponent;
     }
 
     public void setPaddle(Paddle paddle) {
