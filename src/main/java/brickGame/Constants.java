@@ -1,5 +1,11 @@
 package brickGame;
 
+import javafx.scene.paint.Color;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Class containing constants for file paths and image paths used in the brick game application.
  */
@@ -11,10 +17,27 @@ public class Constants {
     public static final String SAVE_PATH = SAVE_PATH_DIR + "/save.mdds";
     public static final String HIGHEST_SCORE_SAVE_PATH = SAVE_PATH_DIR + "/highestScore.mdds";
 
+
+    public static final String SOUND_FILE_PATH = "/bg-music.mp3";
     // Scene Path
     public static final String GAME_SCENE_FXML = "/fxml/GameScene.fxml";
     public static final String MENU_SCENE_FXML = "/fxml/Menu.fxml";
     public static final String SETTINGS_SCENE_FXML = "/fxml/Settings.fxml";
+
+    public static final String GAME_DESCRIPTION_SCENE_FXML = "/fxml/GameDescription.fxml";
+
+
+    public static final List<Color> PADDLE_COLOR_LIST = Arrays.asList(
+            Color.RED,
+            Color.ORANGE,
+            Color.YELLOW,
+            Color.GREEN,
+            Color.BLUE,
+            Color.INDIGO,
+            Color.VIOLET
+    );
+
+
 
 
     // Game component Image Path

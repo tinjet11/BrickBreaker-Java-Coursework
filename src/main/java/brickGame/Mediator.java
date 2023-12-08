@@ -14,10 +14,9 @@ public class Mediator {
     private GameSceneController gameSceneController;
     private GameStateManager gameStateManager;
     private InitGameComponent initGameComponent;
-
-
     private Ball ball;
     private Paddle paddle;
+
 
     // Private constructor to enforce singleton pattern
     private Mediator() {
@@ -32,13 +31,14 @@ public class Mediator {
     }
 
     // Singleton instance
-    private static final Mediator instance = new Mediator();
-
+    private static Mediator instance ;
 
     public static Mediator getInstance() {
+        if (instance == null) {
+            instance = new Mediator();
+        }
         return instance;
     }
-
 
     public GameLogicHandler getGameLogicHandler() {
         return gameLogicHandler;

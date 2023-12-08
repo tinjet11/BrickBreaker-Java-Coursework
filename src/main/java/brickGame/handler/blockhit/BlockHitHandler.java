@@ -23,15 +23,22 @@ public interface BlockHitHandler {
     /**
      * Default implementation for on-hit actions, including updating the score, showing a score animation,
      * hiding the block, marking it as destroyed, and updating the remaining block count in the game logic.
-     *
+     * If is goldTime, then each block hit will add 2 point, else is 1 point.
      * @param block             The Block instance that was hit.
      * @param gameLogicHandler  The GameLogicHandler responsible for managing game logic.
      */
     default void onHitAction(Block block, GameLogicHandler gameLogicHandler) {
         Mediator mediator = Mediator.getInstance();
-        gameLogicHandler.setScore(gameLogicHandler.getScore() + 1);
-        new ScoreAnimation(mediator.getGameSceneController().getGamePane())
-                .showScoreAnimation(block.getX(), block.getY(), 1);
+        if(mediator.getGameLogicHandler().isGoldStatus()){
+            gameLogicHandler.setScore(gameLogicHandler.getScore() + 2);
+            new ScoreAnimation(mediator.getGameSceneController().getGamePane())
+                    .showScoreAnimation(block.getX(), block.getY(), 2);
+        }else{
+            gameLogicHandler.setScore(gameLogicHandler.getScore() + 1);
+            new ScoreAnimation(mediator.getGameSceneController().getGamePane())
+                    .showScoreAnimation(block.getX(), block.getY(), 1);
+        }
+
         block.getRect().setVisible(false);
         block.setDestroyed(true);
         gameLogicHandler.setRemainingBlockCount(gameLogicHandler.getRemainingBlockCount() -1 );

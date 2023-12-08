@@ -132,6 +132,7 @@ public class BallControlHandler {
     public void setPhysicsToBall() {
         controlBallMovement();
         checkCollisionWithVerticalWall();
+        setCollideToPaddle(false);
 
         if (mediator.getBallInstance().getyBall() >= mediator.getPaddleInstance().getyPaddle() - mediator.getBallInstance().getBALL_RADIUS()) {
             if (mediator.getBallInstance().getxBall() >= mediator.getPaddleInstance().getxPaddle() && mediator.getBallInstance().getxBall() <= mediator.getPaddleInstance().getxPaddle() + mediator.getPaddleInstance().getPADDLE_WIDTH()) {

@@ -10,11 +10,15 @@ import brickGame.factory.blockhithandler.BlockHitHandlerFactory;
 import brickGame.handler.blockhit.*;
 import brickGame.handler.dropitem.BonusDropHandler;
 import brickGame.handler.dropitem.BombDropHandler;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.util.Duration;
 
 import java.util.Iterator;
+import java.util.Random;
 
 import static brickGame.Constants.*;
 import static brickGame.model.Block.BLOCK_HEIGHT;
@@ -72,6 +76,7 @@ public class GameLogicHandler implements Actionable {
         if (isBallWithinGameBounds()) {
             handleBlockCollisions();
         }
+
     }
 
     /**
@@ -220,7 +225,37 @@ public class GameLogicHandler implements Actionable {
 
         handleChocos();
         handlePenalties();
+
+        if(mediator.getBallControlHandler().isCollideToPaddle()){
+            changePaddleColor();
+        }
     }
+
+    private boolean canChangeColor = true;
+
+    private void changePaddleColor() {
+        if (canChangeColor) {
+            try{
+                canChangeColor = false;
+                Random RANDOM = new Random();
+                Color selectedColor = PADDLE_COLOR_LIST.get(RANDOM.nextInt(PADDLE_COLOR_LIST.size()));
+
+                Platform.runLater(() -> mediator.getPaddleInstance().getPaddle().setFill(selectedColor));
+            }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                // Set a flag to prevent rapid color changes
+//                PauseTransition pause = new PauseTransition(Duration.millis(100));
+//                pause.setOnFinished(event -> {
+                    canChangeColor = true;
+//                });
+//                pause.play();
+            }
+        }
+
+
+    }
+
     /**
      * Handles the removal of gold status based on time.
      */

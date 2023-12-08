@@ -36,6 +36,7 @@ public class BombDropHandler extends DropItemHandler{
     public void handleTaken() {
         dropItem.setTaken(true);
         dropItem.element.setVisible(false);
+        new ScoreAnimation(gameSceneController.getGamePane()).showMessage("You catch the bomb",dropItem.getX(),dropItem.getY());
     }
 
     /**

@@ -150,7 +150,10 @@ public class GameSceneController {
             mediator.getInitGameComponent().initPaddle();
             mediator.getInitGameComponent().initBoard();
             mediator.getGameLogicHandler().setRemainingBlockCount(mediator.getInitGameComponent().getBlocks().size());
-            new ScoreAnimation(getGamePane()).showMessage("Level Up :)", 300, 300);
+            if(mediator.getGameLogicHandler().getLevel() != 1){
+                new ScoreAnimation(getGamePane()).showMessage("Level Up :)", 300, 300);
+            }
+
         } else {
 
             //if the game first open,call initBall and initPaddle method

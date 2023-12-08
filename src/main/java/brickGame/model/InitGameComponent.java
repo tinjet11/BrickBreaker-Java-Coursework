@@ -6,6 +6,7 @@ import brickGame.handler.GameLogicHandler;
 import brickGame.model.dropitem.Bonus;
 import brickGame.model.dropitem.Bomb;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -149,9 +150,8 @@ public class InitGameComponent {
         paddle.getPaddle().setX(paddle.getxPaddle());
         paddle.getPaddle().setY(paddle.getyPaddle());
 
-        ImagePattern pattern = new ImagePattern(new Image(getClass().getResourceAsStream(PADDLE_IMAGE_PATH)));
-
-        paddle.getPaddle().setFill(pattern);
+        Color color = Color.ALICEBLUE;
+        paddle.getPaddle().setFill(color);
     }
 
     public boolean isExistHeartBlock() {
