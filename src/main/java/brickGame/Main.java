@@ -2,6 +2,7 @@ package brickGame;
 
 import brickGame.controller.GameSceneController;
 import brickGame.controller.MenuController;
+import brickGame.controller.SoundController;
 import brickGame.handler.BallControlHandler;
 import brickGame.handler.GameLogicHandler;
 import brickGame.model.*;
@@ -25,16 +26,9 @@ import java.io.*;
  */
 public class Main extends Application {
     private  Stage primaryStage;
-    private GameLogicHandler gameLogicHandler;
-    private BallControlHandler ballControlHandler;
-    private GameSceneController gameSceneController;
-    private GameStateManager gameStateManager;
-    private InitGameComponent initGameComponent;
 
-
+    private SoundController soundController;
     private Mediator mediator;
-
-
 
     /**
      * The entry point of the JavaFX application. Initializes the game components and
@@ -46,22 +40,20 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         mediator = Mediator.getInstance();
-        gameLogicHandler = GameLogicHandler.getInstance();
-        ballControlHandler = BallControlHandler.getInstance();
-        gameSceneController = GameSceneController.getInstance();
-        gameStateManager = GameStateManager.getInstance();
-        initGameComponent = InitGameComponent.getInstance();
 
-        gameLogicHandler.setMediator(mediator);
-        ballControlHandler.setMediator(mediator);
-        gameSceneController.setMediator(mediator);
-        gameStateManager.setMediator(mediator);
-        initGameComponent.setMediator(mediator);
+        mediator.getGameLogicHandler().setMediator(mediator);
+        mediator.getBallControlHandler().setMediator(mediator);
+        mediator.getGameSceneController().setMediator(mediator);
+        mediator.getGameStateManager().setMediator(mediator);
+        mediator.getInitGameComponent().setMediator(mediator);
 
-        gameSceneController.setPrimaryStage(primaryStage);
+        mediator.getGameSceneController().setPrimaryStage(primaryStage);
 
         this.primaryStage = primaryStage;
         Platform.runLater(this::initializeMenuScene);
+        soundController = SoundController.getInstance();
+
+        soundController.play();
     }
 
     /**

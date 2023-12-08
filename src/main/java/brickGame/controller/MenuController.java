@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+import static brickGame.Constants.GAME_DESCRIPTION_SCENE_FXML;
 import static brickGame.Constants.SETTINGS_SCENE_FXML;
 
 /**
@@ -52,6 +53,8 @@ public class MenuController {
      */
     @FXML
     public void onExit() {
+        SoundController soundController = SoundController.getInstance();
+        soundController.dispose();
         System.exit(0);
     }
 
@@ -120,6 +123,23 @@ public class MenuController {
             Scene settingsScene = new Scene(fxmlLoader.load());
             primaryStage.setTitle("Brick Breaker Game");
             primaryStage.setScene(settingsScene);
+            primaryStage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    public void onOpenGameDescription() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(GAME_DESCRIPTION_SCENE_FXML));
+            fxmlLoader.setControllerFactory(c -> {
+                return new GameDescriptionController(primaryStage.getScene(),primaryStage);
+            });
+
+            Scene gameDescriptionScene = new Scene(fxmlLoader.load());
+            primaryStage.setTitle("Brick Breaker Game");
+            primaryStage.setScene(gameDescriptionScene);
             primaryStage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);

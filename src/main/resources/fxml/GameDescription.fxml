@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.TextFlow?>
+
+<AnchorPane prefHeight="750.0" prefWidth="500.0" stylesheets="@../theme/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brickGame.controller.GameDescriptionController">
+    <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
+    <Label layoutX="186.0" layoutY="56.0" prefHeight="35.0" prefWidth="160.0" text="Game Description" wrapText="true" />
+   <VBox layoutX="14.0" layoutY="101.0" prefHeight="565.0" prefWidth="470.0" spacing="10.0">
+      <children>
+         <HBox layoutX="10.0" layoutY="95.0" prefHeight="56.0" prefWidth="470.0" spacing="10.0">
+            <children>
+               <ImageView fitHeight="45.0" fitWidth="128.0" pickOnBounds="true">
+                  <image>
+                     <Image url="@../images/penalty.jpeg" />
+                  </image>
+               </ImageView>
+               <Label prefHeight="35.0" prefWidth="299.0" text="Will drop a bomb when you hit it" />
+            </children>
+         </HBox>
+         <HBox layoutX="10.0" layoutY="180.0" prefHeight="56.0" prefWidth="470.0" spacing="10.0">
+            <children>
+               <ImageView fitHeight="45.0" fitWidth="128.0" pickOnBounds="true">
+                  <image>
+                     <Image url="@../images/brick-concrete.jpeg" />
+                  </image>
+               </ImageView>
+               <Label prefHeight="68.0" prefWidth="332.0" text="Need to break it twice, first hit will turn it to normal brick. Appears starting from level 10" wrapText="true" />
+            </children>
+         </HBox>
+         <HBox layoutX="10.0" layoutY="236.0" prefHeight="56.0" prefWidth="470.0" spacing="10.0">
+            <children>
+               <ImageView fitHeight="45.0" fitWidth="128.0" pickOnBounds="true">
+                  <image>
+                     <Image url="@../images/choco.jpg" />
+                  </image>
+               </ImageView>
+               <Label prefHeight="68.0" prefWidth="332.0" text="Will drop bonus item when you hit it" wrapText="true" />
+            </children>
+         </HBox>
+         <HBox layoutX="10.0" layoutY="292.0" prefHeight="56.0" prefWidth="470.0" spacing="10.0">
+            <children>
+               <ImageView fitHeight="45.0" fitWidth="128.0" pickOnBounds="true">
+                  <image>
+                     <Image url="@../images/star.jpg" />
+                  </image>
+               </ImageView>
+               <Label prefHeight="68.0" prefWidth="332.0" text="Will turn on goldMode, heart cannot be deduct and 1 hit = 2 points" wrapText="true" />
+            </children>
+         </HBox>
+         <HBox layoutX="10.0" layoutY="348.0" prefHeight="56.0" prefWidth="470.0" spacing="10.0">
+            <children>
+               <ImageView fitHeight="45.0" fitWidth="128.0" pickOnBounds="true">
+                  <image>
+                     <Image url="@../images/brick.jpg" />
+                  </image>
+               </ImageView>
+               <Label prefHeight="68.0" prefWidth="332.0" text="Normal brick " wrapText="true" />
+            </children>
+         </HBox>
+          <HBox prefHeight="85.0" prefWidth="313.0" spacing="10.0">
+              <children>
+                  <ImageView fitHeight="83.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+                      <image>
+                          <Image url="@../images/bomb.png" />
+                      </image>
+                  </ImageView>
+                  <VBox prefHeight="100.0" prefWidth="239.0">
+                      <children>
+                          <Label text="Bomb" />
+                          <Label text="If didn't catch it, deduct 10 points" />
+                      </children>
+                  </VBox>
+              </children>
+          </HBox>
+          <HBox prefHeight="85.0" prefWidth="313.0" spacing="10.0">
+              <children>
+                  <ImageView fitHeight="83.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+                      <image>
+                          <Image url="@../images/bonus1.png" />
+                      </image>
+                  </ImageView>
+                  <ImageView fitHeight="83.0" fitWidth="68.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                      <image>
+                          <Image url="@../images/bonus2.png" />
+                      </image>
+                  </ImageView>
+                  <VBox prefHeight="85.0" prefWidth="534.0">
+                      <children>
+                          <Label text="Bonus" />
+                          <Label prefHeight="35.0" prefWidth="299.0" text="if catch it, add 3 points" />
+                      </children>
+                  </VBox>
+               <TextFlow prefHeight="200.0" prefWidth="200.0" />
+              </children>
+          </HBox>
+      </children>
+   </VBox>
+
+</AnchorPane>

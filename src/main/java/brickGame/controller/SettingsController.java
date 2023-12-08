@@ -1,11 +1,19 @@
 package brickGame.controller;
 
+import brickGame.Main;
 import brickGame.handler.GameLogicHandler;
 import brickGame.model.GameStateManager;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+
+import static brickGame.Constants.GAME_DESCRIPTION_SCENE_FXML;
+import static brickGame.Constants.SETTINGS_SCENE_FXML;
 
 
 /**
@@ -31,6 +39,12 @@ public class SettingsController {
     @FXML
     private Label endLevelLabel;
 
+    @FXML
+    private Slider soundSlider;
+
+    @FXML
+    private CheckBox soundCheckBox;
+
     private int maxHeart = 10;
     private int minHeart = 3;
 
@@ -41,6 +55,8 @@ public class SettingsController {
 
     private GameLogicHandler gameLogicHandler;
     private GameSceneController gameSceneController;
+
+    private SoundController soundController;
 
     private Scene menuScene;
 
@@ -55,6 +71,7 @@ public class SettingsController {
         gameLogicHandler = GameLogicHandler.getInstance();
         gameSceneController = GameSceneController.getInstance();
         primaryStage = gameSceneController.getPrimaryStage();
+        soundController = SoundController.getInstance();
         this.menuScene = menuScene;
     }
 
@@ -62,11 +79,20 @@ public class SettingsController {
      * Initializes the settings UI with the current initial heart and end level values.
      */
     @FXML
-    public void initialize(){
+    public void initialize() {
         currentEndLevel = gameLogicHandler.getEndLevel();
         currentHeart = gameLogicHandler.getInitialHeart();
         initialHeartLabel.setText(String.valueOf(gameLogicHandler.getInitialHeart()));
         endLevelLabel.setText(String.valueOf(gameLogicHandler.getEndLevel()));
+        if (soundController.getStatus() == MediaPlayer.Status.PAUSED) {
+            soundCheckBox.setSelected(true);
+        } else {
+            soundCheckBox.setSelected(false);
+        }
+        soundController.bindVolumeSlider(soundSlider);
+        soundController.bindMuteCheckbox(soundCheckBox);
+
+
     }
 
 
@@ -145,4 +171,5 @@ public class SettingsController {
             }
         }
     }
+
 }

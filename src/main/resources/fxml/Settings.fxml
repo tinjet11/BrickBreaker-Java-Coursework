@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -12,56 +13,40 @@
    <children>
       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <Label layoutX="216.0" layoutY="56.0" text="Settings" />
-      <Label layoutX="40.0" layoutY="111.0" text="Initial heart number:" />
-      <Label layoutX="42.0" layoutY="162.0" text="End level: " />
-      <HBox alignment="CENTER" layoutX="179.0" layoutY="111.0" prefHeight="35.0" prefWidth="115.0">
+      <VBox layoutX="41.0" layoutY="111.0" prefHeight="337.0" prefWidth="248.0" spacing="10.0">
          <children>
-            <Button fx:id="addHeart" mnemonicParsing="false" onAction="#decrementHeart" text="-" />
-            <Label fx:id="initialHeartLabel" alignment="TOP_LEFT" text="3" />
-            <Button fx:id="minusHeart" mnemonicParsing="false" onAction="#incrementHeart" text="+" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" layoutX="129.0" layoutY="162.0" prefHeight="35.0" prefWidth="108.0">
-         <children>
-            <Button fx:id="minusLevel" mnemonicParsing="false" onAction="#decrementLevel" text="-" />
-            <Label fx:id="endLevelLabel" alignment="TOP_LEFT" prefHeight="35.0" prefWidth="36.0" text="18" />
-            <Button fx:id="addLevel" mnemonicParsing="false" onAction="#incrementLevel" prefHeight="30.0" prefWidth="21.0" text="+" />
-         </children>
-      </HBox>
-      <HBox layoutX="51.0" layoutY="250.0" prefHeight="85.0" prefWidth="313.0" spacing="10.0">
-         <children>
-            <ImageView fitHeight="83.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/bomb.png" />
-               </image>
-            </ImageView>
-            <VBox prefHeight="100.0" prefWidth="239.0">
+            <HBox alignment="CENTER" prefHeight="35.0" prefWidth="265.0" spacing="5.0">
                <children>
-                  <Label text="Bomb" />
-                  <Label text="If didn't catch it, deduct 10 points" />
+                  <Label prefHeight="35.0" prefWidth="165.0" text="Initial heart number:" wrapText="true" />
+                  <Button fx:id="addHeart" mnemonicParsing="false" onAction="#decrementHeart" text="-" />
+                  <Label fx:id="initialHeartLabel" alignment="TOP_LEFT" text="3" />
+                  <Button fx:id="minusHeart" mnemonicParsing="false" onAction="#incrementHeart" text="+" />
                </children>
-            </VBox>
-         </children>
-      </HBox>
-      <HBox layoutX="51.0" layoutY="358.0" prefHeight="85.0" prefWidth="313.0" spacing="10.0">
-         <children>
-            <ImageView fitHeight="83.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/bonus1.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="83.0" fitWidth="68.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/bonus2.png" />
-               </image>
-            </ImageView>
-            <VBox prefHeight="100.0" prefWidth="239.0">
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="35.0" prefWidth="234.0" spacing="5.0">
                <children>
-                  <Label text="Bonus" />
-                  <Label text="if catch it, add 3 points" />
+                  <Label prefHeight="35.0" prefWidth="159.0" text="End level: " />
+                  <Button fx:id="minusLevel" mnemonicParsing="false" onAction="#decrementLevel" text="-" />
+                  <Label fx:id="endLevelLabel" alignment="CENTER" prefHeight="35.0" prefWidth="70.0" text="18" wrapText="true" />
+                  <Button fx:id="addLevel" mnemonicParsing="false" onAction="#incrementLevel" prefHeight="30.0" prefWidth="21.0" text="+" />
                </children>
-            </VBox>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="55.0" prefHeight="35.0" prefWidth="234.0" spacing="5.0">
+               <children>
+                  <Label prefHeight="35.0" prefWidth="159.0" text="Volume:" />
+                  <Slider fx:id="soundSlider" max="1" min="0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="44.0" prefWidth="248.0" spacing="5.0">
+               <children>
+                  <Label prefHeight="35.0" prefWidth="135.0" text="Mute Sound" />
+                  <CheckBox fx:id="soundCheckBox">
+                     <padding>
+                        <Insets left="10.0" top="10.0" />
+                     </padding></CheckBox>
+               </children>
+            </HBox>
          </children>
-      </HBox>
+      </VBox>
    </children>
 </AnchorPane>
