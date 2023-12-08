@@ -5,10 +5,11 @@
 ---
 
 ## Compilation Instructions:
-#### git clone this repository and run the following command using maven:
-`mvn clean javafx:run`
+### git clone this repository and run the following command using maven:
+#### `mvn clean javafx:run`
 
-#### git clone this repository and add javafx library in your IDE manually
+### git clone this repository and add javafx library in your IDE manually
+
 
 ---
 
@@ -16,21 +17,24 @@
 - `Menu Scene` added with `load game`,`start game`, `open settings` and `exit` function, also reused and act as the `Pause`, `Win` and `Lose` Scene
 - All time `highest score` can be `record` and will `update` when user win/lose with score higher than the previous highest score
 - Add a` pause button` to the game scene, user can `pause` and will open up menu scene, and can `resume` back by clicking resume button in menu scene
-- `Settings Scene `added with `adjusting end level`, `initial heart number function`, `also show brief description of Game Item` to user
+- `Settings Scene `added with function such as `adjusting end level`, `initial heart number `, `adjusting music volume`, `mute and unmute music` 
 - Added a `penalty block`, when it is hit, a bomb will drop, if user not able to catch it, `deduct 10 points`
 - Added a new block, call `concrete block`, will be created when level reach 10. Player need to hit it 2 time to be able to destroy it, first hit will convert it to normal block
 - Added 3 `additional level`, previously playable level was until 17 only, now until 20.
 - improve the UI by adding a nice purple color with shadow and gradient
+- add `background music` to the game 
+- add `Game Description Scene` page which show brief description about block type and drop item in the game
+- make paddle `change color` randomly when hit by ball
+- add `2 point` when in `goldStatus` Mode instead of previously 1 point only
 
 ### Features that Implemented but Not Working Properly:
-- background game music and block hit sound effect, I have created a sound manager and successfully can play, pause, mute the background music,
-  but after that I notice a significant growth of thread usage in the program, and the game will crash after few level.
-  it took me 3 day to figure out is the problem of game sound, so I remove it and after that the game run smoothly (Didn't have time to implement the above features again, because I decide to focus more on report writing and code refactoring)
+- block hit sound effect, not able to implement properly, also cause my thread usage increase significantly causing 
+  unresponsive game, so i remove the block hit sound effect from my game
 
 ### Features Not Implemented:
-- adjusting music volume in settings page, due to the above problem mention, I decide to give up the background game music so there is no need for this features
-
-
+- create multiple ball in the game
+- change game theme 
+(i don't play game so can't think of other features already ...)
 
 ---
 
@@ -51,6 +55,11 @@
 - HIT_CODE in Block.java
 - BLOCK_TYPE in Block.java
 - GameState (newly added) in GameStateManager
+
+
+### Implemented a Mediator class for central coordination.
+- acts as a central coordinator, enabling communication and coordination among various game components.
+- promotes loose coupling, making the system more modular, extensible, and easier to maintain.
 
 ### Apply `MVC pattern` in the refactoring process
 - create `controller`, `model` and `fxml`(view) in the project
@@ -102,16 +111,22 @@
 
 ---
 
-
 ## New Files:
 
-### GameScene.fxml DONE
+### Mediator.java
+- acts as a central coordination point, facilitating communication and interactions between different components (singletons) in the game 
+- The Mediator helps in keeping these components loosely coupled by allowing them to communicate through a central mediator, 
+- promoting a more maintainable and extensible design.
+- Components that need to communicate with each other can do so indirectly through the Mediator
+- contains references to other significant components in the system, such as the GameSceneController, GameLogicHandler, and other critical controllers or managers.
+
+### GameScene.fxml
 
 - Moved all game scene related UI code to this file.
 - Added a pause button.
 - Moved level label to the left.
 
-### GameSceneController.java DONE
+### GameSceneController.java 
 
 - Set up the game scene, called inside `Main.java` through this controller.
 - Moved gameScene related methods from `Main.java`.
@@ -125,37 +140,54 @@
 - Allows pausing and resuming the game, saving the current game state when paused.
 
 
-### Menu.fxml DONE
+### Menu.fxml 
 
-- Added start, loadGame, settings, and quit buttons.
+- Added start, loadGame, settings,tutorial and quit buttons.
 - Added a brick breaker image at the top.
 - Reused this file when the pause button is clicked; the text of the start button changes to resume, while the others remain the same.
 - Reused this file for showing WIN and LOSE Scene
 
-### MenuController.java DONE
-
-- get instance of `gameLogicHandler`,`gameStateManager`,`gameSceneController`,`primaryStage` in Constructor
+### MenuController.java
 - When the start button is clicked, it checks the current gameState. If it's "ON_START," it calls `startGame();` if it's "PAUSED" it calls `loadGame()`, if it's 'GAME_OVER' or 'WIN', it calls `restartGame()`
 - When the settings button is clicked, open Settings Scene
 - When load Game button is clicked, check is SaveGame file exists, if yes then loadGame else open alert dialog to ask user want to start a new game or not
 
-
-### Settings.fxml DONE
+### Settings.fxml 
 - Added an interface for users to adjust the initial heart number, end level
 - Show brief description of penalty and bonus object
 
-### SettingsController.java DONE
-- Provided functionality to adjust the initial heart number.
-- Provided functionality to adjust the end level.
+### SettingsController.java 
+- Provide functionality to adjust the initial heart number.
+- Provide functionality to adjust the end level.
 - only can adjust settings before the game start or after the game end
+- Provide functionality to adjust the game sound volume
+- Provide functionality to mute and unmute the game sound volume
+- Provide functionality to navigate back to menu scene
 
-### BallControl.java DONE
-- Make this class follows the Singleton pattern, ensuring that only one instance of BallControl exists.
+### GameDescription.fxml
+- provide description about block and dropItem in the game
+- make use of Vbox and Hbox
+
+### GameDescriptionController.java
+- Provide functionality to navigate back to menu scene
+
+### GameSoundController,java
+- Calls initializeMediaPlayer() during instance creation for initial setup.
+- Sets up looping when the media reaches its end.
+- provide playback control function like play(),stop(),pause(),resume() and dispose()
+- Binds a JavaFX Slider to the volume property, allowing dynamic volume adjustment.
+- Binds a JavaFX CheckBox to mute functionality.
+- Pauses audio when the checkbox is selected; resumes from the paused position when deselected.
+- Retrieves the current status of the MediaPlayer (e.g., playing, paused, stopped).
+- Utilizes a constant, SOUND_FILE_PATH, for specifying the path to the sound file.
+
+### BallControlHandler.java
+- Make this class follows the Singleton pattern, ensuring that only one instance of BallControlHandler exists.
 - encapsulate all the variable into private
 - Moved all methods and fields related to ball movement and collision from `Main.java` for a cleaner file.
 - Fixed a bug: when colliding with the left block, `goRightBall` should be `false`.
 
-### InitGameComponent.java DONE
+### InitGameComponent.java
 - Make this class follows the Singleton pattern, ensuring that only one instance of InitGameComponent exists.
 - encapsulate all the variable into private
 - all methods and fields is related to initialization of game component
@@ -166,15 +198,13 @@
 - encapsulate all the variable into private
 - provide getter and setter method
 
-
 ### Paddle.java
 - Make this class follows the Singleton pattern, ensuring that only one instance of InitGameComponent exists.
 - put the function of moving paddle in this class
 - encapsulate all the variable into private
 - provide getter and setter method
 
-
-### GameStateManager.java DONE
+### GameStateManager.java
 - Make this class follows the Singleton pattern, ensuring that only one instance of GameStateManager exists.
 - encapsulate all the variable into private
 - Moved `loadGame()`, `saveGame()`, `restartGame()`, and `nextLevel()` from `Main` into this file.
@@ -184,7 +214,7 @@
   the game start, load, restart or after progress to next level
 - Added a `GameState` enum to better represent the game state.
 
-### Actionable.java DONE
+### Actionable.java
 - Interface moved from `GameEngine.java`.
 - Renamed the interface from `OnAction` to `Actionable`.
 - implement by `GameLogicHandler`
@@ -283,10 +313,10 @@ this interface will provide its own logic for creating the corresponding BlockHi
 - add one method `executePenalty` which deduct the mark and call ScoreAnimation to show the mark deduct animation.
 
 
-### HighestScore.java DONE
+### HighestScore.java
 - save and get the highest Game Score to/from file
 
-### DropItem.java DONE
+### DropItem.java
 - serves as an abstract base class for items that can be dropped in the game. (`Bonus` and `Penalty`)
 - contains common attributes such as position (`x` and `y`), creation time (`timeCreated`), and a flag indicating whether the item has been taken (`taken`). 
 - includes an abstract method draw() that subclasses must implement to define the visual representation of the drop item.
@@ -295,12 +325,11 @@ this interface will provide its own logic for creating the corresponding BlockHi
 - serves as a factory for creating droppable items in the game, specifically instances of `Bonus` and `Bomb` classes. 
 - This factory encapsulates the logic for creating these items, providing a centralized and organized way to instantiate and add them to the game scene.
 
-### Bomb.java DONE
+### Bomb.java
 - function: player will lose 10 point if not able to catch the penalty item 
 - extends the `DropItem` class and represents `bomb` drop item in the game.
 - overrides the `draw() `method to provide a visual representation for the `penalty` item.
 - The `draw()` method uses JavaFX's `Platform.runLater` to ensure UI updates are performed on the JavaFX application thread.
-
 
 ### Constants.java
 - included file path and image path
@@ -311,11 +340,11 @@ this interface will provide its own logic for creating the corresponding BlockHi
 
 ## Existing Files:
 
-### Block.java DONE
+### Block.java
 - Removed unnecessary constants and attributes.
 - Simplified the constructor by using setter methods.
 - Removed unused Block instance (block).
-- Introduced BLOCK_TYPE enum for better readability and maintainability.
+- Introduced `BLOCK_TYPE enum` for better readability and maintainability.
 - Centralized image paths as constants in the class.
 - Used the enum to determine the image path based on the block type.
 - Renamed and reorganized methods for better clarity and adherence to naming conventions.
@@ -323,17 +352,17 @@ this interface will provide its own logic for creating the corresponding BlockHi
 - Simplified and changed the collision detection logic for readability and prevent penetration issue
 - Maintained consistency in naming conventions and coding style.
 
-### BlockSerialize.java DONE
+### BlockSerialize.java (Originally was BlockSerializable)
 
 - Renamed the file to `BlockSerialize`.
 
-### Bonus.java DONE
+### Bonus.java
 - function: player will get 3 point if able to catch the bonus item
 - extends the `DropItem` class and represents a specific type of drop item in the game.
 - overrides the `draw() `method to provide a visual representation for the `bonus` item. 
 - The `draw()` method uses JavaFX's `Platform.runLater` to ensure UI updates are performed on the JavaFX application thread.
 
-### GameEngine.java DONE
+### GameEngine.java
 - Moved `OnAction` interface to its own file.
 - Replaced individual threads with an ExecutorService for better thread management.
 - Introduced a fixed-size thread pool (Executors.newFixedThreadPool(3)) for parallel execution of tasks.
@@ -343,13 +372,12 @@ this interface will provide its own logic for creating the corresponding BlockHi
 - Properly handled thread interruptions (Thread.currentThread().isInterrupted()) and exceptions to enhance robustness.
 - Simplified the stop method to shut down the ExecutorService instead of individually stopping threads.
 
-### LoadSave.java DONE
+### LoadSave.java
 - Fixed some variable typo errors.
 - encapsulates the field to private 
 - The reading of the ArrayList object has been updated to a more explicit form.
-- move `SAVE_PATH_DIR` and `SAVE_PATH` to here
 
-### Main.java DONE
+### Main.java
 - Extends javafx.application.Application and overrides the start method, which acts as the entry point for JavaFX applications.
 - Activates and configures the necessary singleton classes, including `GameLogicHandler`, `BallControl`, `GameSceneController`, `GameStateManager`, `Ball`, `Paddle` and `InitGameComponent`
 - Establishes connections and dependencies between these components to facilitate smooth communication during the game.
@@ -357,7 +385,7 @@ this interface will provide its own logic for creating the corresponding BlockHi
 - Customizes the menu scene, for example, making the "Load" button visible only when the game is first opened.
 - Invokes the launch method to initiate the JavaFX application.
 
-### ScoreAnimation.java (Originally was Score.java) DONE
+### ScoreAnimation.java (Originally was Score.java)
 - Added a constructor with `root` instance as a parameter.
 - Utilized JavaFX's Timeline and KeyFrame for animation instead of creating a separate thread and using `Thread.sleep()`.
 - Removed unused import statements.
@@ -381,18 +409,21 @@ this interface will provide its own logic for creating the corresponding BlockHi
     - **Issue:** The logic for block destruction count had a flaw, especially after pausing and resuming the game.
     - **Solution:** Modified the logic to check the remaining block count rather than the destroyed block count, preventing unintended level progression.
 
-4. **Difficulty Implementing MVC Pattern:**
+4. **Next level running many times unexpectedly:**
+    - **Issue:** when advance to next level, the `nextLevel()` run multiple times unexpectedly
+    - **Solution:** Modified the next level function, introduce one boolean variable to make sure the function cannot be call the second
+                    time until the first function end.
+
+5. **Difficulty Implementing MVC Pattern:**
     - **Issue:** Difficulty in separating UI code from the main logic using FXML and controllers.
     - **Solution:** Found a solution by referring to external sources, successfully implementing the MVC pattern by separating UI code into FXML files and corresponding controllers.
 
-5. **Game become unresponsive unexpectedly:** (It takes me 3 day to figure out what happen)
+6. **Game become unresponsive unexpectedly:** (It takes me 3 day to figure out what happen)
     - **Issue:** When level increase, then the game will become unresponsive and this situation happen inconsistent.
                  The thread as i see in activity monitor will also increase by 100++ for each level, at the end the program crash                
-    - **Solution:** Found that this is a issue after i added the game sound, fix it by commented out the code related to game sound manager
-                    Right now the thread is remains at 40 and the program run smoothly
+    - **Solution:** Found that this is a issue after i added the game sound, fix it by remove the code related to block hit sound
 
-6. **Gold root cannot be removed after pause:**
+7. **Gold root cannot be removed after pause:**
     - **Issue:** The goldRoot is added multiple times,but when remove only remove one goldRoot
     - **Solution:** Found out that this issue is because i added the goldRoot again and again when hit the Star block,
                     Solution to this is to check the goldStatus before add the goldRoot.         
-nextlevel run twice
