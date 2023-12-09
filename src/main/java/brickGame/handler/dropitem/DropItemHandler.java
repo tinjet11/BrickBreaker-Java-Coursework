@@ -13,13 +13,33 @@ import static brickGame.Constants.SCENE_HEIGHT;
 /**
  * Handler class for managing drop items in a brick game.
  * Handles movement, collision detection with the paddle, and scoring for taken drop items.
+ * @author Leong Tin Jet
+ * @version 1.0
  */
 public class DropItemHandler {
+    /**
+     * The initialization game component responsible for setting up the initial state of the game.
+     */
     public InitGameComponent initGameComponent;
+
+    /**
+     * The game scene controller handling user interface and scene transitions.
+     */
     public GameSceneController gameSceneController;
+
+    /**
+     * The game logic handler managing the core game logic, player stats, and overall game state.
+     */
     public GameLogicHandler gameLogicHandler;
+
+    /**
+     * The paddle component representing the player's control in the game.
+     */
     public Paddle paddle;
 
+    /**
+     * The DropItem instance to be handled by this DropItemHandler.
+     */
     public DropItem dropItem;
 
     /**

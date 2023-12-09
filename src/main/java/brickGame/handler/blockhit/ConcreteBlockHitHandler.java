@@ -13,6 +13,8 @@ import static brickGame.Constants.IMAGE_PATH_NORMAL_BRICK;
 /**
  * BlockHitHandler implementation for handling hits on Concrete blocks in a brick game.
  * Extends BlockHitHandler and provides specific behavior for Concrete block hits.
+ * @author Leong Tin Jet
+ * @version 1.0
  */
 public class ConcreteBlockHitHandler implements BlockHitHandler {
 

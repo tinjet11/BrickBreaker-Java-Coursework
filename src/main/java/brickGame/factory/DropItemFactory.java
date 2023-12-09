@@ -16,8 +16,16 @@ import javafx.application.Platform;
  * @version 1.0
  */
 public class DropItemFactory {
-    private final GameSceneController gameSceneController;
+    /**
+     * The initialization game component responsible for setting up the initial state of the game.
+     */
     private final InitGameComponent initGameComponent;
+
+    /**
+     * The game scene controller handling user interface and scene transitions.
+     */
+    private final GameSceneController gameSceneController;
+
 
     /**
      * Constructs a {@code DropItemFactory} with the specified game scene controller and game component.

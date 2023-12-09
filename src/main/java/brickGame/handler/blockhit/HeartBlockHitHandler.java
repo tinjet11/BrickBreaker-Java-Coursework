@@ -6,6 +6,8 @@ import brickGame.handler.GameLogicHandler;
 /**
  * BlockHitHandler implementation for handling hits on Heart blocks in a brick game.
  * Extends BlockHitHandler and provides specific behavior for Heart block hits.
+ * @author Leong Tin Jet
+ * @version 1.0
  */
 public class HeartBlockHitHandler implements BlockHitHandler {
     /**

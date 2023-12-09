@@ -10,6 +10,8 @@ import brickGame.model.InitGameComponent;
  * BlockHitHandler implementation for handling hits on Choco blocks in a brick game.
  * Extends BlockHitHandler and provides specific behavior for Choco block hits.
  *
+ * @author Leong Tin Jet
+ * @version 1.0
  */
 public class ChocoBlockHitHandler implements BlockHitHandler {
     private final DropItemFactory dropItemFactory;

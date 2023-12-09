@@ -29,22 +29,35 @@ import static brickGame.Constants.SETTINGS_SCENE_FXML;
  */
 public class MenuController {
 
+    /**
+     * The instance of Mediator for handling communication between different components.
+     */
     Mediator mediator;
 
+    /**
+     * The current game state.
+     */
     private GameStateManager.GameState gameState;
 
+    /**
+     * The primary stage of the application.
+     */
     private Stage primaryStage;
 
+    /**
+     * The highest score achieved in the game.
+     */
     private int highestScore;
 
 
     public MenuController(){
         mediator = Mediator.getInstance();
-
         primaryStage = mediator.getGameSceneController().getPrimaryStage();
-
     }
 
+    /**
+     * The VBox representing the result box in the menu scene.
+     */
     @FXML
     private VBox resultBox;
 
@@ -129,6 +142,11 @@ public class MenuController {
         }
     }
 
+    /**
+     * Handles the action when the "Game Description" button is clicked. It opens the game description scene.
+     * The game description scene provides information about the game rules and controls.
+     * Uses JavaFX components and FXML for scene setup.
+     */
     @FXML
     public void onOpenGameDescription() {
         try {
@@ -149,11 +167,10 @@ public class MenuController {
     /**
      * Displays the result scene based on the game outcome (win or lose) and updates the highest score.
      *
-     * @param state The game outcome, either "Win" or "Lose".
      * @param winMenuScene The scene to be displayed after winning or losing.
      * @throws IOException If an I/O error occurs while loading the result scene.
      */
-    public void showMenuScene(String state, Scene winMenuScene) throws IOException {
+    public void showMenuScene(Scene winMenuScene) throws IOException {
 
         //destroy saveGame file if player lose or win
         LoadSave loadSave = new LoadSave();
@@ -176,7 +193,7 @@ public class MenuController {
             highestScorePlaceholder.setText("Your new all time highest score is: " + String.valueOf(mediator.getGameLogicHandler().getScore()));
         }
 
-        if (state == "Lose") {
+        if (mediator.getGameStateManager().getGameState() == GameStateManager.GameState.GAME_OVER) {
             Label resultLabel = (Label) winMenuScene.lookup("#resultLabel");
             resultLabel.setText("Game Over :(");
         }

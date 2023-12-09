@@ -8,6 +8,8 @@ import brickGame.model.ScoreAnimation;
 
 /**
  * Interface defining methods for handling block hits in a brick game.
+ * @author Leong Tin Jet
+ * @version 1.0
  */
 public interface BlockHitHandler {
 

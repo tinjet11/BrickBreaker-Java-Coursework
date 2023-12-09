@@ -2,6 +2,8 @@ package brickGame.handler;
 
 /**
  * The Actionable interface provides a set of methods to handle various events in the game.
+ * @author Leong Tin Jet
+ * @version 1.0
  */
 public interface Actionable {
     /**

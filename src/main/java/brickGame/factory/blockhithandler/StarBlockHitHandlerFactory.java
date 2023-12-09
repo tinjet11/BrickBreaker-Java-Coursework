@@ -17,6 +17,6 @@ public class StarBlockHitHandlerFactory implements BlockHitHandlerFactory {
      */
     @Override
     public BlockHitHandler createHandler(GameSceneController gameSceneController, InitGameComponent initGameComponent, BallControlHandler ballControlHandler) {
-        return new StarBlockHitHandler(gameSceneController, ballControlHandler);
+        return new StarBlockHitHandler(gameSceneController);
     }
 }

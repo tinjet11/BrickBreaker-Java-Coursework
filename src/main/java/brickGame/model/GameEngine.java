@@ -31,11 +31,26 @@ import java.util.concurrent.Executors;
  * @version 1.0
  */
 public class GameEngine {
+    /**
+     * The {@code ExecutorService} responsible for managing threads in the game engine.
+     */
     private ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+    /**
+     * The {@code Actionable} interface used for game logic callbacks during the game loop.
+     */
     private Actionable onAction;
+
+    /**
+     * The frames per second (fps) for the game loop.
+     */
     private int fps = 15;
 
+    /**
+     * A flag indicating whether the game engine is stopped.
+     */
     public boolean isStopped = true;
+
 
     /**
      * Sets the Actionable interface to be used for game logic callbacks during the game loop.

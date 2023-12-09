@@ -1,8 +1,6 @@
 package brickGame.controller;
 
 import brickGame.Mediator;
-import brickGame.handler.BallControlHandler;
-import brickGame.handler.GameLogicHandler;
 import brickGame.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,25 +26,53 @@ import static brickGame.Constants.*;
  */
 public class GameSceneController {
 
+    /**
+     * The mediator used for communication between different components of the game.
+     */
     private Mediator mediator;
 
-
-    public void setMediator(Mediator mediator) {
-        this.mediator = mediator;
-    }
+    /**
+     * The main game pane where the game elements are displayed.
+     */
     @FXML
     private AnchorPane gamePane;
+
+    /**
+     * The label displaying the player's score.
+     */
     @FXML
     private Label scoreLabel;
+
+    /**
+     * The label displaying the remaining hearts of the player.
+     */
     @FXML
     private Label heartLabel;
+
+    /**
+     * The label displaying the current level of the game.
+     */
     @FXML
     private Label levelLabel;
 
-
+    /**
+     * The primary stage of the application.
+     */
     private Stage primaryStage;
+
+    /**
+     * Constant representing the direction to move the paddle to the left.
+     */
     private final int LEFT = 1;
+
+    /**
+     * Constant representing the direction to move the paddle to the right.
+     */
     private final int RIGHT = 2;
+
+    /**
+     * The MenuController associated with the game scene.
+     */
     private MenuController menuController;
 
     /**
@@ -102,7 +128,7 @@ public class GameSceneController {
             mediator.getGameLogicHandler().setGameRun(false);
             mediator.getGameStateManager().setGameState(GameStateManager.GameState.GAME_OVER);
             Scene loseMenuScene = loadMenuScene();
-            menuController.showMenuScene("Lose", loseMenuScene);
+            menuController.showMenuScene(loseMenuScene);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -117,7 +143,7 @@ public class GameSceneController {
             mediator.getGameStateManager().setGameState(GameStateManager.GameState.WIN);
             mediator.getGameLogicHandler().setGameRun(false);
             Scene winMenuScene = loadMenuScene();
-            menuController.showMenuScene("Win", winMenuScene);
+            menuController.showMenuScene(winMenuScene);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -293,4 +319,12 @@ public class GameSceneController {
         return primaryStage;
     }
 
+    /**
+     * Sets the mediator for the GameSceneController.
+     *
+     * @param mediator The mediator to set.
+     */
+    public void setMediator(Mediator mediator) {
+        this.mediator = mediator;
+    }
 }

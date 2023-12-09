@@ -7,15 +7,41 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The {@code BlockHitHandlerFactoryProvider} class provides a centralized factory for creating block hit handlers.
- * It maps different block types to their corresponding handler factories, allowing dynamic creation of handlers
- * based on the type of block hit.
+ * The {@code BlockHitHandlerFactoryProvider} class provides a centralized factory for creating
+ * block hit handlers. It maps different block types to their corresponding handler factories,
+ * allowing dynamic creation of handlers based on the type of block hit.
+ * <p>
+ * This class collaborates with various {@code BlockHitHandlerFactory} implementations, such as
+ * {@code ChocoBlockHitHandlerFactory}, {@code PenaltyBlockHitHandlerFactory},
+ * {@code ConcreteBlockHitHandlerFactory}, {@code HeartBlockHitHandlerFactory},
+ * {@code StarBlockHitHandlerFactory}, and {@code NormalBlockHitHandlerFactory}.
+ * </p>
+ * <p>
+ * The factory mapping is established using a {@code Map} to associate each block type with its
+ * corresponding handler factory. The static initializer block initializes the mapping.
+ * </p>
+ *
+ * @see BlockHitHandlerFactory
+ * @see ChocoBlockHitHandlerFactory
+ * @see PenaltyBlockHitHandlerFactory
+ * @see ConcreteBlockHitHandlerFactory
+ * @see HeartBlockHitHandlerFactory
+ * @see StarBlockHitHandlerFactory
+ * @see NormalBlockHitHandlerFactory
+ * @see Block
  * @author Leong Tin Jet
  * @version 1.0
  */
+
 public class BlockHitHandlerFactoryProvider {
+    /**
+     * The mapping of block types to their corresponding handler factories.
+     */
     private static final Map<Block.BLOCK_TYPE, BlockHitHandlerFactory> factories = new HashMap<>();
 
+    /**
+     * Static initializer block to populate the factory mapping.
+     */
     static {
         factories.put(Block.BLOCK_TYPE.BLOCK_CHOCO, new ChocoBlockHitHandlerFactory());
         factories.put(Block.BLOCK_TYPE.BLOCK_PENALTY, new PenaltyBlockHitHandlerFactory());

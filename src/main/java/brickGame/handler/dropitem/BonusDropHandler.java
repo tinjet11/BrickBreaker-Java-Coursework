@@ -8,6 +8,8 @@ import brickGame.model.InitGameComponent;
 /**
  * Handler class for managing bonus drop items in a brick game.
  * Extends DropItemHandler and inherits methods for handling movement, collision detection, and scoring.
+ * @author Leong Tin Jet
+ * @version 1.0
  */
 public class BonusDropHandler extends DropItemHandler {
 

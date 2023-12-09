@@ -58,10 +58,10 @@ public class LoadSave {
     /**
      * Destroys the existing save game file. This method is called when the player win or lose the game.
      */
-    public void destroySaveGameFile(){
+    public void destroySaveGameFile() {
         File saveFile = new File(SAVE_PATH);
         if (saveFile.exists()) {
-           saveFile.delete();
+            saveFile.delete();
         }
     }
 
@@ -142,203 +142,455 @@ public class LoadSave {
         }
     }
 
+    /**
+     * Gets the existence status of the heart block.
+     *
+     * @return True if the heart block exists; otherwise, false.
+     */
     public boolean isExistHeartBlock() {
         return isExistHeartBlock;
     }
 
+    /**
+     * Sets the existence status of the heart block.
+     *
+     * @param existHeartBlock The existence status of the heart block in saved file.
+     */
     public void setExistHeartBlock(boolean existHeartBlock) {
         isExistHeartBlock = existHeartBlock;
     }
 
+    /**
+     * Checks if the gold status is active.
+     *
+     * @return True if gold status is active; otherwise, false.
+     */
     public boolean isGoldStatus() {
         return isGoldStatus;
     }
 
+    /**
+     * Sets the gold status.
+     *
+     * @param goldStatus The new gold status.
+     */
     public void setGoldStatus(boolean goldStatus) {
         isGoldStatus = goldStatus;
     }
 
+    /**
+     * Checks if the ball is moving down.
+     *
+     * @return True if the ball is moving down; otherwise, false.
+     */
     public boolean isGoDownBall() {
         return goDownBall;
     }
 
+    /**
+     * Sets the status of the ball moving down.
+     *
+     * @param goDownBall The new status of the ball moving down.
+     */
     public void setGoDownBall(boolean goDownBall) {
         this.goDownBall = goDownBall;
     }
 
+    /**
+     * Checks if the ball is moving to the right.
+     *
+     * @return True if the ball is moving to the right; otherwise, false.
+     */
     public boolean isGoRightBall() {
         return goRightBall;
     }
 
+    /**
+     * Sets the status of the ball moving to the right.
+     *
+     * @param goRightBall The new status of the ball moving to the right.
+     */
     public void setGoRightBall(boolean goRightBall) {
         this.goRightBall = goRightBall;
     }
 
+    /**
+     * Checks if the ball collides with the paddle.
+     *
+     * @return True if the ball collides with the paddle; otherwise, false.
+     */
     public boolean isCollideToPaddle() {
         return collideToPaddle;
     }
 
+    /**
+     * Sets the collision status of the ball with the paddle.
+     *
+     * @param collideToPaddle The new collision status of the ball with the paddle.
+     */
     public void setCollideToPaddle(boolean collideToPaddle) {
         this.collideToPaddle = collideToPaddle;
     }
 
+    /**
+     * Checks if the ball collides with the top of the paddle and moves to the right.
+     *
+     * @return True if the ball collides with the top of the paddle and moves to the right; otherwise, false.
+     */
     public boolean isCollideTopPaddleAndMoveToRight() {
         return collideTopPaddleAndMoveToRight;
     }
 
+    /**
+     * Sets the collision status of the ball with the top of the paddle and moves to the right.
+     *
+     * @param collideTopPaddleAndMoveToRight The new collision status of the ball with the top of the paddle and moves to the right.
+     */
     public void setCollideTopPaddleAndMoveToRight(boolean collideTopPaddleAndMoveToRight) {
         this.collideTopPaddleAndMoveToRight = collideTopPaddleAndMoveToRight;
     }
+
+    /**
+     * Checks if the ball collides with the right wall.
+     *
+     * @return True if the ball collides with the right wall; otherwise, false.
+     */
 
     public boolean isCollideToRightWall() {
         return collideToRightWall;
     }
 
+    /**
+     * Sets the collision status of the ball with the right wall.
+     *
+     * @param collideToRightWall The new collision status of the ball with the right wall.
+     */
     public void setCollideToRightWall(boolean collideToRightWall) {
         this.collideToRightWall = collideToRightWall;
     }
 
+    /**
+     * Checks if the ball collides with the left wall.
+     *
+     * @return True if the ball collides with the left wall; otherwise, false.
+     */
     public boolean isCollideToLeftWall() {
         return collideToLeftWall;
     }
 
+    /**
+     * Sets the collision status of the ball with the left wall.
+     *
+     * @param collideToLeftWall The new collision status of the ball with the left wall.
+     */
     public void setCollideToLeftWall(boolean collideToLeftWall) {
         this.collideToLeftWall = collideToLeftWall;
     }
 
+    /**
+     * Checks if the ball collides with the right block.
+     *
+     * @return True if the ball collides with the right block; otherwise, false.
+     */
     public boolean isCollideToRightBlock() {
         return collideToRightBlock;
     }
 
+    /**
+     * Sets the collision status of the ball with the right block.
+     *
+     * @param collideToRightBlock The new collision status of the ball with the right block.
+     */
     public void setCollideToRightBlock(boolean collideToRightBlock) {
         this.collideToRightBlock = collideToRightBlock;
     }
 
+    /**
+     * Checks if the ball collides with the bottom block.
+     *
+     * @return True if the ball collides with the bottom block; otherwise, false.
+     */
     public boolean isCollideToBottomBlock() {
         return collideToBottomBlock;
     }
 
+    /**
+     * Sets the existence status of the bottom block collision.
+     *
+     * @param collideToBottomBlock The new existence status of the bottom block collision.
+     */
     public void setCollideToBottomBlock(boolean collideToBottomBlock) {
         this.collideToBottomBlock = collideToBottomBlock;
     }
 
+    /**
+     * Gets the existence status of the left block collision.
+     *
+     * @return True if the ball collides with the left block; otherwise, false.
+     */
     public boolean isCollideToLeftBlock() {
         return collideToLeftBlock;
     }
 
+    /**
+     * Sets the existence status of the left block collision.
+     *
+     * @param collideToLeftBlock The new existence status of the left block collision.
+     */
     public void setCollideToLeftBlock(boolean collideToLeftBlock) {
         this.collideToLeftBlock = collideToLeftBlock;
     }
 
+    /**
+     * Gets the existence status of the top block collision.
+     *
+     * @return True if the ball collides with the top block; otherwise, false.
+     */
     public boolean isCollideToTopBlock() {
         return collideToTopBlock;
     }
 
+    /**
+     * Sets the existence status of the top block collision.
+     *
+     * @param collideToTopBlock The new existence status of the top block collision.
+     */
     public void setCollideToTopBlock(boolean collideToTopBlock) {
         this.collideToTopBlock = collideToTopBlock;
     }
 
+    /**
+     * Gets the current level.
+     *
+     * @return The current level.
+     */
     public int getLevel() {
         return level;
     }
 
+    /**
+     * Sets the current level.
+     *
+     * @param level The new level.
+     */
     public void setLevel(int level) {
         this.level = level;
     }
 
+    /**
+     * Gets the current score.
+     *
+     * @return The current score.
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     * Sets the current score.
+     *
+     * @param score The new score.
+     */
     public void setScore(int score) {
         this.score = score;
     }
 
+    /**
+     * Gets the current heart count.
+     *
+     * @return The current heart count.
+     */
     public int getHeart() {
         return heart;
     }
 
+    /**
+     * Sets the current heart count.
+     *
+     * @param heart The new heart count.
+     */
     public void setHeart(int heart) {
         this.heart = heart;
     }
 
+    /**
+     * Gets the remaining block count.
+     *
+     * @return The remaining block count.
+     */
     public int getRemainingBlockCount() {
         return remainingBlockCount;
     }
 
+    /**
+     * Sets the remaining block count.
+     *
+     * @param remainingBlockCount The new remaining block count.
+     */
     public void setRemainingBlockCount(int remainingBlockCount) {
         this.remainingBlockCount = remainingBlockCount;
     }
 
+    /**
+     * Gets the x-coordinate of the ball.
+     *
+     * @return The x-coordinate of the ball.
+     */
     public double getxBall() {
         return xBall;
     }
 
+    /**
+     * Sets the x-coordinate of the ball.
+     *
+     * @param xBall The new x-coordinate of the ball.
+     */
     public void setxBall(double xBall) {
         this.xBall = xBall;
     }
 
+    /**
+     * Gets the y-coordinate of the ball.
+     *
+     * @return The y-coordinate of the ball.
+     */
     public double getyBall() {
         return yBall;
     }
 
+    /**
+     * Sets the y-coordinate of the ball.
+     *
+     * @param yBall The new y-coordinate of the ball.
+     */
     public void setyBall(double yBall) {
         this.yBall = yBall;
     }
 
+    /**
+     * Gets the x-coordinate of the paddle.
+     *
+     * @return The x-coordinate of the paddle.
+     */
     public double getxPaddle() {
         return xPaddle;
     }
 
+    /**
+     * Sets the x-coordinate of the paddle.
+     *
+     * @param xPaddle The new x-coordinate of the paddle.
+     */
     public void setxPaddle(double xPaddle) {
         this.xPaddle = xPaddle;
     }
 
+    /**
+     * Gets the y-coordinate of the paddle.
+     *
+     * @return The y-coordinate of the paddle.
+     */
     public double getyPaddle() {
         return yPaddle;
     }
 
+    /**
+     * Sets the y-coordinate of the paddle.
+     *
+     * @param yPaddle The new y-coordinate of the paddle.
+     */
     public void setyPaddle(double yPaddle) {
         this.yPaddle = yPaddle;
     }
 
+    /**
+     * Gets the x-coordinate of the center of the paddle.
+     *
+     * @return The x-coordinate of the center of the paddle.
+     */
     public double getCenterPaddleX() {
         return centerPaddleX;
     }
 
+    /**
+     * Sets the x-coordinate of the center of the paddle.
+     *
+     * @param centerPaddleX The new x-coordinate of the center of the paddle.
+     */
     public void setCenterPaddleX(double centerPaddleX) {
         this.centerPaddleX = centerPaddleX;
     }
 
+    /**
+     * Gets the elapsed time.
+     *
+     * @return The elapsed time.
+     */
     public long getTime() {
         return time;
     }
 
+    /**
+     * Sets the elapsed time.
+     *
+     * @param time The new elapsed time.
+     */
     public void setTime(long time) {
         this.time = time;
     }
 
+    /**
+     * Gets the elapsed gold time.
+     *
+     * @return The elapsed gold time.
+     */
     public long getGoldTime() {
         return goldTime;
     }
 
+    /**
+     * Sets the elapsed gold time.
+     *
+     * @param goldTime The new elapsed gold time.
+     */
     public void setGoldTime(long goldTime) {
         this.goldTime = goldTime;
     }
 
+    /**
+     * Gets the velocity of the ball along the x-axis.
+     *
+     * @return The velocity of the ball along the x-axis.
+     */
     public double getvX() {
         return vX;
     }
 
+    /**
+     * Sets the velocity of the ball along the x-axis.
+     *
+     * @param vX The new velocity of the ball along the x-axis.
+     */
     public void setvX(double vX) {
         this.vX = vX;
     }
 
+    /**
+     * Gets the list of serialized blocks.
+     *
+     * @return The list of serialized blocks.
+     */
     public ArrayList<BlockSerialize> getBlocks() {
         return blocks;
     }
 
+    /**
+     * Sets the list of serialized blocks.
+     *
+     * @param blocks The new list of serialized blocks.
+     */
     public void setBlocks(ArrayList<BlockSerialize> blocks) {
         this.blocks = blocks;
     }
+
 }

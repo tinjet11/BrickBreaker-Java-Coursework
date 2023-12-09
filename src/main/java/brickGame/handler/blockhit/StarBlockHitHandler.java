@@ -15,22 +15,27 @@ import static brickGame.Constants.GOLD_ROOT;
 /**
  * BlockHitHandler implementation for handling hits on Star blocks in a brick game.
  * Extends BlockHitHandler and provides specific behavior for Star block hits.
+ * @author Leong Tin Jet
+ * @version 1.0
  */
 public class StarBlockHitHandler implements BlockHitHandler {
+    /**
+     * The game scene controller handling user interface and scene transitions.
+     */
     private final GameSceneController gameSceneController;
-    private final BallControlHandler ballControlHandler;
 
+    /**
+     * The ball instance
+     */
     private final Ball ball;
 
     /**
      * Constructs a StarBlockHitHandler with the specified GameSceneController and BallControl.
      *
      * @param gameSceneController The GameSceneController associated with the game.
-     * @param ballControlHandler         The BallControl instance responsible for ball movement.
      */
-    public StarBlockHitHandler(GameSceneController gameSceneController, BallControlHandler ballControlHandler) {
+    public StarBlockHitHandler(GameSceneController gameSceneController) {
         this.gameSceneController = gameSceneController;
-        this.ballControlHandler = ballControlHandler;
         this.ball = Ball.getInstance();
     }
 

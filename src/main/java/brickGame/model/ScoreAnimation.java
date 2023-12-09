@@ -32,10 +32,23 @@ import javafx.util.Duration;
  * @version 1.0
  */
 public class ScoreAnimation {
+    /**
+     * The duration of the animation in seconds.
+     */
     private final Duration ANIMATION_DURATION = Duration.seconds(1.5);
+    /**
+     * The end value of opacity in the animation.
+     */
     private final double OPACITY_END_VALUE = 0.0;
+
+    /**
+     * The end value of scale in the animation.
+     */
     private final double SCALE_END_VALUE = 0.0;
 
+    /**
+     * The root {@link AnchorPane} used in the animation.
+     */
     private AnchorPane root;
 
     /**
@@ -43,7 +56,7 @@ public class ScoreAnimation {
      *
      * @param root The JavaFX AnchorPane where the score animation will be displayed.
      */
-    public ScoreAnimation(AnchorPane root){
+    public ScoreAnimation(AnchorPane root) {
         this.root = root;
     }
 

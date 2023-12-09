@@ -19,7 +19,7 @@
                <children>
                   <Label prefHeight="35.0" prefWidth="165.0" text="Initial heart number:" wrapText="true" />
                   <Button fx:id="addHeart" mnemonicParsing="false" onAction="#decrementHeart" text="-" />
-                  <Label fx:id="initialHeartLabel" alignment="TOP_LEFT" text="3" />
+                  <Label fx:id="initialHeartLabel" alignment="CENTER" prefHeight="35.0" prefWidth="55.0" text="3" />
                   <Button fx:id="minusHeart" mnemonicParsing="false" onAction="#incrementHeart" text="+" />
                </children>
             </HBox>

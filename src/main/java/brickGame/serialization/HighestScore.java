@@ -34,7 +34,7 @@ public class HighestScore {
      */
     public void setHighestGameScore(int score) {
 
-        if(score > getHighestGameScore()){
+        if (score > getHighestGameScore()) {
             new Thread(() -> {
                 new File(SAVE_PATH_DIR).mkdirs();
                 File file = new File(HIGHEST_SCORE_SAVE_PATH);

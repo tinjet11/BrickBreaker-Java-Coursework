@@ -31,12 +31,32 @@ import static brickGame.model.Block.*;
  * @version 1.0
  */
 public abstract class DropItem implements Serializable {
+    /**
+     * The visual representation of the drop item as a JavaFX Rectangle.
+     */
     public Rectangle element;
 
+    /**
+     * The x-coordinate of the drop item's position.
+     */
     private double x;
+
+    /**
+     * The y-coordinate of the drop item's position.
+     */
     private double y;
+
+    /**
+     * The time when the drop item was created.
+     */
     private long timeCreated;
+
+    /**
+     * A flag indicating whether the drop item has been taken by the player.
+     */
     private boolean taken = false;
+
+
     /**
      * Constructs a new DropItem object with the specified row and column.
      *
@@ -49,37 +69,73 @@ public abstract class DropItem implements Serializable {
 
         draw();
     }
+
     /**
      * Abstract method to be implemented by concrete drop item classes.
      * It is responsible for drawing the visual representation of the drop item.
      */
     protected abstract void draw();
 
+    /**
+     * Gets the time when the drop item was created.
+     *
+     * @return The time when the drop item was created.
+     */
     public long getTimeCreated() {
         return timeCreated;
     }
 
+    /**
+     * Sets the time when the drop item was created.
+     *
+     * @param timeCreated The time when the drop item was created.
+     */
     public void setTimeCreated(long timeCreated) {
         this.timeCreated = timeCreated;
     }
 
+    /**
+     * Checks if the drop item has been taken by the player.
+     *
+     * @return {@code true} if the drop item has been taken, {@code false} otherwise.
+     */
     public boolean isTaken() {
         return taken;
     }
 
+    /**
+     * Sets whether the drop item has been taken by the player.
+     *
+     * @param taken {@code true} if the drop item has been taken, {@code false} otherwise.
+     */
     public void setTaken(boolean taken) {
         this.taken = taken;
     }
 
+    /**
+     * Gets the x-coordinate of the drop item's position.
+     *
+     * @return The x-coordinate of the drop item's position.
+     */
     public double getX() {
         return x;
     }
 
-    public void setY(double y) {
-        this.y = y;
-    }
-
+    /**
+     * Gets the y-coordinate of the drop item's position.
+     *
+     * @return The y-coordinate of the drop item's position.
+     */
     public double getY() {
         return y;
+    }
+
+    /**
+     * Sets the y-coordinate of the drop item's position.
+     *
+     * @param y The new y-coordinate of the drop item's position.
+     */
+    public void setY(double y) {
+        this.y = y;
     }
 }

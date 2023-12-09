@@ -1,18 +1,14 @@
 package brickGame;
 
-import brickGame.controller.GameSceneController;
 import brickGame.controller.MenuController;
 import brickGame.controller.SoundController;
-import brickGame.handler.BallControlHandler;
-import brickGame.handler.GameLogicHandler;
-import brickGame.model.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.media.Media;
 import javafx.stage.Stage;
+
 import java.io.*;
 
 
@@ -21,13 +17,24 @@ import java.io.*;
  * It extends the JavaFX Application class and initializes the game components,
  * such as the game logic handler, ball control, game scene controller, and game state manager.
  * It also handles the initialization of the menu scene.
+ *
  * @author Leong Tin Jet
  * @version 1.0
  */
 public class Main extends Application {
-    private  Stage primaryStage;
+    /**
+     * The primary stage for the application.
+     */
+    private Stage primaryStage;
 
+    /**
+     * The sound controller for managing game audio.
+     */
     private SoundController soundController;
+
+    /**
+     * The mediator for handling communication between game components.
+     */
     private Mediator mediator;
 
     /**
@@ -76,6 +83,7 @@ public class Main extends Application {
         Button loadBtn = (Button) menuScene.lookup("#loadButton");
         loadBtn.setVisible(true);
 
+        primaryStage.setResizable(false);
         primaryStage.setTitle("Brick Breaker Game");
         primaryStage.setScene(menuScene);
         primaryStage.show();

@@ -1,20 +1,12 @@
 package brickGame.controller;
 
-import brickGame.Main;
+import brickGame.Mediator;
 import brickGame.handler.GameLogicHandler;
-import brickGame.model.GameStateManager;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-
-import static brickGame.Constants.GAME_DESCRIPTION_SCENE_FXML;
-import static brickGame.Constants.SETTINGS_SCENE_FXML;
-
 
 /**
  * The SettingsController class is responsible for managing the game settings UI,
@@ -34,32 +26,79 @@ import static brickGame.Constants.SETTINGS_SCENE_FXML;
  */
 public class SettingsController {
 
+    /**
+     * The JavaFX Label representing the display of the initial heart value.
+     */
     @FXML
     private Label initialHeartLabel;
+
+    /**
+     * The JavaFX Label representing the display of the end level value.
+     */
     @FXML
     private Label endLevelLabel;
 
+    /**
+     * The JavaFX Slider for adjusting the sound volume.
+     */
     @FXML
     private Slider soundSlider;
 
+    /**
+     * The JavaFX CheckBox for toggling the sound on or off.
+     */
     @FXML
     private CheckBox soundCheckBox;
 
-    private int maxHeart = 10;
-    private int minHeart = 3;
 
-    private int maxLevel = 21;
-    private int minLevel = 10;
+    /**
+     * The maximum number of initial hearts allowed.
+     */
+    private final int maxHeart = 10;
+
+    /**
+     * The minimum number of initial hearts allowed.
+     */
+    private final int minHeart = 3;
+
+    /**
+     * The maximum level the player can reach.
+     */
+    private final int maxLevel = 21;
+
+    /**
+     * The minimum level the player can reach.
+     */
+    private final int minLevel = 10;
+
+    /**
+     * The current number of initial hearts.
+     */
     private int currentHeart;
+
+    /**
+     * The current maximum level the player can reach.
+     */
     private int currentEndLevel;
 
-    private GameLogicHandler gameLogicHandler;
-    private GameSceneController gameSceneController;
+    /**
+     * The mediator used for communication between different components of the game.
+     */
+    private Mediator mediator;
 
+    /**
+     * The sound controller used to control the sound
+     */
     private SoundController soundController;
 
+    /**
+     * The Scene of menu scene
+     */
     private Scene menuScene;
 
+    /**
+     * The primary stage of the application.
+     */
     private Stage primaryStage;
 
     /**
@@ -68,22 +107,21 @@ public class SettingsController {
      * @param menuScene The Scene object representing the main menu scene.
      */
     public SettingsController(Scene menuScene) {
-        gameLogicHandler = GameLogicHandler.getInstance();
-        gameSceneController = GameSceneController.getInstance();
-        primaryStage = gameSceneController.getPrimaryStage();
+        mediator = Mediator.getInstance();
+        primaryStage = mediator.getGameSceneController().getPrimaryStage();
         soundController = SoundController.getInstance();
         this.menuScene = menuScene;
     }
 
     /**
-     * Initializes the settings UI with the current initial heart and end level values.
+     * Initializes the settings UI with the current initial heart, end level values, sound checkbox and volume slider
      */
     @FXML
     public void initialize() {
-        currentEndLevel = gameLogicHandler.getEndLevel();
-        currentHeart = gameLogicHandler.getInitialHeart();
-        initialHeartLabel.setText(String.valueOf(gameLogicHandler.getInitialHeart()));
-        endLevelLabel.setText(String.valueOf(gameLogicHandler.getEndLevel()));
+        currentEndLevel = mediator.getGameLogicHandler().getEndLevel();
+        currentHeart = mediator.getGameLogicHandler().getInitialHeart();
+        initialHeartLabel.setText(String.valueOf(mediator.getGameLogicHandler().getInitialHeart()));
+        endLevelLabel.setText(String.valueOf(mediator.getGameLogicHandler().getEndLevel()));
         if (soundController.getStatus() == MediaPlayer.Status.PAUSED) {
             soundCheckBox.setSelected(true);
         } else {
@@ -91,8 +129,6 @@ public class SettingsController {
         }
         soundController.bindVolumeSlider(soundSlider);
         soundController.bindMuteCheckbox(soundCheckBox);
-
-
     }
 
 
@@ -117,11 +153,11 @@ public class SettingsController {
     @FXML
     private void incrementHeart() {
 
-        if (!gameLogicHandler.isGameRun()) {
+        if (!mediator.getGameLogicHandler().isGameRun()) {
             if (currentHeart != maxHeart) {
                 currentHeart++;
                 initialHeartLabel.setText(String.valueOf(currentHeart));
-                gameLogicHandler.setInitialHeart(currentHeart);
+                mediator.getGameLogicHandler().setInitialHeart(currentHeart);
             }
         }
     }
@@ -132,11 +168,11 @@ public class SettingsController {
      */
     @FXML
     private void decrementHeart() {
-        if (!gameLogicHandler.isGameRun()) {
+        if (!mediator.getGameLogicHandler().isGameRun()) {
             if (currentHeart != minHeart) {
                 currentHeart--;
                 initialHeartLabel.setText(String.valueOf(currentHeart));
-                gameLogicHandler.setInitialHeart(currentHeart);
+                mediator.getGameLogicHandler().setInitialHeart(currentHeart);
             }
         }
     }
@@ -147,11 +183,11 @@ public class SettingsController {
      */
     @FXML
     private void incrementLevel() {
-        if (!gameLogicHandler.isGameRun()) {
+        if (!mediator.getGameLogicHandler().isGameRun()) {
             if (currentEndLevel != maxLevel) {
                 currentEndLevel++;
                 endLevelLabel.setText(String.valueOf(currentEndLevel));
-                gameLogicHandler.setEndLevel(currentEndLevel);
+                mediator.getGameLogicHandler().setEndLevel(currentEndLevel);
             }
         }
 
@@ -163,11 +199,11 @@ public class SettingsController {
      */
     @FXML
     private void decrementLevel() {
-        if (!gameLogicHandler.isGameRun()) {
+        if (!mediator.getGameLogicHandler().isGameRun()) {
             if (currentEndLevel != minLevel) {
                 currentEndLevel--;
                 endLevelLabel.setText(String.valueOf(currentEndLevel));
-                gameLogicHandler.setEndLevel(currentEndLevel);
+                mediator.getGameLogicHandler().setEndLevel(currentEndLevel);
             }
         }
     }

@@ -13,6 +13,8 @@ import static brickGame.Constants.SCENE_WIDTH;
 /**
  * Handler class for managing bomb drop items in a brick game.
  * Extends DropItemHandler and provides specific behavior for bomb drop items.
+ * @author Leong Tin Jet
+ * @version 1.0
  */
 public class BombDropHandler extends DropItemHandler{
 

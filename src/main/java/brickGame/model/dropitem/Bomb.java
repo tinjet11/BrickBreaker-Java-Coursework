@@ -27,6 +27,14 @@ import static brickGame.Constants.IMAGE_PATH_BOMB;
  * @version 1.0
  */
 public class Bomb extends DropItem {
+
+    /**
+     * Constructs a new Bomb object associated with a specific block's row and column positions.
+     * The constructor calculates the position of the bomb item based on the block positions and invokes the draw method to visually represent the item.
+     *
+     * @param row    The row position of the block associated with the bomb item.
+     * @param column The column position of the block associated with the bomb item.
+     */
     public Bomb(int row, int column) {
         super(row, column);
     }

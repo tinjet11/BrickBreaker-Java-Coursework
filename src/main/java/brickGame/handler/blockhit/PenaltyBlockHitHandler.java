@@ -9,9 +9,13 @@ import brickGame.model.InitGameComponent;
 /**
  * BlockHitHandler implementation for handling hits on Penalty blocks in a brick game.
  * Extends BlockHitHandler and provides specific behavior for Penalty block hits.
+ * @author Leong Tin Jet
+ * @version 1.0
  */
 public class PenaltyBlockHitHandler implements BlockHitHandler {
-
+    /**
+     * The DropItemFactory instance responsible for creating drop items in the game.
+     */
     private final DropItemFactory dropItemFactory;
 
     /**

@@ -30,6 +30,14 @@ import static brickGame.Constants.*;
  * @version 1.0
  */
 public class Bonus extends DropItem {
+
+    /**
+     * Constructs a new Bonus object associated with a specific block's row and column positions.
+     * The constructor calculates the position of the bonus item based on the block positions and invokes the draw method to visually represent the item.
+     *
+     * @param row    The row position of the block associated with the bonus item.
+     * @param column The column position of the block associated with the bonus item.
+     */
     public Bonus(int row, int column) {
         super(row, column);
     }

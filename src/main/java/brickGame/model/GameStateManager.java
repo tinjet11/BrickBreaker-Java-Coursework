@@ -17,6 +17,7 @@ import static brickGame.Constants.*;
  * It handles the game logic, user input, and interaction with other components.
  * <p>
  * This class follows the singleton pattern, allowing only one instance to exist throughout the application.
+ *
  * @author Leong Tin Jet
  * @version 1.0
  */
@@ -47,14 +48,14 @@ public class GameStateManager {
      * Flag indicating whether it's the first time the game is opened.
      */
     private boolean gameFirstOpen = true;
-    
+    /**
+     * The mediator to handle communication between different components.
+     */
     private Mediator mediator;
 
-
-    public void setMediator(Mediator mediator) {
-        this.mediator = mediator;
-    }
-    
+    /**
+     * The singleton instance of the {@code GameStateManager} class.
+     */
     private static GameStateManager instance;
 
     /**
@@ -266,7 +267,7 @@ public class GameStateManager {
 
 
         for (BlockSerialize ser : loadSave.getBlocks()) {
-            mediator.getInitGameComponent().getBlocks().add(new Block(ser.row, ser.j, ser.type));
+            mediator.getInitGameComponent().getBlocks().add(new Block(ser.row, ser.column, ser.type));
         }
 
 
@@ -278,6 +279,7 @@ public class GameStateManager {
         }
 
     }
+
     /**
      * Restarts the game by resetting the level, score, and other relevant components.
      */
@@ -313,28 +315,67 @@ public class GameStateManager {
         }
     }
 
+    /**
+     * Gets the current state of the game.
+     *
+     * @return The current state of the game.
+     */
     public GameState getGameState() {
         return gameState;
     }
 
+    /**
+     * Sets the current state of the game.
+     *
+     * @param gameState The state to set.
+     */
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
     }
 
+    /**
+     * Checks if it's the first time the game is opened.
+     *
+     * @return True if it's the first time; false otherwise.
+     */
     public boolean isGameFirstOpen() {
         return gameFirstOpen;
     }
 
+    /**
+     * Sets the flag indicating whether it's the first time the game is opened.
+     *
+     * @param gameFirstOpen True if it's the first time; false otherwise.
+     */
     public void setGameFirstOpen(boolean gameFirstOpen) {
         this.gameFirstOpen = gameFirstOpen;
     }
 
+    /**
+     * Checks if the game is loaded from a saved state.
+     *
+     * @return True if loaded from save; false otherwise.
+     */
     public boolean isLoadFromSave() {
         return loadFromSave;
     }
 
+    /**
+     * Sets the flag indicating whether the game is loaded from a saved state.
+     *
+     * @param loadFromSave True if loaded from save; false otherwise.
+     */
     public void setLoadFromSave(boolean loadFromSave) {
         this.loadFromSave = loadFromSave;
     }
 
+
+    /**
+     * Sets the mediator to handle communication between different components.
+     *
+     * @param mediator The mediator instance.
+     */
+    public void setMediator(Mediator mediator) {
+        this.mediator = mediator;
+    }
 }

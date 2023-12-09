@@ -13,16 +13,24 @@ import static brickGame.Constants.SCENE_WIDTH;
  * This class follows the singleton pattern, ensuring that only one instance of BallControl exists in the game.
  * It is designed to work in conjunction with the GameLogicHandler and InitGameComponent classes to provide
  * comprehensive control over the ball's behavior.
- *
  * @author Leong Tin Jet
+ * @version 1.0
  */
 public class BallControlHandler {
+    /**
+     * The mediator to handle communication between different components.
+     */
     private Mediator mediator;
 
-
+    /**
+     * Sets the mediator to handle communication between different components.
+     *
+     * @param mediator The mediator instance.
+     */
     public void setMediator(Mediator mediator) {
         this.mediator = mediator;
     }
+
     /**
      * Private constructor to enforce the singleton pattern.
      */
@@ -490,13 +498,7 @@ public class BallControlHandler {
      * @param vX The new velocity of the ball along the horizontal axis.
      */
     public void setvX(double vX) {
-//        if(vX <= 5){
-//            this.vX = vX;
-//        }else{
-//            this.vX= 5;
-//        }
         this.vX = vX;
-        System.out.println(vX);
     }
 
     /**

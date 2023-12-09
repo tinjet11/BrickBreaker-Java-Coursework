@@ -10,14 +10,14 @@ import brickGame.factory.blockhithandler.BlockHitHandlerFactory;
 import brickGame.handler.blockhit.*;
 import brickGame.handler.dropitem.BonusDropHandler;
 import brickGame.handler.dropitem.BombDropHandler;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 import static brickGame.Constants.*;
@@ -25,11 +25,21 @@ import static brickGame.model.Block.BLOCK_HEIGHT;
 import static brickGame.model.Block.BLOCK_PADDING_TOP;
 
 /**
- * Handles the game logic, including collision detection, scoring, and game state management.
+ * Handles the game logic, including collision detection, scoring, and call nextLevel function.
+ *
+ * @author Leong Tin Jet
+ * @version 1.0
  */
 public class GameLogicHandler implements Actionable {
+
+    /**
+     * The singleton instance of the {@code GameLogicHandler} class.
+     */
     private static GameLogicHandler instance;
 
+    /**
+     * Private constructor to enforce singleton pattern.
+     */
     private GameLogicHandler() {
     }
 
@@ -45,25 +55,65 @@ public class GameLogicHandler implements Actionable {
         return instance;
     }
 
+    /**
+     * The mediator to handle communication between different components.
+     */
     private Mediator mediator;
 
 
-    public void setMediator(Mediator mediator) {
-        this.mediator = mediator;
-    }
-
+    /**
+     * The current number of hearts the player has.
+     */
     private int heart = 3;
+
+    /**
+     * The initial number of hearts the player starts with.
+     */
     private int initialHeart = 3;
 
+    /**
+     * The player's current score.
+     */
     private int score = 0;
+
+    /**
+     * The total time elapsed in the game.
+     */
     private long time = 0;
+
+    /**
+     * The total time elapsed in the game when the gold status is active.
+     */
     private long goldTime = 0;
+
+    /**
+     * Flag indicating whether the game is currently running.
+     */
     private boolean isGameRun = false;
+
+    /**
+     * The level at which the game ends.
+     */
     private int endLevel = 21;
+
+    /**
+     * The current level of the game.
+     */
     private int level = 18;
+
+    /**
+     * Flag indicating whether the gold status is active.
+     */
     private boolean isGoldStatus = false;
+
+    /**
+     * The remaining count of unbroken blocks in the current level.
+     */
     private int remainingBlockCount = 0;
 
+    /**
+     * The GameEngine instance associated with this game logic handler.
+     */
     private GameEngine engine;
 
     /**
@@ -99,8 +149,7 @@ public class GameLogicHandler implements Actionable {
      * @return True if the ball is within the game bounds, false otherwise.
      */
     private boolean isBallWithinGameBounds() {
-        return mediator.getBallInstance().getyBall() >= BLOCK_PADDING_TOP &&
-                mediator.getBallInstance().getyBall() <= (BLOCK_HEIGHT * (getLevel() + 1)) + BLOCK_PADDING_TOP;
+        return mediator.getBallInstance().getyBall() >= BLOCK_PADDING_TOP && mediator.getBallInstance().getyBall() <= (BLOCK_HEIGHT * (getLevel() + 1)) + BLOCK_PADDING_TOP;
     }
 
     /**
@@ -122,6 +171,7 @@ public class GameLogicHandler implements Actionable {
             }
         }
     }
+
     /**
      * Handles the specific hit of the ball on a game block.
      *
@@ -139,6 +189,13 @@ public class GameLogicHandler implements Actionable {
         }
 
         handleCollisionDirection(hitCode);
+
+        if (mediator.getBallControlHandler().isGoDownBall() == false) {
+            handleCollisionDirection(Block.HIT_STATE.HIT_BOTTOM);
+        } else {
+            handleCollisionDirection(Block.HIT_STATE.HIT_TOP);
+        }
+
     }
 
     /**
@@ -157,12 +214,14 @@ public class GameLogicHandler implements Actionable {
             mediator.getBallControlHandler().setCollideToTopBlock(true);
         }
     }
+
     /**
      * Stops the game engine.
      */
     public void stopEngine() {
         engine.stop();
     }
+
     /**
      * Starts the game engine.
      */
@@ -226,34 +285,35 @@ public class GameLogicHandler implements Actionable {
         handleChocos();
         handlePenalties();
 
-        if(mediator.getBallControlHandler().isCollideToPaddle()){
+        if (mediator.getBallControlHandler().isCollideToPaddle()) {
             changePaddleColor();
         }
     }
 
     private boolean canChangeColor = true;
 
+    private Color selectedColor;
+
     private void changePaddleColor() {
         if (canChangeColor) {
-            try{
+            try {
                 canChangeColor = false;
                 Random RANDOM = new Random();
-                Color selectedColor = PADDLE_COLOR_LIST.get(RANDOM.nextInt(PADDLE_COLOR_LIST.size()));
+                // Create a list of available colors excluding the last selected color
+                List<Color> availableColors = new ArrayList<>(PADDLE_COLOR_LIST);
+                availableColors.remove(selectedColor);
+
+                selectedColor = availableColors.get(RANDOM.nextInt(availableColors.size()));
 
                 Platform.runLater(() -> mediator.getPaddleInstance().getPaddle().setFill(selectedColor));
-            }catch (Exception e){
+
+
+            } catch (Exception e) {
                 e.printStackTrace();
-            }finally {
-                // Set a flag to prevent rapid color changes
-//                PauseTransition pause = new PauseTransition(Duration.millis(100));
-//                pause.setOnFinished(event -> {
-                    canChangeColor = true;
-//                });
-//                pause.play();
+            } finally {
+                canChangeColor = true;
             }
         }
-
-
     }
 
     /**
@@ -272,6 +332,7 @@ public class GameLogicHandler implements Actionable {
     /**
      * Determines whether gold status should be removed based on time.
      * If exceed 5 second from the initialization of gold ball, return true
+     *
      * @return True if gold status should be removed, false otherwise.
      */
     private boolean shouldRemoveGold() {
@@ -301,6 +362,7 @@ public class GameLogicHandler implements Actionable {
             }
         }
     }
+
     /**
      * Handles bomb (penalty) drop items, including removal, and penalty execution.
      */
@@ -325,89 +387,200 @@ public class GameLogicHandler implements Actionable {
         }
     }
 
+    /**
+     * Gets the current number of hearts the player has.
+     *
+     * @return The current number of hearts.
+     */
     public int getHeart() {
         return heart;
     }
 
+    /**
+     * Sets the current number of hearts the player has.
+     *
+     * @param heart The new number of hearts.
+     */
     public void setHeart(int heart) {
         this.heart = heart;
     }
 
+    /**
+     * Gets the initial number of hearts the player starts with.
+     *
+     * @return The initial number of hearts.
+     */
     public int getInitialHeart() {
         return initialHeart;
     }
 
+    /**
+     * Sets the initial number of hearts the player starts with.
+     *
+     * @param initialHeart The new initial number of hearts.
+     */
     public void setInitialHeart(int initialHeart) {
         this.initialHeart = initialHeart;
     }
 
+    /**
+     * Gets the player's current score.
+     *
+     * @return The current score.
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     * Sets the player's current score.
+     *
+     * @param score The new score.
+     */
     public void setScore(int score) {
         this.score = score;
     }
 
+    /**
+     * Gets the total time elapsed in the game.
+     *
+     * @return The total time elapsed.
+     */
     public long getTime() {
         return time;
     }
 
+    /**
+     * Sets the total time elapsed in the game.
+     *
+     * @param time The new total time elapsed.
+     */
     public void setTime(long time) {
         this.time = time;
     }
 
+    /**
+     * Gets the total time elapsed in the game when the gold status is active.
+     *
+     * @return The total time elapsed during gold status.
+     */
     public long getGoldTime() {
         return goldTime;
     }
 
+    /**
+     * Sets the total time elapsed in the game when the gold status is active.
+     *
+     * @param goldTime The new total time elapsed during gold status.
+     */
     public void setGoldTime(long goldTime) {
         this.goldTime = goldTime;
     }
 
+    /**
+     * Checks if the game is currently running.
+     *
+     * @return True if the game is running; otherwise, false.
+     */
     public boolean isGameRun() {
         return isGameRun;
     }
 
+    /**
+     * Sets the flag indicating whether the game is currently running.
+     *
+     * @param gameRun The new game run status.
+     */
     public void setGameRun(boolean gameRun) {
         isGameRun = gameRun;
     }
 
+    /**
+     * Gets the level at which the game ends.
+     *
+     * @return The level at which the game ends.
+     */
     public int getEndLevel() {
         return endLevel;
     }
 
+    /**
+     * Sets the level at which the game ends.
+     *
+     * @param endLevel The new level at which the game ends.
+     */
     public void setEndLevel(int endLevel) {
         this.endLevel = endLevel;
     }
 
+    /**
+     * Gets the current level of the game.
+     *
+     * @return The current level.
+     */
     public int getLevel() {
         return level;
     }
 
+    /**
+     * Sets the current level of the game.
+     *
+     * @param level The new level.
+     */
     public void setLevel(int level) {
         this.level = level;
     }
 
+    /**
+     * Increments the current level by 1.
+     */
     public void addLevel() {
         this.level += 1;
     }
 
+    /**
+     * Checks if the gold status is active.
+     *
+     * @return True if gold status is active; otherwise, false.
+     */
     public boolean isGoldStatus() {
         return isGoldStatus;
     }
 
+    /**
+     * Sets the flag indicating whether the gold status is active.
+     *
+     * @param goldStatus The new gold status.
+     */
     public void setGoldStatus(boolean goldStatus) {
         isGoldStatus = goldStatus;
     }
 
+    /**
+     * Gets the remaining count of unbroken blocks in the current level.
+     *
+     * @return The remaining block count.
+     */
     public int getRemainingBlockCount() {
         return remainingBlockCount;
     }
 
+    /**
+     * Sets the remaining count of unbroken blocks in the current level.
+     *
+     * @param remainingBlockCount The new remaining block count.
+     */
     public void setRemainingBlockCount(int remainingBlockCount) {
         this.remainingBlockCount = remainingBlockCount;
     }
 
+    /**
+     * Sets the mediator to handle communication between different components.
+     *
+     * @param mediator The mediator instance.
+     */
+    public void setMediator(Mediator mediator) {
+        this.mediator = mediator;
+    }
 
 }

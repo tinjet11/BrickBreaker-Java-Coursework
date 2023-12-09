@@ -43,26 +43,58 @@ import static brickGame.model.Block.BLOCK_HEIGHT;
  * @version 1.0
  */
 public class InitGameComponent {
-    private  static  InitGameComponent instance;
-    private InitGameComponent() {
+    /**
+     * The singleton instance of the {@code InitGameComponent} class.
+     */
+    private static InitGameComponent instance;
 
+    /**
+     * The mediator to handle communication between different components.
+     */
+    private Mediator mediator;
+
+    /**
+     * Flag indicating whether a heart block exists on the game board.
+     */
+    private boolean isExistHeartBlock = false;
+
+    /**
+     * Flag indicating whether a bomb block exists on the game board.
+     */
+    private boolean isExistBombBlock = false;
+
+    /**
+     * List of normal blocks on the game board.
+     */
+    private ArrayList<Block> blocks = new ArrayList<>();
+
+    /**
+     * List of choco bonus items on the game board.
+     */
+    private ArrayList<Bonus> chocos = new ArrayList<>();
+
+    /**
+     * List of bomb penalty items on the game board.
+     */
+    private ArrayList<Bomb> bombs = new ArrayList<>();
+
+    /**
+     * Private constructor to enforce singleton pattern.
+     */
+    private InitGameComponent() {
     }
+
+    /**
+     * Returns the singleton instance of the {@code InitGameComponent} class.
+     *
+     * @return The singleton instance.
+     */
     public static InitGameComponent getInstance() {
         if (instance == null) {
             instance = new InitGameComponent();
         }
         return instance;
     }
-
-    private Mediator mediator;
-
-    private boolean isExistHeartBlock = false;
-    private boolean isExistBombBlock = false;
-
-
-    private ArrayList<Block> blocks = new ArrayList<>();
-    private ArrayList<Bonus> chocos = new ArrayList<>();
-    private ArrayList<Bomb> bombs = new ArrayList<>();
 
     /**
      * set up the all the brick in the game according to the current level
@@ -154,31 +186,65 @@ public class InitGameComponent {
         paddle.getPaddle().setFill(color);
     }
 
+    /**
+     * Returns the flag indicating whether a heart block exists on the game board.
+     *
+     * @return True if a heart block exists; false otherwise.
+     */
     public boolean isExistHeartBlock() {
         return isExistHeartBlock;
     }
 
+    /**
+     * Sets the flag indicating whether a heart block exists on the game board.
+     *
+     * @param existHeartBlock True if a heart block exists; false otherwise.
+     */
     public void setExistHeartBlock(boolean existHeartBlock) {
         isExistHeartBlock = existHeartBlock;
     }
 
+    /**
+     * Returns the list of normal blocks on the game board.
+     *
+     * @return The list of normal blocks.
+     */
     public ArrayList<Block> getBlocks() {
         return blocks;
     }
 
+    /**
+     * Returns the list of choco bonus items on the game board.
+     *
+     * @return The list of choco bonus items.
+     */
     public ArrayList<Bonus> getChocos() {
         return chocos;
     }
 
+    /**
+     * Returns the list of bomb penalty items on the game board.
+     *
+     * @return The list of bomb penalty items.
+     */
     public ArrayList<Bomb> getBombs() {
         return bombs;
     }
 
+    /**
+     * Sets the flag indicating whether a bomb block exists on the game board.
+     *
+     * @param existBombBlock True if a bomb block exists; false otherwise.
+     */
     public void setExistBombBlock(boolean existBombBlock) {
         isExistBombBlock = existBombBlock;
     }
 
-
+    /**
+     * Sets the mediator to handle communication between different components.
+     *
+     * @param mediator The mediator instance.
+     */
     public void setMediator(Mediator mediator) {
         this.mediator = mediator;
     }

@@ -1,13 +1,32 @@
 package brickGame.model;
 
 import javafx.scene.shape.Circle;
-
+/**
+ * The Ball class represents the game ball in the Brick Breaker game.
+ * It follows the Singleton pattern, ensuring only one instance exists throughout the application.
+ * The class contains information about the ball's position, the Circle object representing the ball,
+ * and the ball's radius.
+ *
+ * @author Leong Tin Jet
+ * @version 1.0
+ */
 public class Ball {
+    /**
+     * The singleton instance of the {@code Ball} class.
+     */
+    private static Ball instance;
 
-    private  static  Ball instance;
+    /**
+     *  Private constructor to enforce Singleton pattern
+     */
     private Ball() {
-
     }
+
+    /**
+     * Gets the singleton instance of the Ball class.
+     *
+     * @return The singleton instance of the Ball class.
+     */
     public static Ball getInstance() {
         if (instance == null) {
             instance = new Ball();
@@ -15,7 +34,9 @@ public class Ball {
         return instance;
     }
 
-
+    /**
+     * The Circle object representing the ball
+     */
     private Circle ball;
 
     /**
@@ -89,7 +110,11 @@ public class Ball {
         this.yBall = yBall;
     }
 
-
+    /**
+     * Gets the ball's radius.
+     *
+     * @return the ball's radius.
+     */
     public int getBALL_RADIUS() {
         return BALL_RADIUS;
     }

@@ -25,17 +25,64 @@ import static brickGame.Constants.*;
  * @version 1.0
  */
 public class Block implements Serializable {
+    /**
+     * The row position of the block.
+     */
     private int row;
+
+    /**
+     * The column position of the block.
+     */
     private int column;
+
+    /**
+     * A flag indicating whether the block is destroyed.
+     */
     private boolean isDestroyed = false;
+
+    /**
+     * The type of the block.
+     */
     private BLOCK_TYPE type;
+
+    /**
+     * The x-coordinate of the block.
+     */
     private int x;
+
+    /**
+     * The y-coordinate of the block.
+     */
     private int y;
+
+    /**
+     * The width of the block.
+     */
     public static final int BLOCK_WIDTH = 100;
+
+    /**
+     * The height of the block.
+     */
     public static final int BLOCK_HEIGHT = 30;
+
+    /**
+     * The top padding for the block.
+     */
     public static final int BLOCK_PADDING_TOP = BLOCK_HEIGHT * 2;
+
+    /**
+     * The horizontal padding for the block.
+     */
     public static final int BLOCK_PADDING_H = 50;
+
+    /**
+     * The JavaFX Rectangle representing the block.
+     */
     private Rectangle rect;
+
+    /**
+     * The radius of the ball associated with the block.
+     */
     private final int BALL_RADIUS = 10;
 
 
@@ -43,30 +90,21 @@ public class Block implements Serializable {
      * Enumeration representing different hit states during a collision check.
      */
     public enum HIT_STATE {
-        NO_HIT,
-        HIT_RIGHT,
-        HIT_BOTTOM,
-        HIT_LEFT,
-        HIT_TOP
+        NO_HIT, HIT_RIGHT, HIT_BOTTOM, HIT_LEFT, HIT_TOP
     }
 
     /**
      * Enumeration representing different block types.
      */
     public enum BLOCK_TYPE {
-        BLOCK_NORMAL,
-        BLOCK_CHOCO,
-        BLOCK_STAR,
-        BLOCK_HEART,
-        BLOCK_CONCRETE,
-        BLOCK_PENALTY,
+        BLOCK_NORMAL, BLOCK_CHOCO, BLOCK_STAR, BLOCK_HEART, BLOCK_CONCRETE, BLOCK_PENALTY,
     }
 
 
     /**
      * Constructs a new Block instance with the specified row, column, and type.
      *
-     * @param row   The row position of the block.
+     * @param row    The row position of the block.
      * @param column The column position of the block.
      * @param type   The type of the block.
      */
@@ -157,60 +195,131 @@ public class Block implements Serializable {
         return HIT_STATE.NO_HIT;
     }
 
+    /**
+     * Gets the row position of the block.
+     *
+     * @return The row position.
+     */
     public int getRow() {
         return row;
     }
 
+    /**
+     * Sets the row position of the block.
+     *
+     * @param row The new row position.
+     */
     public void setRow(int row) {
         this.row = row;
     }
 
+    /**
+     * Gets the column position of the block.
+     *
+     * @return The column position.
+     */
     public int getColumn() {
         return column;
     }
 
+    /**
+     * Sets the column position of the block.
+     *
+     * @param column The new column position.
+     */
     public void setColumn(int column) {
         this.column = column;
     }
 
+    /**
+     * Checks if the block is destroyed.
+     *
+     * @return True if the block is destroyed, false otherwise.
+     */
     public boolean isDestroyed() {
         return isDestroyed;
     }
 
+    /**
+     * Sets whether the block is destroyed.
+     *
+     * @param destroyed The new value indicating whether the block is destroyed.
+     */
     public void setDestroyed(boolean destroyed) {
         isDestroyed = destroyed;
     }
 
+    /**
+     * Gets the type of the block.
+     *
+     * @return The type of the block.
+     */
     public BLOCK_TYPE getType() {
         return type;
     }
 
+    /**
+     * Sets the type of the block.
+     *
+     * @param type The new type of the block.
+     */
     public void setType(BLOCK_TYPE type) {
         this.type = type;
     }
 
+    /**
+     * Gets the x-coordinate of the block.
+     *
+     * @return The x-coordinate.
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * Sets the x-coordinate of the block.
+     *
+     * @param x The new x-coordinate.
+     */
     public void setX(int x) {
         this.x = x;
     }
 
+    /**
+     * Gets the y-coordinate of the block.
+     *
+     * @return The y-coordinate.
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * Sets the y-coordinate of the block.
+     *
+     * @param y The new y-coordinate.
+     */
     public void setY(int y) {
         this.y = y;
     }
 
+    /**
+     * Gets the JavaFX Rectangle representing the block.
+     *
+     * @return The JavaFX Rectangle.
+     */
     public Rectangle getRect() {
         return rect;
     }
 
+    /**
+     * Sets the JavaFX Rectangle representing the block.
+     *
+     * @param rect The new JavaFX Rectangle.
+     */
     public void setRect(Rectangle rect) {
         this.rect = rect;
     }
+
 
 }

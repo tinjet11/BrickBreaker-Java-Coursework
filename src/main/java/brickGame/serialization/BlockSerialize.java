@@ -24,13 +24,30 @@ import java.io.Serializable;
  * @version 1.0
  */
 public class BlockSerialize implements Serializable {
+    /**
+     * The row index of the block.
+     */
     public final int row;
-    public final int j;
+    /**
+     * The column index of the block.
+     */
+    public final int column;
+
+    /**
+     * The type of the block, indicating its characteristics.
+     */
     public final Block.BLOCK_TYPE type;
 
-    public BlockSerialize(int row , int j , Block.BLOCK_TYPE type) {
+    /**
+     * Constructs a new {@code BlockSerialize} object with the specified row, column, and type.
+     *
+     * @param row    The row index of the block.
+     * @param column The column index of the block.
+     * @param type   The type of the block, indicating its characteristics.
+     */
+    public BlockSerialize(int row, int column, Block.BLOCK_TYPE type) {
         this.row = row;
-        this.j = j;
+        this.column = column;
         this.type = type;
     }
 
