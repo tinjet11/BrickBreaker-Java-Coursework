@@ -1,8 +1,5 @@
 package brickGame.factory.blockhithandler;
 
-import brickGame.handler.BallControlHandler;
-import brickGame.controller.GameSceneController;
-import brickGame.model.InitGameComponent;
 import brickGame.handler.blockhit.BlockHitHandler;
 import brickGame.handler.blockhit.NormalBlockHitHandler;
 
@@ -16,7 +13,7 @@ public class NormalBlockHitHandlerFactory implements BlockHitHandlerFactory {
      * {@inheritDoc}
      */
     @Override
-    public BlockHitHandler createHandler(GameSceneController gameSceneController, InitGameComponent initGameComponent, BallControlHandler ballControlHandler) {
+    public BlockHitHandler createHandler() {
         return new NormalBlockHitHandler();
     }
 }

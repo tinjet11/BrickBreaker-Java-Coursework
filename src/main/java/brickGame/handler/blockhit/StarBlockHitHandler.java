@@ -1,5 +1,6 @@
 package brickGame.handler.blockhit;
 
+import brickGame.Mediator;
 import brickGame.model.Ball;
 import brickGame.handler.BallControlHandler;
 import brickGame.model.Block;
@@ -32,10 +33,9 @@ public class StarBlockHitHandler implements BlockHitHandler {
     /**
      * Constructs a StarBlockHitHandler with the specified GameSceneController and BallControl.
      *
-     * @param gameSceneController The GameSceneController associated with the game.
      */
-    public StarBlockHitHandler(GameSceneController gameSceneController) {
-        this.gameSceneController = gameSceneController;
+    public StarBlockHitHandler() {
+        this.gameSceneController = Mediator.getInstance().getGameSceneController();
         this.ball = Ball.getInstance();
     }
 

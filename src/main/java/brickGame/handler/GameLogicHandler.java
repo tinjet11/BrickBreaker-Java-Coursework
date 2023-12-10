@@ -184,7 +184,7 @@ public class GameLogicHandler implements Actionable {
         BlockHitHandlerFactory factory = BlockHitHandlerFactoryProvider.getFactory(block.getType());
 
         if (factory != null) {
-            BlockHitHandler handler = factory.createHandler(mediator.getGameSceneController(), mediator.getInitGameComponent(), mediator.getBallControlHandler());
+            BlockHitHandler handler = factory.createHandler();
             handler.handleBlockHit(block, hitCode, mediator.getGameLogicHandler());
         }
 

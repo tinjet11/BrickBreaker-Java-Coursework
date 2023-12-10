@@ -1,5 +1,6 @@
 package brickGame.handler.blockhit;
 
+import brickGame.Mediator;
 import brickGame.model.Block;
 import brickGame.controller.GameSceneController;
 import brickGame.factory.DropItemFactory;
@@ -22,11 +23,10 @@ public class PenaltyBlockHitHandler implements BlockHitHandler {
      * Constructs a PenaltyBlockHitHandler with the specified GameSceneController and InitGameComponent.
      * Initialized the dropItemFactory by creating a instance of DropItemFactory and assign it
      *
-     * @param gameSceneController The GameSceneController associated with the game.
-     * @param initGameComponent   The InitGameComponent used to initialize the game.
      */
-    public PenaltyBlockHitHandler(GameSceneController gameSceneController, InitGameComponent initGameComponent) {
-        this.dropItemFactory = new DropItemFactory(gameSceneController, initGameComponent);
+    public PenaltyBlockHitHandler() {
+        Mediator mediator = Mediator.getInstance();
+        this.dropItemFactory = new DropItemFactory(mediator.getGameSceneController(), mediator.getInitGameComponent());
     }
 
     /**

@@ -1,8 +1,5 @@
 package brickGame.factory.blockhithandler;
 
-import brickGame.handler.BallControlHandler;
-import brickGame.controller.GameSceneController;
-import brickGame.model.InitGameComponent;
 import brickGame.handler.blockhit.BlockHitHandler;
 
 /**
@@ -16,10 +13,7 @@ public interface BlockHitHandlerFactory {
     /**
      * Creates and returns a specific instance of BlockHitHandler based on the provided parameters.
      *
-     * @param gameSceneController The GameSceneController associated with the game.
-     * @param initGameComponent   The InitGameComponent used to initialize the game.
-     * @param ballControlHandler         The BallControl instance responsible for ball movement.
      * @return A specific BlockHitHandler instance.
      */
-    BlockHitHandler createHandler(GameSceneController gameSceneController, InitGameComponent initGameComponent, BallControlHandler ballControlHandler);
+    BlockHitHandler createHandler();
 }
