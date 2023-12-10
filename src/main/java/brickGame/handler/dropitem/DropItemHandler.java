@@ -5,7 +5,7 @@ import brickGame.model.Paddle;
 import brickGame.model.dropitem.DropItem;
 import brickGame.handler.GameLogicHandler;
 import brickGame.model.InitGameComponent;
-import brickGame.model.ScoreAnimation;
+import brickGame.ScoreAnimation;
 import javafx.application.Platform;
 
 import static brickGame.Constants.SCENE_HEIGHT;

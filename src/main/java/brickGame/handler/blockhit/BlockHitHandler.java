@@ -3,7 +3,7 @@ package brickGame.handler.blockhit;
 import brickGame.Mediator;
 import brickGame.model.Block;
 import brickGame.handler.GameLogicHandler;
-import brickGame.model.ScoreAnimation;
+import brickGame.ScoreAnimation;
 
 
 /**

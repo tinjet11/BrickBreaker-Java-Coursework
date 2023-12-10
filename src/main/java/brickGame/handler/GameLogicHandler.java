@@ -2,6 +2,7 @@ package brickGame.handler;
 
 import brickGame.Mediator;
 
+import brickGame.ScoreAnimation;
 import brickGame.model.*;
 import brickGame.model.dropitem.Bonus;
 import brickGame.model.dropitem.Bomb;

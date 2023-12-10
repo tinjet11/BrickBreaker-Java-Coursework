@@ -4,7 +4,7 @@ import brickGame.controller.GameSceneController;
 import brickGame.model.dropitem.DropItem;
 import brickGame.handler.GameLogicHandler;
 import brickGame.model.InitGameComponent;
-import brickGame.model.ScoreAnimation;
+import brickGame.ScoreAnimation;
 
 import static brickGame.Constants.SCENE_HEIGHT;
 import static brickGame.Constants.SCENE_WIDTH;

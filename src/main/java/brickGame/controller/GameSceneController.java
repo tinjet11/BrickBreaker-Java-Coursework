@@ -1,6 +1,7 @@
 package brickGame.controller;
 
 import brickGame.Mediator;
+import brickGame.ScoreAnimation;
 import brickGame.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

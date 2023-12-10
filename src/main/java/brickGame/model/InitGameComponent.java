@@ -1,8 +1,6 @@
 package brickGame.model;
 
 import brickGame.Mediator;
-import brickGame.handler.BallControlHandler;
-import brickGame.handler.GameLogicHandler;
 import brickGame.model.dropitem.Bonus;
 import brickGame.model.dropitem.Bomb;
 import javafx.scene.image.Image;
@@ -143,7 +141,7 @@ public class InitGameComponent {
      * if isGoldStatus, set ball fill to goldBall, else set to normal
      */
     public void initBall() {
-        Ball ball = Ball.getInstance();
+        Ball ball = mediator.getBallInstance();
         Random random = new Random();
 
         // Randomly set the x-coordinate within the width of the game scene
@@ -175,7 +173,7 @@ public class InitGameComponent {
      * set up the UI and position of  paddle in the game
      */
     public void initPaddle() {
-        Paddle paddle = Paddle.getInstance();
+        Paddle paddle = mediator.getPaddleInstance();
         paddle.setPaddle(new Rectangle());
         paddle.getPaddle().setWidth(paddle.getPADDLE_WIDTH());
         paddle.getPaddle().setHeight(paddle.getPADDLE_HEIGHT());
