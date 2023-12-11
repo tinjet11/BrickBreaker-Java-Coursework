@@ -1,7 +1,6 @@
 package brickGame.controller;
 
 import brickGame.Mediator;
-import brickGame.handler.GameLogicHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;

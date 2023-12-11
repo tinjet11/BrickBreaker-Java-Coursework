@@ -2,10 +2,8 @@ package brickGame.handler.blockhit;
 
 import brickGame.Mediator;
 import brickGame.model.Block;
-import brickGame.controller.GameSceneController;
 import brickGame.factory.DropItemFactory;
 import brickGame.handler.GameLogicHandler;
-import brickGame.model.InitGameComponent;
 
 /**
  * BlockHitHandler implementation for handling hits on Penalty blocks in a brick game.

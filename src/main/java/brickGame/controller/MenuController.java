@@ -1,7 +1,6 @@
 package brickGame.controller;
 
 import brickGame.*;
-import brickGame.handler.GameLogicHandler;
 import brickGame.model.GameStateManager;
 import brickGame.serialization.HighestScore;
 import brickGame.serialization.LoadSave;

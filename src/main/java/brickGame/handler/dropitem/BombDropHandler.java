@@ -1,9 +1,6 @@
 package brickGame.handler.dropitem;
 
-import brickGame.controller.GameSceneController;
 import brickGame.model.dropitem.DropItem;
-import brickGame.handler.GameLogicHandler;
-import brickGame.model.InitGameComponent;
 import brickGame.ScoreAnimation;
 
 import static brickGame.Constants.SCENE_HEIGHT;
@@ -20,14 +17,10 @@ public class BombDropHandler extends DropItemHandler{
 
     /**
      * Constructs a BombDropHandler with the specified InitGameComponent, GameSceneController, GameLogicHandler, and DropItem.
-     *
-     * @param initGameComponent   The InitGameComponent used to initialize the game.
-     * @param gameSceneController The GameSceneController associated with the game.
-     * @param gameLogicHandler    The GameLogicHandler responsible for managing game logic.
      * @param dropItem            The DropItem instance to be handled.
      */
-    public BombDropHandler(InitGameComponent initGameComponent, GameSceneController gameSceneController, GameLogicHandler gameLogicHandler, DropItem dropItem) {
-        super(initGameComponent, gameSceneController, gameLogicHandler, dropItem);
+    public BombDropHandler(DropItem dropItem) {
+        super(dropItem);
     }
 
     /**

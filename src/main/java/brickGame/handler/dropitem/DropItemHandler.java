@@ -1,10 +1,10 @@
 package brickGame.handler.dropitem;
 
+import brickGame.Mediator;
 import brickGame.controller.GameSceneController;
 import brickGame.model.Paddle;
 import brickGame.model.dropitem.DropItem;
 import brickGame.handler.GameLogicHandler;
-import brickGame.model.InitGameComponent;
 import brickGame.ScoreAnimation;
 import javafx.application.Platform;
 
@@ -17,10 +17,6 @@ import static brickGame.Constants.SCENE_HEIGHT;
  * @version 1.0
  */
 public class DropItemHandler {
-    /**
-     * The initialization game component responsible for setting up the initial state of the game.
-     */
-    public InitGameComponent initGameComponent;
 
     /**
      * The game scene controller handling user interface and scene transitions.
@@ -45,17 +41,13 @@ public class DropItemHandler {
     /**
      * Constructs a DropItemHandler with the specified InitGameComponent, GameSceneController, GameLogicHandler, and DropItem.
      *
-     * @param initGameComponent   The InitGameComponent used to initialize the game.
-     * @param gameSceneController The GameSceneController associated with the game.
-     * @param gameLogicHandler    The GameLogicHandler responsible for managing game logic.
-     * @param dropItem            The DropItem instance to be handled.
+     * @param dropItem The DropItem instance to be handled.
      */
-    public DropItemHandler(InitGameComponent initGameComponent, GameSceneController gameSceneController, GameLogicHandler gameLogicHandler, DropItem dropItem) {
-        this.initGameComponent = initGameComponent;
-        this.gameSceneController = gameSceneController;
-        this.gameLogicHandler = gameLogicHandler;
+    public DropItemHandler(DropItem dropItem) {
+        this.gameLogicHandler = Mediator.getInstance().getGameLogicHandler();
+        this.gameSceneController = Mediator.getInstance().getGameSceneController();
         this.dropItem = dropItem;
-        this.paddle = Paddle.getInstance();
+        this.paddle = Mediator.getInstance().getPaddleInstance();
     }
 
     /**

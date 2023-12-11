@@ -2,7 +2,6 @@ package brickGame.handler.blockhit;
 
 import brickGame.Mediator;
 import brickGame.model.Ball;
-import brickGame.handler.BallControlHandler;
 import brickGame.model.Block;
 import brickGame.controller.GameSceneController;
 import brickGame.handler.GameLogicHandler;

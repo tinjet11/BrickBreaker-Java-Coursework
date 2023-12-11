@@ -30,32 +30,131 @@ import static brickGame.Constants.SAVE_PATH;
  * @version 1.0
  */
 public class LoadSave {
+    /**
+     * Flag indicating whether a heart block exists in the game.
+     */
     private boolean isExistHeartBlock;
+
+    /**
+     * Flag indicating whether the game is in gold status.
+     */
     private boolean isGoldStatus;
+
+    /**
+     * Flag indicating the downward movement of the ball.
+     */
     private boolean goDownBall;
+
+    /**
+     * Flag indicating the rightward movement of the ball.
+     */
     private boolean goRightBall;
+
+    /**
+     * Flag indicating collision with the paddle.
+     */
     private boolean collideToPaddle;
+
+    /**
+     * Flag indicating collision at the top of the paddle, causing the ball to move to the right.
+     */
     private boolean collideTopPaddleAndMoveToRight;
+
+    /**
+     * Flag indicating collision with the right wall.
+     */
     private boolean collideToRightWall;
+
+    /**
+     * Flag indicating collision with the left wall.
+     */
     private boolean collideToLeftWall;
+
+    /**
+     * Flag indicating collision with a block on the right side.
+     */
     private boolean collideToRightBlock;
+
+    /**
+     * Flag indicating collision with the bottom of a block.
+     */
     private boolean collideToBottomBlock;
+
+    /**
+     * Flag indicating collision with a block on the left side.
+     */
     private boolean collideToLeftBlock;
+
+    /**
+     * Flag indicating collision with the top of a block.
+     */
     private boolean collideToTopBlock;
+
+    /**
+     * Current level of the game.
+     */
     private int level;
+
+    /**
+     * Player's score in the game.
+     */
     private int score;
+
+    /**
+     * Number of remaining hearts.
+     */
     private int heart;
 
+    /**
+     * Remaining count of blocks in the game.
+     */
     private int remainingBlockCount;
+
+    /**
+     * X-coordinate of the ball.
+     */
     private double xBall;
+
+    /**
+     * Y-coordinate of the ball.
+     */
     private double yBall;
+
+    /**
+     * X-coordinate of the paddle.
+     */
     private double xPaddle;
+
+    /**
+     * Y-coordinate of the paddle.
+     */
     private double yPaddle;
+
+    /**
+     * X-coordinate of the center of the paddle.
+     */
     private double centerPaddleX;
+
+    /**
+     * The current time in milliseconds.
+     */
     private long time;
+
+    /**
+     * The time when the gold status is activated in milliseconds.
+     */
     private long goldTime;
+
+    /**
+     * The velocity of the ball along the x-axis.
+     */
     private double vX;
+
+    /**
+     * The list of serialized block objects in the game.
+     */
     private ArrayList<BlockSerialize> blocks = new ArrayList<BlockSerialize>();
+
 
     /**
      * Destroys the existing save game file. This method is called when the player win or lose the game.

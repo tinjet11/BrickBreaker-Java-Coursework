@@ -20,6 +20,9 @@ import brickGame.model.Paddle;
 
 public class Mediator {
 
+    /**
+     * The singleton instance of the {@code Mediator} class.
+     */
     private static Mediator instance;
 
     /**

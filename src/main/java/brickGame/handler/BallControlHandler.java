@@ -1,7 +1,6 @@
 package brickGame.handler;
 
 import brickGame.Mediator;
-import brickGame.model.Paddle;
 
 import static brickGame.Constants.SCENE_HEIGHT;
 import static brickGame.Constants.SCENE_WIDTH;

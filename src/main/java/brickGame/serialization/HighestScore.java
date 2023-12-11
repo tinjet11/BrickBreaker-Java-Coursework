@@ -24,6 +24,10 @@ import static brickGame.Constants.SAVE_PATH_DIR;
  */
 
 public class HighestScore {
+
+    /**
+     * variable used to store highest Score
+     */
     public int highestScore;
 
     /**

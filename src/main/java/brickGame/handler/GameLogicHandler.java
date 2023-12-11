@@ -252,8 +252,6 @@ public class GameLogicHandler implements Actionable {
         heart = heart - 1;
         new ScoreAnimation(mediator.getGameSceneController().getGamePane()).showScoreAnimation(SCENE_WIDTH / 2, SCENE_HEIGHT / 2, -1);
 
-        System.out.println("heart: " + heart);
-
         if (heart <= 0) {
             mediator.getGameSceneController().showLoseScene();
             stopEngine();
@@ -291,10 +289,30 @@ public class GameLogicHandler implements Actionable {
         }
     }
 
+    /**
+     * Flag indicating whether the paddle color can be changed.
+     * When set to true, the paddle color can be changed; otherwise, color change is disabled.
+     */
     private boolean canChangeColor = true;
 
+    /**
+     * The currently selected color for the paddle.
+     * It is used to ensure that the next color is different from the last selected color.
+     */
     private Color selectedColor;
 
+    /**
+     * Changes the color of the paddle if the ability to change color is enabled.
+     * The paddle color is randomly selected from a predefined list of colors,
+     * excluding the last selected color to ensure variety.
+     * The color change operation is executed on the JavaFX application thread using Platform.runLater.
+     * This method includes a synchronization mechanism to prevent concurrent color changes.
+     *
+     * Note: The canChangeColor flag is used to control the ability to change color.
+     * If set to true, the method proceeds with color change; otherwise, it skips the operation.
+     *
+     * @throws Exception If an exception occurs during the color change process.
+     */
     private void changePaddleColor() {
         if (canChangeColor) {
             try {
@@ -348,7 +366,7 @@ public class GameLogicHandler implements Actionable {
         while (iterator.hasNext()) {
             Bonus choco = iterator.next();
 
-            BonusDropHandler bonusDropHandler = new BonusDropHandler(mediator.getInitGameComponent(), mediator.getGameSceneController(), this, choco);
+            BonusDropHandler bonusDropHandler = new BonusDropHandler(choco);
 
             if (bonusDropHandler.shouldRemove()) {
                 iterator.remove();
@@ -371,7 +389,7 @@ public class GameLogicHandler implements Actionable {
         Iterator<Bomb> iterator = mediator.getInitGameComponent().getBombs().iterator();
         while (iterator.hasNext()) {
             Bomb bomb = iterator.next();
-            BombDropHandler bombDropHandler = new BombDropHandler(mediator.getInitGameComponent(), mediator.getGameSceneController(), this, bomb);
+            BombDropHandler bombDropHandler = new BombDropHandler(bomb);
 
             if (bombDropHandler.shouldRemove()) {
                 bombDropHandler.executePenalty();
