@@ -13,22 +13,22 @@
    <children>
       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <Label layoutX="216.0" layoutY="56.0" text="Settings" />
-      <VBox layoutX="41.0" layoutY="111.0" prefHeight="337.0" prefWidth="276.0" spacing="10.0">
+      <VBox layoutX="41.0" layoutY="111.0" prefHeight="337.0" prefWidth="299.0" spacing="10.0">
          <children>
             <HBox alignment="CENTER" prefHeight="35.0" prefWidth="265.0" spacing="5.0">
                <children>
                   <Label prefHeight="35.0" prefWidth="165.0" text="Initial heart number:" wrapText="true" />
-                  <Button fx:id="addHeart" mnemonicParsing="false" onAction="#decrementHeart" text="-" />
+                  <Button fx:id="addHeart" mnemonicParsing="false" onAction="#decrementHeart" prefHeight="31.0" prefWidth="42.0" text="-" />
                   <Label fx:id="initialHeartLabel" alignment="CENTER" prefHeight="35.0" prefWidth="48.0" text="10" />
-                  <Button fx:id="minusHeart" mnemonicParsing="false" onAction="#incrementHeart" text="+" />
+                  <Button fx:id="minusHeart" mnemonicParsing="false" onAction="#incrementHeart" prefHeight="31.0" prefWidth="46.0" text="+" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="35.0" prefWidth="234.0" spacing="5.0">
+            <HBox alignment="CENTER" prefHeight="35.0" prefWidth="289.0" spacing="5.0">
                <children>
                   <Label prefHeight="35.0" prefWidth="159.0" text="End level: " />
-                  <Button fx:id="minusLevel" mnemonicParsing="false" onAction="#decrementLevel" text="-" />
+                  <Button fx:id="minusLevel" mnemonicParsing="false" onAction="#decrementLevel" prefHeight="31.0" prefWidth="42.0" text="-" />
                   <Label fx:id="endLevelLabel" alignment="CENTER" prefHeight="35.0" prefWidth="70.0" text="18" wrapText="true" />
-                  <Button fx:id="addLevel" mnemonicParsing="false" onAction="#incrementLevel" prefHeight="30.0" prefWidth="21.0" text="+" />
+                  <Button fx:id="addLevel" mnemonicParsing="false" onAction="#incrementLevel" prefHeight="31.0" prefWidth="52.0" text="+" />
                </children>
             </HBox>
             <HBox alignment="CENTER" layoutX="10.0" layoutY="55.0" prefHeight="35.0" prefWidth="234.0" spacing="5.0">
