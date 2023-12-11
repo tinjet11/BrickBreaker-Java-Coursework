@@ -215,6 +215,8 @@
   also call gameLogicHandler to set up the game engine here. 
 - It is worth to mention that `startGame()` is a very important method as it is the initial point which
   the game start, load, restart or after progress to next level
+- Fix a bug by removing `mediator.getInitGameComponent().getDropItem().clear();` in `loadGame()` function, and add the dropItem
+  back to root and set new time created for it  
 - Added a `GameState` enum to better represent the game state.
 
 ### Actionable.java
@@ -374,6 +376,7 @@ this interface will provide its own logic for creating the corresponding BlockHi
 - Enclosed Platform.runLater within the thread tasks to ensure JavaFX UI updates are performed on the JavaFX application thread.
 - Properly handled thread interruptions (Thread.currentThread().isInterrupted()) and exceptions to enhance robustness.
 - Simplified the stop method to shut down the ExecutorService instead of individually stopping threads.
+- Check isLoadFromSave before set the time in `start()`, successfully fix the logic issue
 
 ### LoadSave.java
 - Fixed some variable typo errors.
@@ -432,5 +435,15 @@ this interface will provide its own logic for creating the corresponding BlockHi
                     Solution to this is to check the goldStatus before add the goldRoot.         
 
 8. **Ball will go through between two block:**
-    - **Issue:** The ball wil penetrate the block if it is hitting the center of two block
+    - **Issue:** The ball will penetrate the block if it is hitting the center of two block
     - **Solution:** Adding another layer of collision logic so it bounce back when hit a block
+
+9. **Time will become 0 everytime engine start:**
+    - **Issue:** The time will become zero everytime engine start when pause and resume the game
+    - **Solution:** Checking is loadFromSave before set the time value
+
+10**The dropItem will disappear after pause and resume :**
+    - **Issue:** The dropItem is being clear every time the game is load, which is after pause and resume
+    - **Solution:** Remove the `mediator.getInitGameComponent().getDropItem().clear();`, add the dropItem back to root and set the new time created
+    
+
