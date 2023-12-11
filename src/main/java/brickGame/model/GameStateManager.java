@@ -210,6 +210,7 @@ public class GameStateManager {
 
                 outputStream.writeObject(blockSerializables);
 
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -262,9 +263,18 @@ public class GameStateManager {
         mediator.getBallControlHandler().setvX(loadSave.getvX());
 
         mediator.getInitGameComponent().getBlocks().clear();
-        mediator.getInitGameComponent().getChocos().clear();
-        mediator.getInitGameComponent().getBombs().clear();
 
+        mediator.getInitGameComponent().getBombs().forEach((bomb -> {
+            bomb.element.setVisible(true);
+            bomb.setTimeCreated(mediator.getGameLogicHandler().getTime());
+            Platform.runLater(() -> mediator.getGameSceneController().getGamePane().getChildren().add(bomb.element));
+        }));
+
+        mediator.getInitGameComponent().getChocos().forEach((bonus -> {
+            bonus.element.setVisible(true);
+            bonus.setTimeCreated(mediator.getGameLogicHandler().getTime());
+            Platform.runLater(() -> mediator.getGameSceneController().getGamePane().getChildren().add(bonus.element));
+        }));
 
         for (BlockSerialize ser : loadSave.getBlocks()) {
             mediator.getInitGameComponent().getBlocks().add(new Block(ser.row, ser.column, ser.type));
