@@ -12,7 +12,7 @@
 <AnchorPane prefHeight="750.0" prefWidth="500.0" stylesheets="@../theme/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brickGame.controller.GameDescriptionController">
     <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
     <Label layoutX="186.0" layoutY="56.0" prefHeight="35.0" prefWidth="160.0" text="Game Description" wrapText="true" />
-   <VBox layoutX="14.0" layoutY="101.0" prefHeight="565.0" prefWidth="470.0" spacing="10.0">
+   <VBox layoutX="8.0" layoutY="101.0" prefHeight="565.0" prefWidth="492.0" spacing="10.0">
       <children>
          <HBox layoutX="10.0" layoutY="95.0" prefHeight="56.0" prefWidth="470.0" spacing="10.0">
             <children>
@@ -21,7 +21,7 @@
                      <Image url="@../images/penalty.jpeg" />
                   </image>
                </ImageView>
-               <Label prefHeight="35.0" prefWidth="299.0" text="Will drop a bomb when you hit it" />
+               <Label prefHeight="35.0" prefWidth="350.0" text="Will drop a bomb when you hit it" />
             </children>
          </HBox>
          <HBox layoutX="10.0" layoutY="180.0" prefHeight="56.0" prefWidth="470.0" spacing="10.0">
@@ -31,7 +31,7 @@
                      <Image url="@../images/brick-concrete.jpeg" />
                   </image>
                </ImageView>
-               <Label prefHeight="68.0" prefWidth="332.0" text="Need to break it twice, first hit will turn it to normal brick. Appears starting from level 10" wrapText="true" />
+               <Label prefHeight="56.0" prefWidth="355.0" text="Need to break it twice, first hit will turn it to normal brick. Appears starting from level 10" wrapText="true" />
             </children>
          </HBox>
          <HBox layoutX="10.0" layoutY="236.0" prefHeight="56.0" prefWidth="470.0" spacing="10.0">
@@ -41,7 +41,7 @@
                      <Image url="@../images/choco.jpg" />
                   </image>
                </ImageView>
-               <Label prefHeight="68.0" prefWidth="332.0" text="Will drop bonus item when you hit it" wrapText="true" />
+               <Label prefHeight="56.0" prefWidth="354.0" text="Will drop bonus item when you hit it" wrapText="true" />
             </children>
          </HBox>
          <HBox layoutX="10.0" layoutY="292.0" prefHeight="56.0" prefWidth="470.0" spacing="10.0">
@@ -51,7 +51,7 @@
                      <Image url="@../images/star.jpg" />
                   </image>
                </ImageView>
-               <Label prefHeight="68.0" prefWidth="332.0" text="Will turn on goldMode, heart cannot be deduct and 1 hit = 2 points" wrapText="true" />
+               <Label prefHeight="56.0" prefWidth="350.0" text="Will turn on goldMode, heart cannot be deduct and 1 hit = 2 points" wrapText="true" />
             </children>
          </HBox>
          <HBox layoutX="10.0" layoutY="348.0" prefHeight="56.0" prefWidth="470.0" spacing="10.0">
@@ -61,7 +61,7 @@
                      <Image url="@../images/brick.jpg" />
                   </image>
                </ImageView>
-               <Label prefHeight="68.0" prefWidth="332.0" text="Normal brick " wrapText="true" />
+               <Label prefHeight="56.0" prefWidth="357.0" text="Normal brick " wrapText="true" />
             </children>
          </HBox>
           <HBox prefHeight="85.0" prefWidth="313.0" spacing="10.0">
@@ -71,10 +71,10 @@
                           <Image url="@../images/bomb.png" />
                       </image>
                   </ImageView>
-                  <VBox prefHeight="100.0" prefWidth="239.0">
+                  <VBox prefHeight="85.0" prefWidth="398.0">
                       <children>
                           <Label text="Bomb" />
-                          <Label text="If didn't catch it, deduct 10 points" />
+                          <Label prefHeight="35.0" prefWidth="277.0" text="If didn't catch it, deduct 10 points" />
                       </children>
                   </VBox>
               </children>
