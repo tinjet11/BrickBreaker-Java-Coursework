@@ -1,10 +1,13 @@
 ## Brick Breaker Game Refactoring
-## COMP2042_CW_hcytl1
-## Name - Leong Tin Jet
+### COMP2042_CW_hcytl1
+### Name - Leong Tin Jet
+### Student Id - 20506131
 
 ---
 
 ## Compilation Instructions:
+### Make sure you have correct java version and maven installed
+
 ### git clone this repository and run the following command using maven:
 #### `mvn clean javafx:run`
 
@@ -55,7 +58,6 @@
 - HIT_CODE in Block.java
 - BLOCK_TYPE in Block.java
 - GameState (newly added) in GameStateManager
-
 
 ### Implemented a Mediator class for central coordination.
 - acts as a central coordinator, enabling communication and coordination among various game components.
@@ -129,7 +131,7 @@
 
 ### GameSceneController.java 
 
-- Set up the game scene, called inside `Main.java` through this controller.
+- Set up the game scene through this controller.
 - Moved gameScene related methods from `Main.java`.
 - Make this class follows the Singleton pattern, ensuring that only one instance of GameSceneController exists.
 - Utilizes FXML to define the structure of the main game scene, allowing for a clean separation of UI and logic.
@@ -138,7 +140,7 @@
 - Implements smooth paddle movement in response to left and right arrow key presses.
 - Initializes game components, including blocks, ball, and paddle.
 - Dynamically updates the score, heart count, and level labels on the game interface.
-- Allows pausing and resuming the game, saving the current game state when paused.
+- Allows pausing the game, saving the current game state when paused.
 
 
 ### Menu.fxml 
@@ -195,12 +197,12 @@
 - all methods and fields moved from `Main.java`
 
 ### Ball.java
-- Make this class follows the Singleton pattern, ensuring that only one instance of InitGameComponent exists.
+- Make this class follows the Singleton pattern, ensuring that only one instance of Ball exists.
 - encapsulate all the variable into private
 - provide getter and setter method
 
 ### Paddle.java
-- Make this class follows the Singleton pattern, ensuring that only one instance of InitGameComponent exists.
+- Make this class follows the Singleton pattern, ensuring that only one instance of Paddle exists.
 - put the function of moving paddle in this class
 - encapsulate all the variable into private
 - provide getter and setter method
@@ -237,7 +239,7 @@
 
 ### BlockHitHandler.java
 - applying strategy method
-- an interface which define the common method like that used by all the class that implements it
+- an interface which define the common method that used by all the class that implements it
 
 ### ChocoBlockHandler.java
 - implements the `BlockHitHandler` interface to define the behavior when a choco block is hit.
