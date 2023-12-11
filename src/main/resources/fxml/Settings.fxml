@@ -13,13 +13,13 @@
    <children>
       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
       <Label layoutX="216.0" layoutY="56.0" text="Settings" />
-      <VBox layoutX="41.0" layoutY="111.0" prefHeight="337.0" prefWidth="248.0" spacing="10.0">
+      <VBox layoutX="41.0" layoutY="111.0" prefHeight="337.0" prefWidth="276.0" spacing="10.0">
          <children>
             <HBox alignment="CENTER" prefHeight="35.0" prefWidth="265.0" spacing="5.0">
                <children>
                   <Label prefHeight="35.0" prefWidth="165.0" text="Initial heart number:" wrapText="true" />
                   <Button fx:id="addHeart" mnemonicParsing="false" onAction="#decrementHeart" text="-" />
-                  <Label fx:id="initialHeartLabel" alignment="CENTER" prefHeight="35.0" prefWidth="55.0" text="3" />
+                  <Label fx:id="initialHeartLabel" alignment="CENTER" prefHeight="35.0" prefWidth="48.0" text="10" />
                   <Button fx:id="minusHeart" mnemonicParsing="false" onAction="#incrementHeart" text="+" />
                </children>
             </HBox>
@@ -37,7 +37,7 @@
                   <Slider fx:id="soundSlider" max="1" min="0" />
                </children>
             </HBox>
-            <HBox prefHeight="44.0" prefWidth="248.0" spacing="5.0">
+            <HBox prefHeight="44.0" prefWidth="282.0" spacing="5.0">
                <children>
                   <Label prefHeight="35.0" prefWidth="135.0" text="Mute Sound" />
                   <CheckBox fx:id="soundCheckBox">
