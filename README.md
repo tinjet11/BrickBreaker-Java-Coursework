@@ -84,6 +84,7 @@
 
 ### Apply `factory method` in the refactoring process
 - inside package `brickgame.factory`
+
 #### BlockHitHandlerFactoryProvider
 -   Description: Centralized factory for creating block hit handlers.
 -   Responsibility: Maps different block types to their corresponding handler factories.
@@ -171,7 +172,7 @@
 ### GameDescriptionController.java
 - Provide functionality to navigate back to menu scene
 
-### GameSoundController,java
+### SoundController,java
 - Calls initializeMediaPlayer() during instance creation for initial setup.
 - Sets up looping when the media reaches its end.
 - provide playback control function like play(),stop(),pause(),resume() and dispose()
@@ -427,3 +428,15 @@ this interface will provide its own logic for creating the corresponding BlockHi
     - **Issue:** The goldRoot is added multiple times,but when remove only remove one goldRoot
     - **Solution:** Found out that this issue is because i added the goldRoot again and again when hit the Star block,
                     Solution to this is to check the goldStatus before add the goldRoot.         
+
+8. **Ball will go through between two block:**
+    - **Issue:** The ball wil penetrate the block if it is hitting the center of two block
+    - **Solution:** Adding another layer of collision logic so it bounce back when hit a block       
+
+
+
+
+
+This is my game. This is a menu screen which i added, inside here we have settings, inside settings user can adjust the end level 
+so the game can end faster, user can also set the initial heart number. But this two can only be adjust before the game start.
+Below that we have 
