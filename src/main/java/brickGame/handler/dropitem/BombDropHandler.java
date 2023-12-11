@@ -45,7 +45,12 @@ public class BombDropHandler extends DropItemHandler{
      * Executes a penalty by decreasing the score and showing a negative score animation.
      */
     public void executePenalty(){
-        gameLogicHandler.setScore(gameLogicHandler.getScore() - 10);
+        if(gameLogicHandler.getScore() <= 10){
+            gameLogicHandler.setScore(0);
+        }else{
+            gameLogicHandler.setScore(gameLogicHandler.getScore() - 10);
+        }
+
         new ScoreAnimation(gameSceneController.getGamePane()).showScoreAnimation(SCENE_WIDTH / 2, SCENE_HEIGHT / 2, -10);
         dropItem.element.setVisible(false);
     }
