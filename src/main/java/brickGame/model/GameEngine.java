@@ -1,6 +1,7 @@
 package brickGame.model;
 
 
+import brickGame.Mediator;
 import brickGame.handler.Actionable;
 import javafx.application.Platform;
 
@@ -133,9 +134,14 @@ public class GameEngine {
 
     /**
      * Initiates the game engine, starting the initialization, update, physics calculation, and time tracking loops.
+     * fix a bug: the time is set to 0 every time the game restart, fix it by checking is loadFromSave
      */
     public void start() {
-        time = 0;
+        if(Mediator.getInstance().getGameStateManager().isLoadFromSave()){
+            time = Mediator.getInstance().getGameLogicHandler().getTime();
+        }else{
+            time = 0;
+        }
         update();
         physicsCalculation();
         timeStart();
