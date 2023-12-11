@@ -24,6 +24,8 @@ import static brickGame.Constants.SAVE_PATH;
  * This class is part of the game's serialization mechanism and implements methods for managing the save file.
  * </p>
  *
+ * <br></br>
+ * <a href="https://github.com/kooitt/CourseworkGame/blob/master/src/main/java/brickGame/LoadSave.java">Original Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

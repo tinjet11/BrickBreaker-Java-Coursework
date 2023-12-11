@@ -28,6 +28,8 @@ import javafx.util.Duration;
  * at specific positions on the screen.
  * </p>
  *
+ * <br></br>
+ * <a href="https://github.com/kooitt/CourseworkGame/blob/master/src/main/java/brickGame/Score.java">Original Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

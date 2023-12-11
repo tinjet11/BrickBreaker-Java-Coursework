@@ -26,6 +26,8 @@ import static brickGame.Constants.*;
  * interactive gameplay elements.
  * </p>
  *
+ * <br></br>
+ * <a href="https://github.com/kooitt/CourseworkGame/blob/master/src/main/java/brickGame/Bonus.java">Original Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

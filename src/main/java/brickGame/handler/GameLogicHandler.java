@@ -100,7 +100,7 @@ public class GameLogicHandler implements Actionable {
     /**
      * The current level of the game.
      */
-    private int level = 18;
+    private int level = 1;
 
     /**
      * Flag indicating whether the gold status is active.

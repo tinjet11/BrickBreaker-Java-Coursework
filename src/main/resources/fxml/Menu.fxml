@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="700.0" prefWidth="500.0" stylesheets="@../theme/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brickGame.controller.MenuController">
+<AnchorPane prefHeight="750.0" prefWidth="500.0" stylesheets="@../theme/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="brickGame.controller.MenuController">
    <children>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="150.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -28,7 +28,7 @@
             <Button fx:id="loadButton" mnemonicParsing="false" onAction="#onLoad" prefHeight="31.0" prefWidth="117.0" text="Load Game" visible="false" />
             <Button fx:id="startButton" alignment="CENTER" mnemonicParsing="false" onAction="#onStartOrResume" prefHeight="30.0" prefWidth="115.0" text="Start Game" />
             <Button fx:id="settingsButton" alignment="CENTER" mnemonicParsing="false" onAction="#onOpenSettings" prefHeight="25.0" prefWidth="152.0" text="Settings" />
-            <Button fx:id="gameDescriptionButton" alignment="CENTER" layoutX="18.0" layoutY="119.0" mnemonicParsing="false" onAction="#onOpenGameDescription" prefHeight="25.0" prefWidth="152.0" text="Tutorial" />
+            <Button fx:id="gameDescriptionButton" alignment="CENTER" layoutX="18.0" layoutY="119.0" mnemonicParsing="false" onAction="#onOpenGameDescription" prefHeight="25.0" prefWidth="152.0" text="Description" />
             <Button fx:id="exitButton" alignment="CENTER" mnemonicParsing="false" onAction="#onExit" prefHeight="25.0" prefWidth="105.0" text="Quit" />
          </children>
          <padding>

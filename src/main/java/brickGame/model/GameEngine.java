@@ -27,6 +27,8 @@ import java.util.concurrent.Executors;
  * game engine, respectively.
  * </p>
  *
+ * <br></br>
+ * <a href="https://github.com/kooitt/CourseworkGame/blob/master/src/main/java/brickGame/GameEngine.java">Original Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

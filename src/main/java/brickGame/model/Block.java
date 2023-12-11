@@ -20,7 +20,8 @@ import static brickGame.Constants.*;
  * <p>
  * The class implements the Serializable interface to support saving and loading game states.
  * </p>
- *
+ * <br></br>
+ * <a href="https://github.com/kooitt/CourseworkGame/blob/master/src/main/java/brickGame/Block.java">Original Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */
