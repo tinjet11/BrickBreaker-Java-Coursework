@@ -431,12 +431,4 @@ this interface will provide its own logic for creating the corresponding BlockHi
 
 8. **Ball will go through between two block:**
     - **Issue:** The ball wil penetrate the block if it is hitting the center of two block
-    - **Solution:** Adding another layer of collision logic so it bounce back when hit a block       
-
-
-
-
-
-This is my game. This is a menu screen which i added, inside here we have settings, inside settings user can adjust the end level 
-so the game can end faster, user can also set the initial heart number. But this two can only be adjust before the game start.
-Below that we have 
+    - **Solution:** Adding another layer of collision logic so it bounce back when hit a block
