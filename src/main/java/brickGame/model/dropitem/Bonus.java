@@ -26,8 +26,10 @@ import static brickGame.Constants.*;
  * interactive gameplay elements.
  * </p>
  *
- * <br></br>
+ * <br>
  * <a href="https://github.com/kooitt/CourseworkGame/blob/master/src/main/java/brickGame/Bonus.java">Original Code</a>
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/model/dropitem/Bonus.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

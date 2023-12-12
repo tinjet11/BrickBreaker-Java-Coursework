@@ -17,7 +17,8 @@ import static brickGame.Constants.*;
  * It handles the game logic, user input, and interaction with other components.
  * <p>
  * This class follows the singleton pattern, allowing only one instance to exist throughout the application.
- *
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/model/GameStateManager.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

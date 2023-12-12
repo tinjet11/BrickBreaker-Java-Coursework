@@ -21,7 +21,8 @@ import static brickGame.Constants.*;
  * The GameSceneController class is providing method for setting the label value,
  * such as level,heart, and score. It also provides user functionality to move the paddle,
  * It also provides functionality for pause button and calling function to show win or lose scene
- *
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/controller/GameSceneController.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

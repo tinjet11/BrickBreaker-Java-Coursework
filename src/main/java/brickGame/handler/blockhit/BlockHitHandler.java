@@ -8,6 +8,8 @@ import brickGame.ScoreAnimation;
 
 /**
  * Interface defining methods for handling block hits in a brick game.
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/handler/blockhit/BlockHitHandler.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

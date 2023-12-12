@@ -22,7 +22,8 @@ import static brickGame.Constants.IMAGE_PATH_BOMB;
  * The Bomb class is designed to be instantiated and used within the game logic to provide dynamic and
  * interactive gameplay elements.
  * </p>
- *
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/model/dropitem/Bomb.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

@@ -36,7 +36,8 @@ import static brickGame.model.Block.BLOCK_HEIGHT;
  * one instance of the class is created. The class also encapsulates the state and behavior related to game initialization,
  * promoting a modular and organized game structure.
  * </p>
- *
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/model/InitGameComponent.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

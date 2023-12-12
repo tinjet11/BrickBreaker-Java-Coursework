@@ -22,7 +22,8 @@ import static brickGame.Constants.SETTINGS_SCENE_FXML;
  * The MenuController class is responsible for managing the main menu interactions and controlling the game's menu scenes.
  * It handles actions such as starting or resuming the game, loading saved games, exiting the application, and opening the settings.
  * Additionally, it displays result scenes upon winning or losing the game.
- *
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/controller/MenuController.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

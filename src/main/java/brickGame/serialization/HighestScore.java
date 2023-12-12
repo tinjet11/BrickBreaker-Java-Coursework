@@ -18,7 +18,8 @@ import static brickGame.Constants.SAVE_PATH_DIR;
  * <p>
  * This class is part of the game's scoring mechanism and implements methods for managing the highest score file.
  * </p>
- *
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/serialization/HighestScore.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

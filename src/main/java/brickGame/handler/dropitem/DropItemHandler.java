@@ -13,6 +13,8 @@ import static brickGame.Constants.SCENE_HEIGHT;
 /**
  * Handler class for managing drop items in a brick game.
  * Handles movement, collision detection with the paddle, and scoring for taken drop items.
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/handler/dropitem/DropItemHandler.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

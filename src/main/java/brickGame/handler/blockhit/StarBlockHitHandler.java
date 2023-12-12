@@ -15,6 +15,8 @@ import static brickGame.Constants.GOLD_ROOT;
 /**
  * BlockHitHandler implementation for handling hits on Star blocks in a brick game.
  * Extends BlockHitHandler and provides specific behavior for Star block hits.
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/handler/blockhit/StarBlockHitHandler.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

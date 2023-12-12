@@ -6,7 +6,8 @@ import javafx.scene.shape.Circle;
  * It follows the Singleton pattern, ensuring only one instance exists throughout the application.
  * The class contains information about the ball's position, the Circle object representing the ball,
  * and the ball's radius.
- *
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/model/Ball.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

@@ -20,7 +20,8 @@ import static brickGame.Constants.SCENE_WIDTH;
  * <p>
  * This class is part of the game's model, managing the behavior of the paddle in the game.
  * </p>
- *
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/model/Paddle.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

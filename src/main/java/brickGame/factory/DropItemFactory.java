@@ -12,6 +12,8 @@ import javafx.application.Platform;
  * The {@code DropItemFactory} class is responsible for creating instances of drop items in the game.
  * It provides methods to create specific types of drop items and ensures their proper addition to the game scene
  * and relevant collections in the game component.
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/factory/DropItemFactory.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

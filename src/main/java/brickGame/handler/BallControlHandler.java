@@ -12,6 +12,8 @@ import static brickGame.Constants.SCENE_WIDTH;
  * This class follows the singleton pattern, ensuring that only one instance of BallControl exists in the game.
  * It is designed to work in conjunction with the GameLogicHandler and InitGameComponent classes to provide
  * comprehensive control over the ball's behavior.
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/handler/BallControlHandler.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

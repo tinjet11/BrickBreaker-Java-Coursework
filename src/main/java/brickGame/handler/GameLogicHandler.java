@@ -26,8 +26,9 @@ import static brickGame.model.Block.BLOCK_HEIGHT;
 import static brickGame.model.Block.BLOCK_PADDING_TOP;
 
 /**
- * Handles the game logic, including collision detection, scoring, and call nextLevel function.
- *
+ * Handles the game logic, including collision detection, scoring, heart deducting, dropItem movement and call nextLevel function.
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/handler/GameLogicHandler.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

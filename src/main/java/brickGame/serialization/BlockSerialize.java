@@ -19,8 +19,10 @@ import java.io.Serializable;
  * This class implements the Serializable interface to allow its instances to be serialized
  * and deserialized using object streams.
  * </p>
- * <br></br>
+ * <br>
  * <a href="https://github.com/kooitt/CourseworkGame/blob/master/src/main/java/brickGame/BlockSerializable.java">Original Code</a>
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/serialization/BlockSerialize.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

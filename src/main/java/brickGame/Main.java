@@ -17,8 +17,11 @@ import java.io.*;
  * It extends the JavaFX Application class and initializes the game components,
  * such as the game logic handler, ball control, game scene controller, and game state manager.
  * It also handles the initialization of the menu scene.
- * <br></br>
+ * <br>
  * <a href="https://github.com/kooitt/CourseworkGame/blob/master/src/main/java/brickGame/Main.java">Original Code</a>
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/Main.java">Current Code</a>
+ *
  * @author Leong Tin Jet
  * @version 1.0
  */

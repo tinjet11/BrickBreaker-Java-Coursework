@@ -9,6 +9,8 @@ import brickGame.handler.GameLogicHandler;
  * BlockHitHandler implementation for handling hits on Choco blocks in a brick game.
  * Extends BlockHitHandler and provides specific behavior for Choco block hits.
  *
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/handler/blockhit/ChocoBlockHitHandler.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

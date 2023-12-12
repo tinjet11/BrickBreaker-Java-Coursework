@@ -29,6 +29,8 @@ import java.util.Map;
  * @see StarBlockHitHandlerFactory
  * @see NormalBlockHitHandlerFactory
  * @see Block
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/factory/BlockHitHandlerFactoryProvider.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

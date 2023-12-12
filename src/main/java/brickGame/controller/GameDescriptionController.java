@@ -10,7 +10,8 @@ import javafx.stage.Stage;
  * and controlling navigation back to the main menu.
  * It provides a method for handling the back button click to return to the main menu scene.
  * Uses JavaFX components for scene setup.
- *
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/controller/GameDescriptionController.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

@@ -7,6 +7,8 @@ import brickGame.handler.GameLogicHandler;
 /**
  * BlockHitHandler implementation for handling hits on Normal blocks in a brick game.
  * Extends BlockHitHandler and provides specific behavior for Normal block hits.
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/handler/blockhit/NormalBlockHitHandler.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

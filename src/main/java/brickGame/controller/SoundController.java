@@ -30,7 +30,8 @@ import static brickGame.Constants.SOUND_FILE_PATH;
  * The {@code SoundController} class is designed as a singleton, and the instance is created lazily to ensure
  * efficiency and avoid unnecessary initialization when the class is not in use.
  * </p>
- *
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/controller/SoundController.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

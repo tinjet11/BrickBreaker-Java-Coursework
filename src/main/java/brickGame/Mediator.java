@@ -14,6 +14,8 @@ import brickGame.model.Paddle;
  * ensure a single instance responsible for managing the flow of information among different
  * parts of the application.
  *
+ *  <br>
+ *  <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/Mediator.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */

@@ -19,7 +19,8 @@ import javafx.stage.Stage;
  * <p>
  * The class utilizes JavaFX components and FXML for scene setup and UI interactions.
  * </p>
- *
+ * <br>
+ * <a href="https://github.com/tinjet11/COMP2042_CW_hcytl1/blob/master/src/main/java/brickGame/controller/SettingsController.java">Current Code</a>
  * @author Leong Tin Jet
  * @version 1.0
  */
