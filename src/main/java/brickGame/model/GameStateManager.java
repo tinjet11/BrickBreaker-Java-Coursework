@@ -264,12 +264,14 @@ public class GameStateManager {
 
         mediator.getInitGameComponent().getBlocks().clear();
 
+        // show bomb drop item if there is any before pause
         mediator.getInitGameComponent().getBombs().forEach((bomb -> {
             bomb.element.setVisible(true);
             bomb.setTimeCreated(mediator.getGameLogicHandler().getTime());
             Platform.runLater(() -> mediator.getGameSceneController().getGamePane().getChildren().add(bomb.element));
         }));
 
+        // show bonus drop item if there is any before pause
         mediator.getInitGameComponent().getChocos().forEach((bonus -> {
             bonus.element.setVisible(true);
             bonus.setTimeCreated(mediator.getGameLogicHandler().getTime());
