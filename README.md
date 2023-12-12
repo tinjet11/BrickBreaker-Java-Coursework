@@ -136,8 +136,7 @@
 - Make this class follows the Singleton pattern, ensuring that only one instance of GameSceneController exists.
 - Utilizes FXML to define the structure of the main game scene, allowing for a clean separation of UI and logic.
 - Switch game states such as WIN, GAME_OVER, and PAUSED.
-- load "Win" and "Lose" Scene by utilizing MenuController 
-- Implements smooth paddle movement in response to left and right arrow key presses.
+- load "Win" and "Lose" Scene by utilizing MenuController
 - Initializes game components, including blocks, ball, and paddle.
 - Dynamically updates the score, heart count, and level labels on the game interface.
 - Allows pausing the game, saving the current game state when paused.
@@ -156,8 +155,7 @@
 - When load Game button is clicked, check is SaveGame file exists, if yes then loadGame else open alert dialog to ask user want to start a new game or not
 
 ### Settings.fxml 
-- Added an interface for users to adjust the initial heart number, end level
-- Show brief description of penalty and bonus object
+- Added an interface for users to adjust the initial heart number, end level, game sound volume and mute button
 
 ### SettingsController.java 
 - Provide functionality to adjust the initial heart number.
@@ -215,13 +213,14 @@
   also call gameLogicHandler to set up the game engine here. 
 - It is worth to mention that `startGame()` is a very important method as it is the initial point which
   the game start, load, restart or after progress to next level
-- Fix a bug by removing `mediator.getInitGameComponent().getDropItem().clear();` in `loadGame()` function, and add the dropItem
+- Fixed a bug: By removing `mediator.getInitGameComponent().getDropItem().clear();` in `loadGame()` function, and add the dropItem
   back to root and set new time created for it  
 - Added a `GameState` enum to better represent the game state.
 
 ### Actionable.java
 - Interface moved from `GameEngine.java`.
 - Renamed the interface from `OnAction` to `Actionable`.
+- remove unused `onInit()` method
 - implement by `GameLogicHandler`
 
 ### GameLogicHandler.java
@@ -249,10 +248,12 @@
 - Invokes the `onHitAction` method, defined in the BlockHitHandler, to handle generic hit actions.
 - Utilizes the `DropItemFactory` to create a bonus object when the choco block is hit, enhancing modularity and code organization.
 
+
 ### PenaltyBlockHandler.java
 - implements the `BlockHitHandler` interface to define the behavior when a penalty block is hit.
 - Provides the implementation of the `handleBlockHit` function, specifying actions to be taken upon the penalty block being hit.
 - Invokes the `onHitAction` method, defined in the BlockHitHandler, to handle generic hit actions.
+- Utilizes the `DropItemFactory` to create a bomb object when the penalty block is hit, enhancing modularity and code organization.
 
 ### HeartBlockHandler.java
 - implements the `BlockHitHandler` interface to define the behavior when a heart block is hit.
