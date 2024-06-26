@@ -1,7 +1,5 @@
 ## Brick Breaker Game Refactoring
-### COMP2042_CW_hcytl1
-### Name - Leong Tin Jet
-### Student Id - 20506131
+### Author - Leong Tin Jet
 
 ---
 
